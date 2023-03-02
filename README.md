@@ -1,7 +1,6 @@
 # Dual Universe - Factory Monitoring Expanded
 Fork of BartasRS Factory Monitoring Expanded - https://github.com/BartasRS/Factory-Monitoring-Expanded
 ![image](https://user-images.githubusercontent.com/94600381/222389623-ad7aa55e-e8ce-4b87-8a8c-e2e8b5bd2b31.png)
-Dual Uni
 
 <br>
 This version displays Metalworks, Electronics and Glass industry on screen 1, 3D Printers, Chemical Industry, Refiners, Honeycombs, Smelters and Recyclers on screen 2 and, finally Assemblers on screen 3. Should be ok for most people but can be expanded up to 9 screens if required<br>
