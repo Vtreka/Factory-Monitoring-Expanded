@@ -1,4 +1,4 @@
-# Dual Universee - Factory Monitoring Expanded
+# Dual Universe - Factory Monitoring Expanded
 Fork of BartasRS Factory Monitoring Expanded - https://github.com/BartasRS/Factory-Monitoring-Expanded
 ![image](https://user-images.githubusercontent.com/94600381/222389623-ad7aa55e-e8ce-4b87-8a8c-e2e8b5bd2b31.png)
 Dual Uni
