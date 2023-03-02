@@ -4,6 +4,7 @@
 system.print(" --- Factory Monitor Expanded v2.1 ---")
 system.print ("type 'help' for available commands")
 
+databank = nil
 screens = {}
 core_unit = {}
 --local json = require('dkjson')
@@ -18,6 +19,7 @@ for slot_name, slot in pairs(unit) do
             table.insert(screens,slot)
             slot.activate()
         elseif slot.getClass():lower():find('coreunit') then table.insert(core_unit,slot)
+        elseif slot.getClass():lower():find('databankunit') then table.insert(databank,slot)
         end
     end
 end
