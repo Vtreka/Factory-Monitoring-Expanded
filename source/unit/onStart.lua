@@ -6,7 +6,7 @@ system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
 useDatabankValues = true --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
-Show_name = false --export: Shows Industry Unit name instead of element being crafted if checked
+--Show_name = false --export: Shows Industry Unit name instead of element being crafted if checked
 border = 550 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_timer = 5 --export: Screen(s) refresh timer in seconds
 tier1colour = '1, 1, 1' --export: Set Tier 1 Colour
