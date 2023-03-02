@@ -1,4 +1,3 @@
-
 local posy = 10
 local t_posy = 10
 c=1
@@ -85,7 +84,6 @@ f_state = function(fid,F)
     end
 end
 
-
 indy_column = function(indy, tier, posx, posy)
 if indy[0] == 0 then return "" else    
     stxt = ""
@@ -94,34 +92,6 @@ if indy[0] == 0 then return "" else
     if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier3colour ..", 1)\n" end
     if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier4colour ..", .5)\n" end
         
-        
-if Show_name then         
-    local machines = {}
-    for index,id in ipairs(indy) do
-        local machine = {mid = id, name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", "")}
-        machines[index] = machine
-    end
-        
-    table.sort(machines, function(a,b) return a.name < b.name end)
-        
-    for index,machine in ipairs(machines) do
-        local id = machine.mid
-        if index<10 then num= "00" .. tostring(index) 
-         elseif index<100 then num= "0" .. tostring(index) 
-         else num = tostring(index) end
-         if posy == border then posy=20 c=c+1 end       
-            
-        stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" 
-        .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_stateWithElementName(id).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
-        
-        posy = posy +10
-    end
-
-    t_posy = posy
-    return t_color .. stxt .. " c=" .. c .."\n"
-end
-end    
-    else
     for index,id in ipairs(indy) do
         if index<10 then num= "00" .. tostring(index) 
          elseif index<100 then num= "0" .. tostring(index) 
