@@ -30,7 +30,7 @@ The script is made so it should be fairly easy to shuffle contents between scree
     - Can now connect Databank to save Parameters between updates (The first time you connect a Databank it will have no data saved and you should get a message in the Lua chat channel that says "No parameters saved to Databank. Restart the Programming Board"). The Parameters are saved when the Programming Board is deactivated, so do that then re-activate the Programming Board<br>
     - Combined separate onStart code into Unit:onStart
     - Added onStop event to save databank values
-    - Reverted some changes in Unit:onTimer until I get my head around how to implement sorting by element name and options for different naming and orders of industry state
+    - Reverted some changes in Unit:onTimer until I get my head around how to implement sorting by element name and options for different naming and orders of industry state <br>
 
 <b>Version 2.1 updates:</b><br>
     - Adding Recyclers<br>
