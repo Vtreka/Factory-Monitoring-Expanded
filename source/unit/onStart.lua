@@ -1,7 +1,7 @@
 -- Script created by Bartas (ingame), BartasRS#2742 (Discord)
 -- Updates provided by Vtreka (ingame), Vtreka#1337 (Discord)
 
-system.print(" --- Factory Monitor Expanded v2.1 ---")
+system.print(" --- Factory Monitor Expanded v2.2 ---")
 system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
