@@ -154,7 +154,7 @@ indy_column = function(indy, tier, posx, posy)
         
                 posy = posy +10
             else
-                stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. f_state(id,1) .. "addText(layer, font3,\"" .. f_state(id,0).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
+                stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_state(id,0).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
         
                 posy = posy +10
             end
