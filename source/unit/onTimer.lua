@@ -136,12 +136,23 @@ indy_column = function(indy, tier, posx, posy)
         if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier3colour ..", 1)\n" end
         if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier4colour ..", .5)\n" end
         
+        local machines = {}
         for index,id in ipairs(indy) do
+            local machine = {mid = id, name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", "")}
+            machines[index] = machine
+        end
+            
+        table.sort(machines, function(a,b) 
+            return a.name < b.name
+        end)
+            
+        for index,machine in ipairs(machines) do
+            local id = machine.mid
             if index<10 then 
                 num= "00" .. tostring(index) 
-            elseif index<100 then 
+             elseif index<100 then 
                 num= "0" .. tostring(index) 
-            else 
+             else 
                 num = tostring(index) 
             end
             
