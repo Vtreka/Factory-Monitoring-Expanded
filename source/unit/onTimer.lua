@@ -145,7 +145,7 @@ indy_column = function(indy, tier, posx, posy)
                 num = tostring(index) 
             end
             
-            if posy == border then 
+            if posy >= border then 
                 posy=20 c=c+1 
             end       
         
