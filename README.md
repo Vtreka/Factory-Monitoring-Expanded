@@ -26,6 +26,16 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 2.3 updates:</b><br>
+Enabled Show Name parameter to switch between showing Industry Unit name instead of element being crafted. <br><br>
+
+Note: Naming convention is currently as follows:<br>
+    - Show indy name Checked: Machine state then Industry Unit name<br>
+    - Show indy name Unchecked: Element being crafted then Machine state<br><br>
+
+Thanks to BlimpieBoy for contributions to code.<br>
+Next updates: Planning to allow for State to be set as a prefix or suffix using Parameters and adding in sorting within each tier. <br><br>
+
 <b>Version 2.2 updates:</b><br>
     - Can now connect Databank to save Parameters between updates (The first time you connect a Databank it will have no data saved and you should get a message in the Lua chat channel that says "No parameters saved to Databank. Restart the Programming Board"). The Parameters are saved when the Programming Board is deactivated, so do that then re-activate the Programming Board<br>
     - Combined separate onStart code into Unit:onStart

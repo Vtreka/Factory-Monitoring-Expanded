@@ -1,12 +1,13 @@
 -- Script created by Bartas (ingame), BartasRS#2742 (Discord)
 -- Updates provided by Vtreka (ingame), Vtreka#1337 (Discord)
+-- Contributions provided by BlimpieBoy (ingame), Blimpieboy#0903 (Discord)
 
 system.print(" --- Factory Monitor Expanded v2.2 ---")
 system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
 useDatabankValues = true --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
---Show_name = false --export: Shows Industry Unit name instead of element being crafted if checked
+Show_Indy_name = false --export: Shows Industry Unit name instead of element being crafted if checked
 border = 550 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_timer = 5 --export: Screen(s) refresh timer in seconds
 tier1colour = '1, 1, 1' --export: Set Tier 1 Colour
@@ -17,7 +18,7 @@ tier4colour = '.3, 0, .5' --export: Set Tier 4 Colour
 system.print("Refresh timer set to: "..Refresh_timer.." seconds")
 
 options = {}
-options.Show_name = Show_name
+options.Show_Indy_name = Show_Indy_name
 options.border = border
 options.tier1colour = tier1colour
 options.tier2colour = tier2colour

@@ -73,42 +73,97 @@ f_state = function(fid,F)
         tt = string.gsub(tt, "product","")
         return tt .. " - Error" .. state
     end
-    if state == 1 and F == 1 then return "setNextFillColor(layer,1,1,0,1)"
-        elseif state == 2 and F == 1 then return "setNextFillColor(layer,0,1,0,1) "
-        elseif state == 3 and F == 1 then return "setNextFillColor(layer,1,0,0.8,1) "
-        elseif state == 4 and F == 1 then return "setNextFillColor(layer,1,0.5,0,1) "
-        elseif state == 5 and F == 1 then return "setNextFillColor(layer,1,0,0,1) "
-        elseif state == 6 and F == 1 then return "setNextFillColor(layer,0,0.5,1,1) "
-        elseif state == 7 and F == 1 then return "setNextFillColor(layer,1,0,0,1) "
-        else return ""
+end
+
+f_stateWithElementName = function(fid)
+    state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+    elementName = core_unit[1].getElementNameById(fid)
+    elementName = string.gsub(elementName, "Craft ", "")
+	
+    if state == 1 then
+		if isElementConfigured(fid) then
+			return "Stopped     " .. elementName
+		else
+			return "Unconfig    " .. elementName
+		end
+	elseif state == 2 then return "Running     " .. elementName
+	elseif state == 3 then return "Ingredient  " .. elementName
+	elseif state == 4 then return "Output full " .. elementName
+	elseif state == 5 then return "No output   " .. elementName
+	elseif state == 6 then return "Pending     " .. elementName
+	elseif state == 7 then return "Schematic   " .. elementName
+	elseif state > 7 then return  "ERROR       " .. elementName
+    end							  
+end
+
+isElementConfigured = function(fid)
+	local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
+		if industryInfo == nil then
+			return false
+		end
+	local currentProducts = industryInfo["currentProducts"]
+		if currentProducts == nil or #currentProducts == 0 then
+			return false
+		end
+	local productInfo = system.getItem(currentProducts[1]["id"])
+		if productInfo == nil then
+			return false
+		end
+
+	return true
+end
+
+setNextFillColourByState = function(fid)
+    state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+    if state == 1 then return "setNextFillColor(layer,1,1,0,1)"
+	elseif state == 2 then return "setNextFillColor(layer,0,1,0,1) "
+	elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,1) "
+	elseif state == 4 then return "setNextFillColor(layer,1,0.5,0,1) "
+	elseif state == 5 then return "setNextFillColor(layer,1,0,0,1) "
+	elseif state == 6 then return "setNextFillColor(layer,0,0.5,1,1) "
+	elseif state == 7 then return "setNextFillColor(layer,1,0,0,1) "
+	else return ""
     end
 end
 
 indy_column = function(indy, tier, posx, posy)
-if indy[0] == 0 then return "" else    
-    stxt = ""
-    if tier <= 1 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier1colour ..", 1)\n" end
-    if tier == 2 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier2colour ..", 1)\n" end
-    if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier3colour ..", 1)\n" end
-    if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier4colour ..", .5)\n" end
+    if indy[0] == 0 then 
+        return "" 
+    else    
+        stxt = ""
+        if tier <= 1 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier1colour ..", 1)\n" end
+        if tier == 2 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier2colour ..", 1)\n" end
+        if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier3colour ..", 1)\n" end
+        if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier4colour ..", .5)\n" end
         
-    for index,id in ipairs(indy) do
-        if index<10 then num= "00" .. tostring(index) 
-         elseif index<100 then num= "0" .. tostring(index) 
-         else num = tostring(index) end
-         if posy == border then posy=20 c=c+1 end       
+        for index,id in ipairs(indy) do
+            if index<10 then 
+                num= "00" .. tostring(index) 
+            elseif index<100 then 
+                num= "0" .. tostring(index) 
+            else 
+                num = tostring(index) 
+            end
             
-        stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" 
-        .. f_state(id,1) .. "addText(layer, font3,\"" .. f_state(id,0).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
+            if posy == border then 
+                posy=20 c=c+1 
+            end       
         
-        posy = posy +10
-    end
-
-    t_posy = posy
-    return t_color .. stxt .. " c=" .. c .."\n"
-end
-end        
-
+            if Show_Indy_name then
+                stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_stateWithElementName(id).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
+        
+                posy = posy +10
+            else
+                stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. f_state(id,1) .. "addText(layer, font3,\"" .. f_state(id,0).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
+        
+                posy = posy +10
+            end
+        end
+            
+            t_posy = posy
+            return t_color .. stxt .. " c=" .. c .."\n"
+        end
+    end        
 
 screen_one = [[
 local layer = createLayer()
