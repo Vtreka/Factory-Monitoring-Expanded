@@ -9,6 +9,7 @@ f_state = function(fid,F)
         if state < 1 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - Error" .. state
@@ -27,48 +28,56 @@ f_state = function(fid,F)
             end
         local displayNameWithSize = productInfo["displayNameWithSize"]
         local tt = string.gsub(displayNameWithSize, "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - Stopped"
         elseif state == 2 and F == 0 then 
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - Running"
         elseif state == 3 and F == 0 then 
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - Missing ingredient"
         elseif state == 4 and F == 0 then 
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - Output full"
         elseif state == 5 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - No output container"
         elseif state == 6 and F == 0 then 
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - Pending"
         elseif state == 7 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - Missing schematics"
         elseif state > 7 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
+        tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, "product","")
         return tt .. " - Error" .. state
