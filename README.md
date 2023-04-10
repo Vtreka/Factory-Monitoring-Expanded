@@ -8,7 +8,7 @@ Note: The 9 screen variant of the script is based on the original and has not be
 <br><br>
 ## Installation
 Copy [3 screen version](https://github.com/Vtreka/Factory-Monitoring-Expanded/blob/main/PB.json) into Programming Board in game <br><br>
-Simply connect core and 3 screens (in any order) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
+Simply connect core and 3 screens in any order (and optionally a databank) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
 <b>Lua Parameters</b><br><br>
 Refresh timer - value in seconds, set above 3 for really big factories<br>
 Show name - Checkbox does nothing currently. In future will allow to display Industry Unit name instead of the item that is being crafted<br>
@@ -26,6 +26,10 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 2.3.1 updates:</b><br>
+    - Addded sorting by name when "Show Indy name" is not enabled<br>
+    - Removed additional space added to items with product in the name<br><br>
+    
 <b>Version 2.3 updates:</b><br>
 Enabled Show Name parameter to switch between showing Industry Unit name instead of element being crafted. <br><br>
 
