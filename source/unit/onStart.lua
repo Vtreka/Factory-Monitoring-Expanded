@@ -2,7 +2,7 @@
 -- Updates provided by Vtreka (ingame), Vtreka#1337 (Discord)
 -- Contributions provided by BlimpieBoy (ingame), Blimpieboy#0903 (Discord)
 
-system.print(" --- Factory Monitor Expanded v2.2 ---")
+system.print(" --- Factory Monitor Expanded v2.3.1 ---")
 system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
