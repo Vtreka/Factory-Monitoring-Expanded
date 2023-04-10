@@ -11,7 +11,7 @@ f_state = function(fid,F)
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - Error" .. state
         elseif state == 1 and F == 0 then
         local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
@@ -30,56 +30,56 @@ f_state = function(fid,F)
         local tt = string.gsub(displayNameWithSize, "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - Stopped"
         elseif state == 2 and F == 0 then 
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - Running"
         elseif state == 3 and F == 0 then 
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - Missing ingredient"
         elseif state == 4 and F == 0 then 
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - Output full"
         elseif state == 5 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - No output container"
         elseif state == 6 and F == 0 then 
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - Pending"
         elseif state == 7 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - Missing schematics"
         elseif state > 7 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, "product","")
+        tt = string.gsub(tt, " product","")
         return tt .. " - Error" .. state
     end
 end
@@ -125,12 +125,12 @@ end
 setNextFillColourByState = function(fid)
     state = core_unit[1].getElementIndustryInfoById(fid)["state"]
     if state == 1 then return "setNextFillColor(layer,1,1,0,1)"
-	elseif state == 2 then return "setNextFillColor(layer,0,1,0,1) "
-	elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,1) "
-	elseif state == 4 then return "setNextFillColor(layer,1,0.5,0,1) "
-	elseif state == 5 then return "setNextFillColor(layer,1,0,0,1) "
-	elseif state == 6 then return "setNextFillColor(layer,0,0.5,1,1) "
-	elseif state == 7 then return "setNextFillColor(layer,1,0,0,1) "
+	elseif state == 2 then return "setNextFillColor(layer,0,1,0,1)"
+	elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,1)"
+	elseif state == 4 then return "setNextFillColor(layer,1,0.5,0,1)"
+	elseif state == 5 then return "setNextFillColor(layer,1,0,0,1)"
+	elseif state == 6 then return "setNextFillColor(layer,0,0.5,1,1)"
+	elseif state == 7 then return "setNextFillColor(layer,1,0,0,1)"
 	else return ""
     end
 end
@@ -145,45 +145,93 @@ indy_column = function(indy, tier, posx, posy)
         if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier3colour ..", 1)\n" end
         if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier4colour ..", .5)\n" end
         
-        local machines = {}
-        for index,id in ipairs(indy) do
-            local machine = {mid = id, name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", "")}
-            machines[index] = machine
-        end
-            
-        table.sort(machines, function(a,b) 
-            return a.name < b.name
-        end)
-            
-        for index,machine in ipairs(machines) do
-            local id = machine.mid
-            if index<10 then 
-                num= "00" .. tostring(index) 
-             elseif index<100 then 
-                num= "0" .. tostring(index) 
-             else 
-                num = tostring(index) 
+        if Show_Indy_name then
+            --create table of machines
+            local machines = {}
+            for index,id in ipairs(indy) do
+                local machine = {mid = id, name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", "")}
+                machines[index] = machine
             end
+                
+            --Sort table by name
+            table.sort(machines, function(a,b) 
+                return a.name < b.name
+                end)
+                
+            --create table of columns
+            for index,machine in ipairs(machines) do
+                local id = machine.mid
+                if index<10 then 
+                    num= "00" .. tostring(index) 
+                elseif index<100 then 
+                    num= "0" .. tostring(index) 
+                else 
+                    num = tostring(index) 
+                end
+                
+                --Move to next column if position is greater than border
+                if posy >= border then 
+                    posy=20 c=c+1 
+                end       
             
-            if posy >= border then 
-                posy=20 c=c+1 
-            end       
-        
-            if Show_Indy_name then
+                --Add text to table
                 stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_stateWithElementName(id).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
-        
-                posy = posy +10
-            else
-                stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_state(id,0).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
-        
+            
                 posy = posy +10
             end
-        end
-            
+
             t_posy = posy
-            return t_color .. stxt .. " c=" .. c .."\n"
+            return t_color .. stxt .. " c=" .. c .. "\n"
+        else
+            --create table of Industry
+            local industryUnits = {}
+            for index,id in ipairs(indy) do
+                local industryInfo = core_unit[1].getElementIndustryInfoById(id)["currentProducts"]
+                if industryInfo and #industryInfo >= 1 then
+                    local itemInfo = system.getItem(industryInfo[1]["id"])
+                    local tempName = itemInfo["displayNameWithSize"]
+                    local name = getName(tempName)
+                    local industryUnit = {mid = id, name = string.lower(name)}
+                    industryUnits[index] = industryUnit
+                else
+                    -- skip this industry unit if name is nil
+                    local industryUnit = {mid = id, name = ""}
+                    industryUnits[index] = industryUnit
+                end
+            end
+
+            --Sort table by name
+            table.sort(industryUnits, function(a,b) 
+                return a.name < b.name 
+                end)
+
+            --create table of columns
+            for index,industryUnit in ipairs(industryUnits) do
+                local id = industryUnit.mid
+                if index < 10 then
+                    num = "00" .. tostring(index)
+                elseif index < 100 then
+                    num = "0" .. tostring(index)
+                else
+                    num = tostring(index)
+                end
+            
+            --Move to next column if position is greater than border
+            if posy >= border then
+                posy = 20 c=c+1
+            end
+
+            --Add text to table
+            stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_state(id,0).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
+       
+            posy = posy + 10
         end
-    end        
+
+        t_posy = posy
+        return t_color .. stxt .. " c=" .. c .. "\n"
+        end
+    end
+end     
 
 screen_one = [[
 local layer = createLayer()
