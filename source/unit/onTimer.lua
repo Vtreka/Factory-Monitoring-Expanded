@@ -216,8 +216,12 @@ indy_column = function(indy, tier, posx, posy)
 
             --Sort table by state or name
             table.sort(machines, function(a,b)
-                if SortByState and a.stateLabel ~= b.stateLabel then
-                    return a.stateLabel < b.stateLabel
+                if SortByState then
+                    if StateSortMode == 'A' and a.stateLabel ~= b.stateLabel then
+                        return a.stateLabel < b.stateLabel
+                    elseif StateSortMode == 'V' and a.state ~= b.state then
+                        return a.state < b.state
+                    end
                 end
                 return a.name < b.name
             end)
@@ -268,8 +272,12 @@ indy_column = function(indy, tier, posx, posy)
 
             --Sort table by state or name
             table.sort(industryUnits, function(a,b)
-                if SortByState and a.stateLabel ~= b.stateLabel then
-                    return a.stateLabel < b.stateLabel
+                if SortByState then
+                    if StateSortMode == 'A' and a.stateLabel ~= b.stateLabel then
+                        return a.stateLabel < b.stateLabel
+                    elseif StateSortMode == 'V' and a.state ~= b.state then
+                        return a.state < b.state
+                    end
                 end
                 return a.name < b.name
             end)
