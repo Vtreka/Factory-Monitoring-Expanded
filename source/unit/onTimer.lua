@@ -125,20 +125,45 @@ f_stateWithElementName = function(fid)
 end
 
 isElementConfigured = function(fid)
-	local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
-		if industryInfo == nil then
-			return false
-		end
-	local currentProducts = industryInfo["currentProducts"]
-		if currentProducts == nil or #currentProducts == 0 then
-			return false
-		end
-	local productInfo = system.getItem(currentProducts[1]["id"])
-		if productInfo == nil then
-			return false
-		end
+        local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
+                if industryInfo == nil then
+                        return false
+                end
+        local currentProducts = industryInfo["currentProducts"]
+                if currentProducts == nil or #currentProducts == 0 then
+                        return false
+                end
+        local productInfo = system.getItem(currentProducts[1]["id"])
+                if productInfo == nil then
+                        return false
+                end
 
-	return true
+        return true
+end
+
+getStateLabel = function(fid)
+    local state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+    if state == 1 then
+        if isElementConfigured(fid) then
+            return "Stopped"
+        else
+            return "Unconfig"
+        end
+    elseif state == 2 then
+        return "Running"
+    elseif state == 3 then
+        return "Ingredient"
+    elseif state == 4 then
+        return "Output full"
+    elseif state == 5 then
+        return "No output"
+    elseif state == 6 then
+        return "Pending"
+    elseif state == 7 then
+        return "Schematic"
+    else
+        return "Error" .. state
+    end
 end
 
 setNextFillColourByState = function(fid)
@@ -182,7 +207,8 @@ indy_column = function(indy, tier, posx, posy)
                     local machine = {
                         mid = id,
                         name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", ""),
-                        state = core_unit[1].getElementIndustryInfoById(id)["state"]
+                        state = core_unit[1].getElementIndustryInfoById(id)["state"],
+                        stateLabel = getStateLabel(id)
                     }
                     table.insert(machines, machine)
                 end
@@ -190,8 +216,8 @@ indy_column = function(indy, tier, posx, posy)
 
             --Sort table by state or name
             table.sort(machines, function(a,b)
-                if SortByState and a.state ~= b.state then
-                    return a.state < b.state
+                if SortByState and a.stateLabel ~= b.stateLabel then
+                    return a.stateLabel < b.stateLabel
                 end
                 return a.name < b.name
             end)
@@ -233,7 +259,8 @@ indy_column = function(indy, tier, posx, posy)
                         table.insert(industryUnits, {
                             mid = id,
                             name = string.lower(name),
-                            state = core_unit[1].getElementIndustryInfoById(id)["state"]
+                            state = core_unit[1].getElementIndustryInfoById(id)["state"],
+                            stateLabel = getStateLabel(id)
                         })
                     end
                 end
@@ -241,8 +268,8 @@ indy_column = function(indy, tier, posx, posy)
 
             --Sort table by state or name
             table.sort(industryUnits, function(a,b)
-                if SortByState and a.state ~= b.state then
-                    return a.state < b.state
+                if SortByState and a.stateLabel ~= b.stateLabel then
+                    return a.stateLabel < b.stateLabel
                 end
                 return a.name < b.name
             end)
