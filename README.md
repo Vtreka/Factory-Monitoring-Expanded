@@ -17,6 +17,8 @@ tier1colour - Set Tier 1 Colour<br>
 tier2colour - Set Tier 2 Colour<br>
 tier3colour - Set Tier 3 Colour<br>
 tier4colour - Set Tier 4 Colour<br>
+tier5colour - Set Tier 5 Colour<br>
+Sort by item tier - Group industries by the tier of the item being produced rather than the Industry Unit tier<br>
 
 <br>
 Script comes with industry locator. Type <i>help</i> in Lua Tab to see available commands.
@@ -26,6 +28,10 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 2.4 updates:</b><br>
+    - Added option to sort by item tier instead of Industry Unit tier<br>
+    - Added Tier 5 colour parameter<br><br>
+
 <b>Version 2.3.1 updates:</b><br>
     - Addded sorting by name when "Show Indy name" is not enabled<br>
     - Removed additional space added to items with product in the name<br><br>
