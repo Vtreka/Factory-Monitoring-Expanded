@@ -185,33 +185,6 @@ elseif string.find(T, indy_type[6]) then
           c_pos = core_unit[1].getElementPositionById(smelter4[iid])
           system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
           end
-elseif string.find(T, indy_type[9]) then
-   str = string.gsub(T, indy_type[9],"")
-   
-       if string.find(str, "t1") then 
-          str = string.gsub(str, "t1","")
-          iid = tonumber(str)
-          c_pos = core_unit[1].getElementPositionById(honey1[iid])
-          system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
-          end
-        if string.find(str, "t2") then 
-          str = string.gsub(str, "t2","")
-          iid = tonumber(str)
-          c_pos = core_unit[1].getElementPositionById(honey2[iid])
-          system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
-          end
-        if string.find(str, "t3") then 
-          str = string.gsub(str, "t3","")
-          iid = tonumber(str)
-          c_pos = core_unit[1].getElementPositionById(honey3[iid])
-          system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
-          end
-        if string.find(str, "t4") then 
-          str = string.gsub(str, "t4","")
-          iid = tonumber(str)
-          c_pos = core_unit[1].getElementPositionById(honey4[iid])
-          system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
-          end
 elseif string.find(T, indy_type[7]) then
    str = string.gsub(T, indy_type[7],"")
    
