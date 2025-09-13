@@ -196,8 +196,8 @@ t_stats = function(fid, ax, ay)
         maintain = "-----"
         batch = "-----"
     else
-        maintain = info["maintainProductAmount"]
-        batch = currentProducts[1]["quantity"]
+        maintain = string.format("%d", info["maintainProductAmount"])
+        batch    = string.format("%d", currentProducts[1]["quantity"])
     end
     return "setNextFillColor(layer, .6,.6,.6,1) addText(layer, font3, \"M: ".. maintain .." B: ".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
 end
