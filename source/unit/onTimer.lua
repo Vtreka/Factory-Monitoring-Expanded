@@ -197,13 +197,13 @@ t_stats = function(fid, ax, ay)
     local currentProducts = info["currentProducts"]
     local maintain, batch
     if currentProducts == nil or currentProducts[1] == nil then
-        maintain = "-----"
-        batch = "-----"
+        maintain = string.format("%5s", "-----")
+        batch    = string.format("%5s", "-----")
     else
-        maintain = string.format("%d", info["maintainProductAmount"])
-        batch    = string.format("%d", currentProducts[1]["quantity"])
+        maintain = string.format("%5d", info["maintainProductAmount"])
+        batch    = string.format("%5d", currentProducts[1]["quantity"])
     end
-    return "setNextFillColor(layer, .6,.6,.6,1) addText(layer, font3, \"M: ".. maintain .." B: ".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
+    return "setNextFillColor(layer, .6,.6,.6,1) setNextTextAlign(layer, AlignH_Right, AlignV_Middle) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
 end
 
 indy_column = function(indy, tier, posx, posy)
