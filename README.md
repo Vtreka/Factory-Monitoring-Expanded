@@ -13,6 +13,7 @@ Simply connect core and 4 screens in any order (and optionally a databank) to Pr
 Refresh timer - value in seconds, set above 3 for really big factories<br>
 Show Maintain/Batch - Display maintain and batch amounts for each machine <br>
 Show name - Will display Industry Unit name instead of the item that is being crafted<br>
+Show State - Toggle display of the machine state text<br>
 Sort By item tier - Will sort by tier of item being crafted instead of Industry Unit tier <br>
 Sort By State - Sort industry units by their state value <br>
 State Sort Mode - When sorting by state, choose 'A' for alphabetical or 'V' for value-based sorting <br>

@@ -7,7 +7,9 @@ column = {10, 266, 522, 778}
 f_state = function(fid, F)
     state = core_unit[1].getElementIndustryInfoById(fid)["state"]
     local function fmt(name, label)
-        if State_as_Prefix then
+        if not Show_State then
+            return name
+        elseif State_as_Prefix then
             return label .. " - " .. name
         else
             return name .. " - " .. label
@@ -117,7 +119,9 @@ f_stateWithElementName = function(fid)
     elseif state > 7 then
         label = "ERROR"
     end
-    if State_as_Prefix then
+    if not Show_State then
+        return elementName
+    elseif State_as_Prefix then
         return label .. " - " .. elementName
     else
         return elementName .. " - " .. label
