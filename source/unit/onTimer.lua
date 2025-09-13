@@ -197,13 +197,13 @@ t_stats = function(fid, ax, ay)
     local currentProducts = info["currentProducts"]
     local maintain, batch
     if currentProducts == nil or currentProducts[1] == nil then
-        maintain = string.format("%5s", "-----")
-        batch    = string.format("%5s", "-----")
+        maintain = "-----"
+        batch    = "-----"
     else
-        maintain = string.format("%5d", info["maintainProductAmount"])
-        batch    = string.format("%5d", currentProducts[1]["quantity"])
+        maintain = string.format("%d", info["maintainProductAmount"])
+        batch    = string.format("%d", currentProducts[1]["quantity"])
     end
-    return "setNextFillColor(layer, .6,.6,.6,1) setNextTextAlign(layer, AlignH_Right, AlignV_Middle) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
+    return "setNextFillColor(layer, .6,.6,.6,1) setNextTextAlign(layer, AlignH_Right, posy) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
 end
 
 indy_column = function(indy, tier, posx, posy)
@@ -264,7 +264,7 @@ indy_column = function(indy, tier, posx, posy)
                 stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_stateWithElementName(id).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
             
                 if Show_Maintain_Batch then
-                    stxt = stxt .. t_stats(id, column[c] + 170, posy)
+                    stxt = stxt .. t_stats(id, column[c] + 240, posy)
                 end
 
                 posy = posy +10
@@ -324,7 +324,7 @@ indy_column = function(indy, tier, posx, posy)
             stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_state(id,0).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
        
              if Show_Maintain_Batch then
-                stxt = stxt .. t_stats(id, column[c] + 170, posy)
+                stxt = stxt .. t_stats(id, column[c] + 240, posy)
             end
 
             posy = posy + 10
@@ -381,7 +381,7 @@ local layer = createLayer()
 local rx, ry = getResolution()
 
 local font = loadFont("Oxanium", 12)
-local font3 = loadFont("RobotoCondensed", 11)
+local font3 = loadFont("RobotoCondensed", 10)
 
 local column = {10, 266, 522, 778}
 
@@ -431,7 +431,7 @@ local layer = createLayer()
 local rx, ry = getResolution()
 
 local font = loadFont("Oxanium", 12)
-local font3 = loadFont("RobotoCondensed", 11)
+local font3 = loadFont("RobotoCondensed", 10)
 
 local column = {10, 266, 522, 778}
 
@@ -482,7 +482,7 @@ local layer = createLayer()
 local rx, ry = getResolution()
 
 local font = loadFont("Oxanium", 12)
-local font3 = loadFont("RobotoCondensed", 11)
+local font3 = loadFont("RobotoCondensed", 10)
 
 column = {10, 266, 522, 778}
 
@@ -525,7 +525,7 @@ local layer = createLayer()
 local rx, ry = getResolution()
 
 local font = loadFont("Oxanium", 12)
-local font3 = loadFont("RobotoCondensed", 11)
+local font3 = loadFont("RobotoCondensed", 10)
 
 column = {10, 266, 522, 778}
 

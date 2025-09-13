@@ -32,6 +32,10 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 3.0 updates:</b><br>
+    -Added and right Aligned Maintain/Batch values<br>
+    -Added toggle to show/hide state value<br>
+
 <b>Version 2.6 updates:</b><br>
     - Added parameter to choose alphabetical or value-based state sorting<br>
 
