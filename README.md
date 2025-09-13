@@ -11,6 +11,7 @@ Copy [4 screen version](https://github.com/Vtreka/Factory-Monitoring-Expanded/bl
 Simply connect core and 4 screens in any order (and optionally a databank) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
 <b>Lua Parameters</b><br><br>
 Refresh timer - value in seconds, set above 3 for really big factories<br>
+Show Maintain/Batch - Display maintain and batch amounts for each machine <br>
 Show name - Will display Industry Unit name instead of the item that is being crafted<br>
 Sort By item tier - Will sort by tier of item being crafted instead of Industry Unit tier <br>
 Sort By State - Sort industry units by their state value <br>

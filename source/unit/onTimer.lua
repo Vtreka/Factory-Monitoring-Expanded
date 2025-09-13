@@ -118,7 +118,7 @@ f_stateWithElementName = function(fid)
         label = "ERROR"
     end
     if State_as_Prefix then
-        return label .. " " .. elementName
+        return label .. " - " .. elementName
     else
         return elementName .. " - " .. label
     end
@@ -188,6 +188,20 @@ getItemTier = function(fid)
     return 0
 end
 
+t_stats = function(fid, ax, ay)
+    local info = core_unit[1].getElementIndustryInfoById(fid)
+    local currentProducts = info["currentProducts"]
+    local maintain, batch
+    if currentProducts == nil or currentProducts[1] == nil then
+        maintain = "-----"
+        batch = "-----"
+    else
+        maintain = info["maintainProductAmount"]
+        batch = currentProducts[1]["quantity"]
+    end
+    return "setNextFillColor(layer, .6,.6,.6,1) addText(layer, font3, \"M: ".. maintain .." B: ".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
+end
+
 indy_column = function(indy, tier, posx, posy)
     if indy[0] == 0 then 
         return "" 
@@ -245,6 +259,10 @@ indy_column = function(indy, tier, posx, posy)
                 --Add text to table
                 stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_stateWithElementName(id).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
             
+                if Show_Maintain_Batch then
+                    stxt = stxt .. t_stats(id, column[c] + 170, posy)
+                end
+
                 posy = posy +10
             end
 
@@ -301,6 +319,10 @@ indy_column = function(indy, tier, posx, posy)
             --Add text to table
             stxt = stxt .."addText(layer, font3, \"" .. num.."\", ".. column[c] .. "," .. posy ..")\n" .. setNextFillColourByState(id) .. "addText(layer, font3,\"" .. f_state(id,0).. "\" , " .. column[c] + 20 .. "," .. posy .. ")\n"
        
+             if Show_Maintain_Batch then
+                stxt = stxt .. t_stats(id, column[c] + 170, posy)
+            end
+
             posy = posy + 10
         end
 
