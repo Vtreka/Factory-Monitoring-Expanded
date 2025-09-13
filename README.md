@@ -13,6 +13,7 @@ Simply connect core and 4 screens in any order (and optionally a databank) to Pr
 Refresh timer - value in seconds, set above 3 for really big factories<br>
 Show name - Will display Industry Unit name instead of the item that is being crafted<br>
 Sort By item tier - Will sort by tier of item being crafted instead of Industry Unit tier <br>
+Sort By State - Sort industry units by their state value <br>
 border - bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
 tier1colour - Set Tier 1 Colour<br>
 tier2colour - Set Tier 2 Colour<br>
@@ -28,6 +29,9 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 2.5 updates:</b><br>
+    - Added option to sort by state<br>
+<br>
 <b>Version 2.4 updates:</b><br>
     - Added option to sort by item tier instead of Industry Unit tier<br>
     - Added Tier 5 colour parameter<br><br>
@@ -44,7 +48,7 @@ Note: Naming convention is currently as follows:<br>
     - Show indy name Unchecked: Element being crafted then Machine state<br><br>
 
 Thanks to BlimpieBoy for contributions to code.<br>
-Next updates: Planning to allow for State to be set as a prefix or suffix using Parameters and adding in sorting within each tier. <br><br>
+<br>
 
 <b>Version 2.2 updates:</b><br>
     - Can now connect Databank to save Parameters between updates (The first time you connect a Databank it will have no data saved and you should get a message in the Lua chat channel that says "No parameters saved to Databank. Restart the Programming Board"). The Parameters are saved when the Programming Board is deactivated, so do that then re-activate the Programming Board<br>
