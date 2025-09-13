@@ -7,11 +7,11 @@ This version displays Electronics, 3D Printers, Chemical Industry and Glass indu
 Note: The 9 screen variant of the script is based on the original and has not been updated.
 <br><br>
 ## Installation
-Copy [3 screen version](https://github.com/Vtreka/Factory-Monitoring-Expanded/blob/main/PB.json) into Programming Board in game <br><br>
-Simply connect core and 3 screens in any order (and optionally a databank) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
+Copy [4 screen version](https://github.com/Vtreka/Factory-Monitoring-Expanded/blob/main/PB.json) into Programming Board in game <br><br>
+Simply connect core and 4 screens in any order (and optionally a databank) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
 <b>Lua Parameters</b><br><br>
 Refresh timer - value in seconds, set above 3 for really big factories<br>
-Show name - Checkbox does nothing currently. In future will allow to display Industry Unit name instead of the item that is being crafted<br>
+Show name - Will display Industry Unit name instead of the item that is being crafted<br>
 border - bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
 tier1colour - Set Tier 1 Colour<br>
 tier2colour - Set Tier 2 Colour<br>

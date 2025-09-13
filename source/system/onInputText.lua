@@ -14,7 +14,7 @@ if string.find(T,"help") then
  system.print("to clear an arrow type: clear [index]")
  system.print("ex: clear 18")
  system.print("")
- system.print("For assistance contact Bartas (game) or BartasRS#2742 (discord)")    
+ system.print("For assistance contact Vtreka in game or on discord")    
  end
 if string.find(T,"clear") then
     str = string.gsub(T, "clear" ,"")
