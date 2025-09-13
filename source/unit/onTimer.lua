@@ -4,83 +4,90 @@ c=1
 
 column = {10, 266, 522, 778}
 
-f_state = function(fid,F)
+f_state = function(fid, F)
     state = core_unit[1].getElementIndustryInfoById(fid)["state"]
-        if state < 1 and F == 0 then
+    local function fmt(name, label)
+        if State_as_Prefix then
+            return label .. " - " .. name
+        else
+            return name .. " - " .. label
+        end
+    end
+    if state < 1 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - Error" .. state
-        elseif state == 1 and F == 0 then
+        return fmt(tt, "Error" .. state)
+    elseif state == 1 and F == 0 then
         local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
-            if industryInfo == nil then
+        if industryInfo == nil then
             return "Not configured"
-            end
+        end
         local currentProducts = industryInfo["currentProducts"]
-            if currentProducts == nil or #currentProducts == 0 then
+        if currentProducts == nil or #currentProducts == 0 then
             return "Not configured"
-            end
+        end
         local productInfo = system.getItem(currentProducts[1]["id"])
-            if productInfo == nil then
+        if productInfo == nil then
             return "Not configured"
-            end
+        end
         local displayNameWithSize = productInfo["displayNameWithSize"]
         local tt = string.gsub(displayNameWithSize, "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - Stopped"
-        elseif state == 2 and F == 0 then 
+        return fmt(tt, "Stopped")
+    elseif state == 2 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - Running"
-        elseif state == 3 and F == 0 then 
+        return fmt(tt, "Running")
+    elseif state == 3 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - Missing ingredient"
-        elseif state == 4 and F == 0 then 
+        return fmt(tt, "Missing ingredient")
+    elseif state == 4 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - Output full"
-        elseif state == 5 and F == 0 then
+        return fmt(tt, "Output full")
+    elseif state == 5 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - No output container"
-        elseif state == 6 and F == 0 then 
+        return fmt(tt, "No output container")
+    elseif state == 6 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - Pending"
-        elseif state == 7 and F == 0 then
+        return fmt(tt, "Pending")
+    elseif state == 7 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - Missing schematics"
-        elseif state > 7 and F == 0 then
+        return fmt(tt, "Missing schematics")
+    elseif state > 7 and F == 0 then
         t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
         tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
         tt = string.gsub(tt, "hydraulics","Hydraulics")
         tt = string.gsub(tt, "Uncommon","Unc.")
         tt = string.gsub(tt, " product","")
-        return tt .. " - Error" .. state
+        return fmt(tt, "Error" .. state)
     end
 end
 
@@ -88,21 +95,33 @@ f_stateWithElementName = function(fid)
     state = core_unit[1].getElementIndustryInfoById(fid)["state"]
     elementName = core_unit[1].getElementNameById(fid)
     elementName = string.gsub(elementName, "Craft ", "")
-	
+    local label = ""
     if state == 1 then
-		if isElementConfigured(fid) then
-			return "Stopped     " .. elementName
-		else
-			return "Unconfig    " .. elementName
-		end
-	elseif state == 2 then return "Running     " .. elementName
-	elseif state == 3 then return "Ingredient  " .. elementName
-	elseif state == 4 then return "Output full " .. elementName
-	elseif state == 5 then return "No output   " .. elementName
-	elseif state == 6 then return "Pending     " .. elementName
-	elseif state == 7 then return "Schematic   " .. elementName
-	elseif state > 7 then return  "ERROR       " .. elementName
-    end							  
+        if isElementConfigured(fid) then
+            label = "Stopped"
+        else
+            label = "Unconfig"
+        end
+    elseif state == 2 then
+        label = "Running"
+    elseif state == 3 then
+        label = "Ingredient"
+    elseif state == 4 then
+        label = "Output full"
+    elseif state == 5 then
+        label = "No output"
+    elseif state == 6 then
+        label = "Pending"
+    elseif state == 7 then
+        label = "Schematic"
+    elseif state > 7 then
+        label = "ERROR"
+    end
+    if State_as_Prefix then
+        return label .. " " .. elementName
+    else
+        return elementName .. " - " .. label
+    end
 end
 
 isElementConfigured = function(fid)
