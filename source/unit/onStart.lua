@@ -9,6 +9,7 @@ system.print ("type 'help' for available commands")
 useDatabankValues = true --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
 Show_Indy_name = false --export: Shows Industry Unit name instead of element being crafted if checked
 SortByItemTier = true --export: Sort by item tier instead of Industry Unit tier
+State_as_Prefix = false --export: Put state before the machine/item name if checked
 border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_timer = 5 --export: Screen(s) refresh timer in seconds
 tier1colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
@@ -28,6 +29,7 @@ options.tier3colour = tier3colour
 options.tier4colour = tier4colour
 options.tier5colour = tier5colour
 options.SortByItemTier = SortByItemTier
+options.State_as_Prefix = State_as_Prefix
 
 databank = nil
 screens = {}
