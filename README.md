@@ -12,19 +12,19 @@ Simply connect core and 4 screens in any order (and optionally a databank) to Pr
 <b>Lua Parameters</b><br><br>
 Refresh timer - value in seconds, set above 3 for really big factories<br>
 Show name - Will display Industry Unit name instead of the item that is being crafted<br>
+Sort By item tier - Will sort by tier of item being crafted instead of Industry Unit tier <br>
 border - bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
 tier1colour - Set Tier 1 Colour<br>
 tier2colour - Set Tier 2 Colour<br>
 tier3colour - Set Tier 3 Colour<br>
 tier4colour - Set Tier 4 Colour<br>
 tier5colour - Set Tier 5 Colour<br>
-Sort by item tier - Group industries by the tier of the item being produced rather than the Industry Unit tier<br>
 
 <br>
 Script comes with industry locator. Type <i>help</i> in Lua Tab to see available commands.
 
 <hr>
-The script is made so it should be fairly easy to shuffle contents between screens or add more screens to it (up to 9) if you wish so. If you need any help with customising it reach me in game (Vtreka) or on Discord (Vtreka#1337).
+The script is made so it should be fairly easy to shuffle contents between screens or add more screens to it (up to 9) if you wish so. If you need any help with customising it reach me in game or on Discord (Vtreka).
 
 <br>
 <hr>

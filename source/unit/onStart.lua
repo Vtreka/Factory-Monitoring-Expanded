@@ -8,14 +8,14 @@ system.print ("type 'help' for available commands")
 --[[ LUA PARAMETERS ]]
 useDatabankValues = true --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
 Show_Indy_name = false --export: Shows Industry Unit name instead of element being crafted if checked
-border = 550 --export: Bottom display line<br>Maximum 600<br>Use to adjust
+SortByItemTier = false --export: Sort by item tier instead of Industry Unit tier
+border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_timer = 5 --export: Screen(s) refresh timer in seconds
 tier1colour = '1, 1, 1' --export: Set Tier 1 Colour
 tier2colour = '0, 1, 0' --export: Set Tier 2 Colour
 tier3colour = '0, 0, 1' --export: Set Tier 3 Colour
 tier4colour = '.3, 0, .5' --export: Set Tier 4 Colour
 tier5colour = '1, 1, 0' --export: Set Tier 5 Colour
-SortByItemTier = false --export: Sort by item tier instead of Industry Unit tier
 
 system.print("Refresh timer set to: "..Refresh_timer.." seconds")
 
