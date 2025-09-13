@@ -14,6 +14,8 @@ tier1colour = '1, 1, 1' --export: Set Tier 1 Colour
 tier2colour = '0, 1, 0' --export: Set Tier 2 Colour
 tier3colour = '0, 0, 1' --export: Set Tier 3 Colour
 tier4colour = '.3, 0, .5' --export: Set Tier 4 Colour
+tier5colour = '1, 1, 0' --export: Set Tier 5 Colour
+SortByItemTier = false --export: Sort by item tier instead of Industry Unit tier
 
 system.print("Refresh timer set to: "..Refresh_timer.." seconds")
 
@@ -24,6 +26,8 @@ options.tier1colour = tier1colour
 options.tier2colour = tier2colour
 options.tier3colour = tier3colour
 options.tier4colour = tier4colour
+options.tier5colour = tier5colour
+options.SortByItemTier = SortByItemTier
 
 databank = nil
 screens = {}
