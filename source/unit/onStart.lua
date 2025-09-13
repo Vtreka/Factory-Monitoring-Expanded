@@ -11,11 +11,11 @@ Show_Indy_name = false --export: Shows Industry Unit name instead of element bei
 SortByItemTier = false --export: Sort by item tier instead of Industry Unit tier
 border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_timer = 5 --export: Screen(s) refresh timer in seconds
-tier1colour = '1, 1, 1' --export: Set Tier 1 Colour
-tier2colour = '0, 1, 0' --export: Set Tier 2 Colour
-tier3colour = '0, 0, 1' --export: Set Tier 3 Colour
-tier4colour = '.3, 0, .5' --export: Set Tier 4 Colour
-tier5colour = '1, 1, 0' --export: Set Tier 5 Colour
+tier1colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
+tier2colour = '0, 1.5, 0' --export: Set Tier 2 Colour
+tier3colour = '0, 0.15, 1' --export: Set Tier 3 Colour
+tier4colour = '1, 0, 1.5' --export: Set Tier 4 Colour
+tier5colour = '2, 0.8, 0' --export: Set Tier 5 Colour
 
 system.print("Refresh timer set to: "..Refresh_timer.." seconds")
 
