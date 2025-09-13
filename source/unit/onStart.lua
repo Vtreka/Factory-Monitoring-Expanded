@@ -11,6 +11,7 @@ Show_Indy_name = false --export: Shows Industry Unit name instead of element bei
 SortByItemTier = true --export: Sort by item tier instead of Industry Unit tier
 SortByState = false --export: Sort machines by state
 State_as_Prefix = false --export: Put state before the machine/item name if checked
+StateSortMode = 'V' --export: When sorting by state, 'A' sorts alphabetically and 'V' by value
 border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_timer = 5 --export: Screen(s) refresh timer in seconds
 tier1colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
@@ -32,6 +33,7 @@ options.tier5colour = tier5colour
 options.SortByItemTier = SortByItemTier
 options.SortByState = SortByState
 options.State_as_Prefix = State_as_Prefix
+options.StateSortMode = StateSortMode
 
 databank = nil
 screens = {}

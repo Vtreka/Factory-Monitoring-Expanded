@@ -14,6 +14,7 @@ Refresh timer - value in seconds, set above 3 for really big factories<br>
 Show name - Will display Industry Unit name instead of the item that is being crafted<br>
 Sort By item tier - Will sort by tier of item being crafted instead of Industry Unit tier <br>
 Sort By State - Sort industry units by their state value <br>
+State Sort Mode - When sorting by state, choose 'A' for alphabetical or 'V' for value-based sorting <br>
 border - bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
 tier1colour - Set Tier 1 Colour<br>
 tier2colour - Set Tier 2 Colour<br>
@@ -29,6 +30,9 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 2.6 updates:</b><br>
+    - Added parameter to choose alphabetical or value-based state sorting<br>
+
 <b>Version 2.5 updates:</b><br>
     - Added option to sort by state<br>
 <br>
