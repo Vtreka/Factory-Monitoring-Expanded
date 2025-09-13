@@ -9,6 +9,7 @@ system.print ("type 'help' for available commands")
 useDatabankValues = true --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
 Show_Maintain_Batch = false --export: Display maintain and batch values for each machine
 Show_Indy_name = false --export: Shows Industry Unit name instead of element being crafted if checked
+Show_State = true --export: Show machine state if checked
 SortByItemTier = true --export: Sort by item tier instead of Industry Unit tier
 SortByState = false --export: Sort machines by state
 State_as_Prefix = false --export: Put state before the machine/item name if checked
@@ -36,6 +37,7 @@ options.SortByState = SortByState
 options.State_as_Prefix = State_as_Prefix
 options.StateSortMode = StateSortMode
 options.Show_Maintain_Batch = Show_Maintain_Batch
+options.Show_State = Show_State
 
 databank = nil
 screens = {}
