@@ -3,7 +3,7 @@ Fork of BartasRS Factory Monitoring Expanded - https://github.com/BartasRS/Facto
 ![image](https://user-images.githubusercontent.com/94600381/222389623-ad7aa55e-e8ce-4b87-8a8c-e2e8b5bd2b31.png)
 
 <br>
-This version displays Metalworks, Electronics and Glass industry on screen 1, 3D Printers, Chemical Industry, Refiners, Honeycombs, Smelters and Recyclers on screen 2 and, finally Assemblers on screen 3. Should be ok for most people but can be expanded up to 9 screens if required<br>
+This version displays Electronics, 3D Printers, Chemical Industry and Glass industry on screen 1, Refiners, Smelters, Honeycomb and Recyclers on screen 2, Assembly Lines on screen 3 and Metalwork Industry on screen 4. Should be ok for most people but can be expanded up to 9 screens if required<br>
 Note: The 9 screen variant of the script is based on the original and has not been updated.
 <br><br>
 ## Installation

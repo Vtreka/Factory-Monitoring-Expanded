@@ -266,18 +266,23 @@ for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
 
 local c = 1
 
-header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
-]] .. indy_column(metalwork1,1,column[c],t_posy+40) .. [[
-]] .. indy_column(metalwork2,2,column[c],t_posy) .. [[
-]] .. indy_column(metalwork3,3,column[c],t_posy) .. [[
-]] .. indy_column(metalwork4,4,column[c],t_posy) .. [[
-
 header("Electronics Industry", ]].. t_posy ..[[, column[c], ]]..electronics_all..[[)
 ]] .. indy_column(electronics1,1,column[c],t_posy+40) .. [[
 ]] .. indy_column(electronics2,2,column[c],t_posy) .. [[
 ]] .. indy_column(electronics3,3,column[c],t_posy) .. [[
 ]] .. indy_column(electronics4,4,column[c],t_posy) .. [[
 
+header("3D Printers", ]].. t_posy ..[[, column[c], ]]..printer_all..[[)
+]] .. indy_column(printer1,1,column[c],t_posy+40) .. [[
+]] .. indy_column(printer2,2,column[c],t_posy) .. [[
+]] .. indy_column(printer3,3,column[c],t_posy) .. [[
+]] .. indy_column(printer4,4,column[c],t_posy) .. [[
+
+header("Chemical Industry", ]].. t_posy ..[[, column[c], ]]..chemical_all..[[)
+]] .. indy_column(chemical1,1,column[c],t_posy+40) .. [[
+]] .. indy_column(chemical2,2,column[c],t_posy) .. [[
+]] .. indy_column(chemical3,3,column[c],t_posy) .. [[
+]] .. indy_column(chemical4,4,column[c],t_posy) .. [[
 
 header("Glass Industry", ]].. t_posy ..[[, column[c], ]]..glass_all..[[)
 ]] .. indy_column(glass1,1,column[c],t_posy+40) .. [[
@@ -323,18 +328,6 @@ for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
 
 local c = 1
 
-header("3D Printers", ]].. t_posy ..[[, column[c], ]]..printer_all..[[)
-]] .. indy_column(printer1,1,column[c],t_posy+40) .. [[
-]] .. indy_column(printer2,2,column[c],t_posy) .. [[
-]] .. indy_column(printer3,3,column[c],t_posy) .. [[
-]] .. indy_column(printer4,4,column[c],t_posy) .. [[
-
-header("Chemical Industry", ]].. t_posy ..[[, column[c], ]]..chemical_all..[[)
-]] .. indy_column(chemical1,1,column[c],t_posy+40) .. [[
-]] .. indy_column(chemical2,2,column[c],t_posy) .. [[
-]] .. indy_column(chemical3,3,column[c],t_posy) .. [[
-]] .. indy_column(chemical4,4,column[c],t_posy) .. [[
-
 header("Refiners", ]].. t_posy ..[[, column[c], ]]..refiner_all..[[)
 ]] .. indy_column(refiner1,1,column[c],t_posy+40) .. [[
 ]] .. indy_column(refiner2,2,column[c],t_posy) .. [[
@@ -358,7 +351,7 @@ header("Recyclers", ]].. t_posy ..[[, column[c], ]]..recycler_all..[[)
 ]] .. indy_column(recycler2,2,column[c],t_posy) .. [[
 ]] .. indy_column(recycler3,3,column[c],t_posy) .. [[
 ]] .. indy_column(recycler4,4,column[c],t_posy) .. [[
-]]  
+]]
 
 posy = 10
 t_posy = 10
@@ -404,14 +397,61 @@ header("Assembly Lines", ]].. t_posy ..[[, column[c], ]]..assembly_all..[[)
 ]] .. indy_column(assembly3,3,column[c],t_posy) .. [[
 ]] .. indy_column(assembly4,4,column[c],t_posy) .. [[
 
-]]  
+]]
+
+posy = 10
+t_posy = 10
+c=1
+column = {10, 266, 522, 778}
+
+screen_four = [[
+local layer = createLayer()
+local rx, ry = getResolution()
+
+local font = loadFont("Oxanium", 12)
+local font3 = loadFont("RobotoCondensed", 11)
+
+column = {10, 266, 522, 778}
+
+setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
+setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
+setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
+
+setNextFillColor(layer, 0,0,0,0)
+setNextStrokeWidth(layer, 1)
+addBoxRounded(layer, 0, 0, rx, ry, 10)
+
+local div = rx/4
+local posy = 10
+
+local header = function(tag, y, p, n)
+    setNextFillColor(layer, 0,0,1,0.2)
+    setNextStrokeWidth(layer, .1)
+    addBoxRounded(layer, p, y, div - 20, 20, 4)
+    setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
+    setNextFillColor(layer, 1,1,1,1)
+    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)
+end
+
+for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
+
+local c = 1
+
+header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
+]] .. indy_column(metalwork1,1,column[c],t_posy+40) .. [[
+]] .. indy_column(metalwork2,2,column[c],t_posy) .. [[
+]] .. indy_column(metalwork3,3,column[c],t_posy) .. [[
+]] .. indy_column(metalwork4,4,column[c],t_posy) .. [[
+
+]]
 
 screens[1].activate()
 screens[2].activate()
 screens[3].activate()
+screens[4].activate()
 
 screens[1].setRenderScript(screen_one)
 screens[2].setRenderScript(screen_two)
 screens[3].setRenderScript(screen_three)
---screens[4].setRenderScript(screen_four)
+screens[4].setRenderScript(screen_four)
 --screens[5].setRenderScript(screen_five)
