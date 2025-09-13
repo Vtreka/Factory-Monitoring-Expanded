@@ -179,15 +179,22 @@ indy_column = function(indy, tier, posx, posy)
             local machines = {}
             for index,id in ipairs(indy) do
                 if (not SortByItemTier) or (getItemTier(id) == tier) then
-                    local machine = {mid = id, name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", "")}
+                    local machine = {
+                        mid = id,
+                        name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", ""),
+                        state = core_unit[1].getElementIndustryInfoById(id)["state"]
+                    }
                     table.insert(machines, machine)
                 end
             end
-                
-            --Sort table by name
-            table.sort(machines, function(a,b) 
+
+            --Sort table by state or name
+            table.sort(machines, function(a,b)
+                if SortByState and a.state ~= b.state then
+                    return a.state < b.state
+                end
                 return a.name < b.name
-                end)
+            end)
                 
             --create table of columns
             for index,machine in ipairs(machines) do
@@ -223,15 +230,22 @@ indy_column = function(indy, tier, posx, posy)
                     if itemInfo and ((not SortByItemTier) or itemInfo["tier"] == tier) then
                         local tempName = itemInfo["displayNameWithSize"]
                         local name = getName(tempName)
-                        table.insert(industryUnits, {mid = id, name = string.lower(name)})
+                        table.insert(industryUnits, {
+                            mid = id,
+                            name = string.lower(name),
+                            state = core_unit[1].getElementIndustryInfoById(id)["state"]
+                        })
                     end
                 end
             end
 
-            --Sort table by name
-            table.sort(industryUnits, function(a,b) 
-                return a.name < b.name 
-                end)
+            --Sort table by state or name
+            table.sort(industryUnits, function(a,b)
+                if SortByState and a.state ~= b.state then
+                    return a.state < b.state
+                end
+                return a.name < b.name
+            end)
 
             --create table of columns
             for index,industryUnit in ipairs(industryUnits) do
