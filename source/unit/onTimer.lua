@@ -175,7 +175,7 @@ setNextFillColourByState = function(fid)
     if state == 1 then return "setNextFillColor(layer,1,1,0,".. Brightness ..")"
         elseif state == 2 then return "setNextFillColor(layer,0,1,0,".. Brightness ..")"
         elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,".. Brightness ..")"
-        elseif state == 4 then return "setNextFillColor(layer,1,0.5,0,".. Brightness ..""
+        elseif state == 4 then return "setNextFillColor(layer,1,0.5,0,".. Brightness ..")"
         elseif state == 5 then return "setNextFillColor(layer,1,0,0,".. Brightness ..")"
         elseif state == 6 then return "setNextFillColor(layer,0,0.5,1,".. Brightness ..")"
         elseif state == 7 then return "setNextFillColor(layer,1,0,0,".. Brightness ..")"
@@ -203,7 +203,7 @@ t_stats = function(fid, ax, ay)
         maintain = string.format("%d", info["maintainProductAmount"])
         batch    = string.format("%d", currentProducts[1]["quantity"])
     end
-    return "setNextFillColor(layer, .6,.6,.6,".. Brightness ..") setNextTextAlign(layer, AlignH_Right, posy) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
+    return "setNextFillColor(layer, .6,.6,.6,1) setNextTextAlign(layer, AlignH_Right, posy) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
 end
 
 indy_column = function(indy, tier, posx, posy)
@@ -409,12 +409,12 @@ local div = rx/4
 local posy = 10
 
 local header = function(tag, y, p, n)
-    setNextFillColor(layer, 0,0,1,]] .. (0.2 * Brightness) .. [[)
+    setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
     setNextStrokeWidth(layer, .1)
     addBoxRounded(layer, p, y, div - 20, 20, 4)
     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
-    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)
+    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
 end
 
 for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
@@ -457,12 +457,12 @@ local div = rx/4
 local posy = 10
 
 local header = function(tag, y, p, n)
-    setNextFillColor(layer, 0,0,1,]] .. (0.2 * Brightness) .. [[)
+    setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
     setNextStrokeWidth(layer, .1)
     addBoxRounded(layer, p, y, div - 20, 20, 4)
     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
-    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)
+    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
 end
 
 for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
@@ -506,12 +506,12 @@ local div = rx/4
 local posy = 10
 
 local header = function(tag, y, p, n)
-    setNextFillColor(layer, 0,0,1,]] .. (0.2 * Brightness) .. [[)
+    setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
     setNextStrokeWidth(layer, .1)
     addBoxRounded(layer, p, y, div - 20, 20, 4)
     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
-    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)
+    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
 end
 
 for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
@@ -547,7 +547,7 @@ local div = rx/4
 local posy = 10
 
 local header = function(tag, y, p, n)
-    setNextFillColor(layer, 0,0,1,]] .. (0.2 * Brightness) .. [[)
+    setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
     setNextStrokeWidth(layer, .1)
     addBoxRounded(layer, p, y, div - 20, 20, 4)
     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
