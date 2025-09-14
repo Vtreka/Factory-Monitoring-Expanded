@@ -172,13 +172,13 @@ end
 
 setNextFillColourByState = function(fid)
     state = core_unit[1].getElementIndustryInfoById(fid)["state"]
-    if state == 1 then return "setNextFillColor(layer,1,1,0,1)"
-        elseif state == 2 then return "setNextFillColor(layer,0,1,0,1)"
-        elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,1)"
-        elseif state == 4 then return "setNextFillColor(layer,1,0.5,0,1)"
-        elseif state == 5 then return "setNextFillColor(layer,1,0,0,1)"
-        elseif state == 6 then return "setNextFillColor(layer,0,0.5,1,1)"
-        elseif state == 7 then return "setNextFillColor(layer,1,0,0,1)"
+    if state == 1 then return "setNextFillColor(layer,1,1,0,"..brightness..")"
+        elseif state == 2 then return "setNextFillColor(layer,0,1,0,"..brightness..")"
+        elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,"..brightness..")"
+        elseif state == 4 then return "setNextFillColor(layer,1,0.5,0,"..brightness..""
+        elseif state == 5 then return "setNextFillColor(layer,1,0,0,"..brightness..")"
+        elseif state == 6 then return "setNextFillColor(layer,0,0.5,1,"..brightness..")"
+        elseif state == 7 then return "setNextFillColor(layer,1,0,0,"..brightness..")"
         else return ""
     end
 end
@@ -203,7 +203,7 @@ t_stats = function(fid, ax, ay)
         maintain = string.format("%d", info["maintainProductAmount"])
         batch    = string.format("%d", currentProducts[1]["quantity"])
     end
-    return "setNextFillColor(layer, .6,.6,.6,1) setNextTextAlign(layer, AlignH_Right, posy) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
+    return "setNextFillColor(layer, .6,.6,.6,"..brightness..") setNextTextAlign(layer, AlignH_Right, posy) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
 end
 
 indy_column = function(indy, tier, posx, posy)
@@ -211,11 +211,11 @@ indy_column = function(indy, tier, posx, posy)
         return "" 
     else    
         stxt = ""
-        if tier <= 1 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_1_Colour ..", 1)\n" end
-        if tier == 2 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_2_Colour ..", 1)\n" end
-        if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_3_Colour ..", 1)\n" end
-        if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_4_Colour ..", .5)\n" end
-        if tier >= 5 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_5_Colour ..", 1)\n" end
+        if tier <= 1 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_1_Colour ..", "..brightness..")\n" end
+        if tier == 2 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_2_Colour ..", "..brightness..")\n" end
+        if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_3_Colour ..", "..brightness..")\n" end
+        if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_4_Colour ..", "..brightness..")\n" end
+        if tier >= 5 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_5_Colour ..", "..brightness..")\n" end
         
         if Show_Indy_Name then
             --create table of machines
@@ -376,6 +376,7 @@ if Sort_By_Item_Tier then
     metalworkAllList = mergeTables(metalwork1, metalwork2, metalwork3, metalwork4)
 end
 
+local brightness = options.Brightness or 1
 local background = options.Background or ""
 local backgroundScript = "setNextFillColor(layer,0,0,0,0)\nsetNextStrokeWidth(layer, 1)\naddBoxRounded(layer, 0, 0, rx, ry, 10)\n"
 if background ~= "" then
@@ -384,7 +385,7 @@ if background ~= "" then
     else
         local r,g,b = background:match("([%d%.]+)%s*,%s*([%d%.]+)%s*,%s*([%d%.]+)")
         if r and g and b then
-            backgroundScript = "setNextFillColor(layer,"..r..","..g..","..b..",1)\nsetNextStrokeWidth(layer,1)\naddBoxRounded(layer,0,0,rx,ry,10)\n"
+            backgroundScript = "setNextFillColor(layer,"..r..","..g..","..b..","..brightness..")\nsetNextStrokeWidth(layer,1)\naddBoxRounded(layer,0,0,rx,ry,10)\n"
         end
     end
 end
@@ -398,9 +399,9 @@ local font3 = loadFont("RobotoCondensed", 10)
 
 local column = {10, 266, 522, 778}
 
-setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
-setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
-setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
+setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. brightness .. [[)
+setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. brightness .. [[)
+setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. brightness .. [[)
 
 ]] .. backgroundScript .. [[
 
@@ -408,12 +409,12 @@ local div = rx/4
 local posy = 10
 
 local header = function(tag, y, p, n)
-    setNextFillColor(layer, 0,0,1,0.2)
+    setNextFillColor(layer, 0,0,1,]] .. (0.2*brightness) .. [[)
     setNextStrokeWidth(layer, .1)
     addBoxRounded(layer, p, y, div - 20, 20, 4)
     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
-    setNextFillColor(layer, 1,1,1,1)
-    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+    setNextFillColor(layer, 1,1,1,]] .. brightness .. [[)
+    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)
 end
 
 for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
@@ -446,9 +447,9 @@ local font3 = loadFont("RobotoCondensed", 10)
 
 local column = {10, 266, 522, 778}
 
-setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
-setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
-setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
+setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. brightness .. [[)
+setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. brightness .. [[)
+setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. brightness .. [[)
 
 ]] .. backgroundScript .. [[
 
@@ -456,12 +457,12 @@ local div = rx/4
 local posy = 10
 
 local header = function(tag, y, p, n)
-    setNextFillColor(layer, 0,0,1,0.2)
+    setNextFillColor(layer, 0,0,1,]] .. (0.2*brightness) .. [[)
     setNextStrokeWidth(layer, .1)
     addBoxRounded(layer, p, y, div - 20, 20, 4)
     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
-    setNextFillColor(layer, 1,1,1,1)
-    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+    setNextFillColor(layer, 1,1,1,]] .. brightness .. [[)
+    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)
 end
 
 for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
@@ -495,9 +496,9 @@ local font3 = loadFont("RobotoCondensed", 10)
 
 column = {10, 266, 522, 778}
 
-setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
-setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
-setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
+setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. brightness .. [[)
+setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. brightness .. [[)
+setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. brightness .. [[)
 
 ]] .. backgroundScript .. [[
 
@@ -505,12 +506,12 @@ local div = rx/4
 local posy = 10
 
 local header = function(tag, y, p, n)
-    setNextFillColor(layer, 0,0,1,0.2)
+    setNextFillColor(layer, 0,0,1,]] .. (0.2*brightness) .. [[)
     setNextStrokeWidth(layer, .1)
     addBoxRounded(layer, p, y, div - 20, 20, 4)
     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
-    setNextFillColor(layer, 1,1,1,1)
-    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+    setNextFillColor(layer, 1,1,1,]] .. brightness .. [[)
+    addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)
 end
 
 for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
@@ -536,9 +537,9 @@ local font3 = loadFont("RobotoCondensed", 10)
 
 column = {10, 266, 522, 778}
 
-setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
-setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
-setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
+setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. brightness .. [[)
+setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. brightness .. [[)
+setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. brightness .. [[)
 
 ]] .. backgroundScript .. [[
 
@@ -546,11 +547,11 @@ local div = rx/4
 local posy = 10
 
 local header = function(tag, y, p, n)
-    setNextFillColor(layer, 0,0,1,0.2)
+    setNextFillColor(layer, 0,0,1,]] .. (0.2*brightness) .. [[)
     setNextStrokeWidth(layer, .1)
     addBoxRounded(layer, p, y, div - 20, 20, 4)
     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
-    setNextFillColor(layer, 1,1,1,1)
+    setNextFillColor(layer, 1,1,1,]] .. brightness .. [[)
     addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)
 end
 

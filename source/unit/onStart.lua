@@ -22,6 +22,7 @@ Tier_2_Colour = '0, 1.5, 0' --export: Set Tier 2 Colour
 Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
 Tier_4_Colour = '1, 0, 1.5' --export: Set Tier 4 Colour
 Tier_5_Colour = '2, 0.8, 0' --export: Set Tier 5 Colour
+Brightness = 1 --export: Adjust text and background transparency (0 to 1)
 
 system.print("Refresh timer set to: "..Refresh_Timer.." seconds")
 
@@ -33,6 +34,7 @@ options.Tier_2_Colour = Tier_2_Colour
 options.Tier_3_Colour = Tier_3_Colour
 options.Tier_4_Colour = Tier_4_Colour
 options.Tier_5_Colour = Tier_5_Colour
+options.Brightness = Brightness
 options.Background = Background
 options.Sort_By_Item_Tier = Sort_By_Item_Tier
 options.Sort_By_State = Sort_By_State

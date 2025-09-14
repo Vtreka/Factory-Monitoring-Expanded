@@ -18,12 +18,13 @@ Sort By State - Sort industry units by their state value <br>
 State Sort Mode - When sorting by state, choose 'A' for alphabetical or 'V' for State value sorting <br>
 Border - Bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
 Refresh timer - Value in seconds, set above 3 for really big factories<br>
+Brightness - Adjust brightness of all text and background <br>
+Background - Set background colour "r, g, b" or image URL<br>
 Tier 1 Colour - Set Tier 1 Colour<br>
 Tier 2 Colour - Set Tier 2 Colour<br>
 Tier 3 Colour - Set Tier 3 Colour<br>
 Tier 4 Colour - Set Tier 4 Colour<br>
 Tier 5 Colour - Set Tier 5 Colour<br>
-Background - Set background colour "r, g, b" or image URL<br>
 
 <br>
 Script comes with industry locator. Type <i>help</i> in Lua Tab to see available commands.
@@ -33,6 +34,9 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 3.2 updates:</b><br>
+    -Added Brightness parameter to control text and background transparency<br>
+<br>
 <b>Version 3.1 updates:</b><br>
     -Added Background parameter, can set as RGB colour or a URL<br>
 <br>
