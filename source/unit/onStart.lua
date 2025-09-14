@@ -6,43 +6,42 @@ system.print(" --- Factory Monitor Expanded v2.3.1 ---")
 system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
-useDatabankValues = true --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
+Use_Databank_Values = true --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
+Show_Indy_Name = false --export: Shows Industry Unit name instead of element being crafted if checked
 Show_Maintain_Batch = true --export: Display maintain and batch values for each machine
-Show_Indy_name = false --export: Shows Industry Unit name instead of element being crafted if checked
 Show_State = true --export: Show machine state if checked
-SortByItemTier = true --export: Sort by item tier instead of Industry Unit tier
-SortByState = false --export: Sort machines by state
-State_as_Prefix = false --export: Put state before the machine/item name if checked
-StateSortMode = 'V' --export: When sorting by state, 'A' sorts alphabetically and 'V' by value
-border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
-Refresh_timer = 5 --export: Screen(s) refresh timer in seconds
-tier1colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
-tier2colour = '0, 1.5, 0' --export: Set Tier 2 Colour
-tier3colour = '0, 0.15, 1' --export: Set Tier 3 Colour
-tier4colour = '1, 0, 1.5' --export: Set Tier 4 Colour
-tier5colour = '2, 0.8, 0' --export: Set Tier 5 Colour
+Sort_By_Item_Tier = true --export: Sort by item tier instead of Industry Unit tier
+Sort_By_State = false --export: Sort machines by state
+State_As_Prefix = false --export: Put state before the machine/item name if checked
+State_Sort_Mode = 'V' --export: When sorting by state, 'A' sorts alphabetically and 'V' by value
+Border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
+Refresh_Timer = 5 --export: Screen(s) refresh timer in seconds
+Tier_1_Colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
+Tier_2_Colour = '0, 1.5, 0' --export: Set Tier 2 Colour
+Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
+Tier_4_Colour = '1, 0, 1.5' --export: Set Tier 4 Colour
+Tier_5_Colour = '2, 0.8, 0' --export: Set Tier 5 Colour
 
 system.print("Refresh timer set to: "..Refresh_timer.." seconds")
 
 options = {}
-options.Show_Indy_name = Show_Indy_name
-options.border = border
-options.tier1colour = tier1colour
-options.tier2colour = tier2colour
-options.tier3colour = tier3colour
-options.tier4colour = tier4colour
-options.tier5colour = tier5colour
-options.SortByItemTier = SortByItemTier
-options.SortByState = SortByState
-options.State_as_Prefix = State_as_Prefix
-options.StateSortMode = StateSortMode
+options.Show_Indy_Name = Show_Indy_Name
+options.Border = Border
+options.Tier_1_Colour = Tier_1_Colour
+options.Tier_2_Colour = Tier_2_Colour
+options.Tier_3_Colour = Tier_3_Colour
+options.Tier_4_Colour = Tier_4_Colour
+options.Tier_5_Colour = Tier_5_Colour
+options.Sort_By_Item_Tier = Sort_By_Item_Tier
+options.Sort_By_State = Sort_By_State
+options.State_As_Prefix = State_As_Prefix
+options.State_Sort_Mode = State_Sort_Mode
 options.Show_Maintain_Batch = Show_Maintain_Batch
 options.Show_State = Show_State
 
 databank = nil
 screens = {}
 core_unit = {}
---local json = require('dkjson')
 
 for slot_name, slot in pairs(unit) do
     if type(slot) == "table"
@@ -141,7 +140,6 @@ recycler3 = {}
 recycler4 = {}
 
 -- Assembly Lines --
-
 assembly1 = {}
 assembly2 = {}
 assembly3 = {}

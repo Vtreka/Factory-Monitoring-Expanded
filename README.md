@@ -9,7 +9,7 @@ Note: The 9 screen variant of the script is based on the original and has not be
 ## Installation
 Copy [4 screen version](https://github.com/Vtreka/Factory-Monitoring-Expanded/blob/main/PB.json) into Programming Board in game <br><br>
 Simply connect core and 4 screens in any order (and optionally a databank) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
-<b>Lua Parameters</b><br><br>
+<b>**Lua Parameters**</b><br>
 Refresh timer - value in seconds, set above 3 for really big factories<br>
 Show Maintain/Batch - Display maintain and batch amounts for each machine <br>
 Show name - Will display Industry Unit name instead of the item that is being crafted<br>
@@ -35,37 +35,36 @@ The script is made so it should be fairly easy to shuffle contents between scree
 <b>Version 3.0 updates:</b><br>
     -Added and right Aligned Maintain/Batch values<br>
     -Added toggle to show/hide state value<br>
-
+<br>
 <b>Version 2.6 updates:</b><br>
     - Added parameter to choose alphabetical or value-based state sorting<br>
-
+<br>
 <b>Version 2.5 updates:</b><br>
     - Added option to sort by state<br>
 <br>
 <b>Version 2.4 updates:</b><br>
     - Added option to sort by item tier instead of Industry Unit tier<br>
-    - Added Tier 5 colour parameter<br><br>
-
+    - Added Tier 5 colour parameter<br>
+<br>
 <b>Version 2.3.1 updates:</b><br>
     - Addded sorting by name when "Show Indy name" is not enabled<br>
-    - Removed additional space added to items with product in the name<br><br>
-    
+    - Removed additional space added to items with product in the name<br>
+<br>   
 <b>Version 2.3 updates:</b><br>
-Enabled Show Name parameter to switch between showing Industry Unit name instead of element being crafted. <br><br>
-
+Enabled Show Name parameter to switch between showing Industry Unit name instead of element being crafted. <br>
+<br>
 Note: Naming convention is currently as follows:<br>
     - Show indy name Checked: Machine state then Industry Unit name<br>
-    - Show indy name Unchecked: Element being crafted then Machine state<br><br>
-
+    - Show indy name Unchecked: Element being crafted then Machine state<br>
+<br>
 Thanks to BlimpieBoy for contributions to code.<br>
 <br>
-
 <b>Version 2.2 updates:</b><br>
     - Can now connect Databank to save Parameters between updates (The first time you connect a Databank it will have no data saved and you should get a message in the Lua chat channel that says "No parameters saved to Databank. Restart the Programming Board"). The Parameters are saved when the Programming Board is deactivated, so do that then re-activate the Programming Board<br>
     - Combined separate onStart code into Unit:onStart
     - Added onStop event to save databank values
-    - Reverted some changes in Unit:onTimer until I get my head around how to implement sorting by element name and options for different naming and orders of industry state <br><br>
-
+    - Reverted some changes in Unit:onTimer until I get my head around how to implement sorting by element name and options for different naming and orders of industry state <br>
+<br>
 <b>Version 2.1 updates:</b><br>
     - Adding Recyclers<br>
     - Added catch for industry units that haven't been configured yet (indy unit placed but no item select to be crafted)<br>
