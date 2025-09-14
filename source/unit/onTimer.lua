@@ -421,18 +421,42 @@ for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
 
 local c = 1
 
+--Screen 1 
 header("Electronics Industry", ]].. t_posy ..[[, column[c], ]]..electronics_all..[[)
 ]] .. renderIndustry(electronicsAllList, electronics1, electronics2, electronics3, electronics4) .. [[
 
-header("3D Printers", ]].. t_posy ..[[, column[c], ]]..printer_all..[[)
-]] .. renderIndustry(printerAllList, printer1, printer2, printer3, printer4) .. [[
-
+--Screen 1 and 5
 header("Chemical Industry", ]].. t_posy ..[[, column[c], ]]..chemical_all..[[)
 ]] .. renderIndustry(chemicalAllList, chemical1, chemical2, chemical3, chemical4) .. [[
 
+--Screen 1 and 6
 header("Glass Industry", ]].. t_posy ..[[, column[c], ]]..glass_all..[[)
 ]] .. renderIndustry(glassAllList, glass1, glass2, glass3, glass4) .. [[
+
 ]]
+-- --Screen 1 and 4
+-- header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
+-- ]] .. renderIndustry(metalworkAllList, metalwork1, metalwork2, metalwork3, metalwork4) .. [[
+-- -- Screen 1 and 3
+-- header("Assembly Lines", ]].. t_posy ..[[, column[c], ]]..assembly_all..[[)
+-- ]] .. renderIndustry(assemblyAllList, assembly1, assembly2, assembly3, assembly4) .. [[
+-- Screen 1 and 2
+-- header("3D Printers", ]].. t_posy ..[[, column[c], ]]..printer_all..[[)
+-- ]] .. renderIndustry(printerAllList, printer1, printer2, printer3, printer4) .. [[
+-- --Screen 1, 2 and 7
+-- header("Refiners", ]].. t_posy ..[[, column[c], ]]..refiner_all..[[)
+-- ]] .. renderIndustry(refinerAllList, refiner1, refiner2, refiner3, refiner4) .. [[
+-- --Screen 1, 2 and 8
+-- header("Smelters", ]].. t_posy ..[[, column[c], ]]..smelter_all..[[)
+-- ]] .. renderIndustry(smelterAllList, smelter1, smelter2, smelter3, smelter4) .. [[
+-- --Screen 1, 2 and 9
+-- header("Honeycomb", ]].. t_posy ..[[, column[c], ]]..honey_all..[[)
+-- ]] .. renderIndustry(honeyAllList, honey1, honey2, honey3, honey4) .. [[
+-- --Screen 1, 2 and 10
+-- header("Recyclers", ]].. t_posy ..[[, column[c], ]]..recycler_all..[[)
+-- ]] .. renderIndustry(recyclerAllList, recycler1, recycler2, recycler3, recycler4) .. [[
+
+-- ]]
 
 posy = 10
 t_posy = 10
@@ -469,17 +493,26 @@ for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
 
 local c = 1
 
+--Screen 1 and 2
+header("3D Printers", ]].. t_posy ..[[, column[c], ]]..printer_all..[[)
+]] .. renderIndustry(printerAllList, printer1, printer2, printer3, printer4) .. [[
+
+--Screen 1, 2 and 7
 header("Refiners", ]].. t_posy ..[[, column[c], ]]..refiner_all..[[)
 ]] .. renderIndustry(refinerAllList, refiner1, refiner2, refiner3, refiner4) .. [[
 
+--Screen 1, 2 and 8
 header("Smelters", ]].. t_posy ..[[, column[c], ]]..smelter_all..[[)
 ]] .. renderIndustry(smelterAllList, smelter1, smelter2, smelter3, smelter4) .. [[
 
+--Screen 1, 2 and 9
 header("Honeycomb", ]].. t_posy ..[[, column[c], ]]..honey_all..[[)
 ]] .. renderIndustry(honeyAllList, honey1, honey2, honey3, honey4) .. [[
 
+--Screen 1, 2 and 10
 header("Recyclers", ]].. t_posy ..[[, column[c], ]]..recycler_all..[[)
 ]] .. renderIndustry(recyclerAllList, recycler1, recycler2, recycler3, recycler4) .. [[
+
 ]]
 
 posy = 10
