@@ -26,7 +26,6 @@ Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
 Tier_4_Colour = '1, 0, 1.5' --export: Set Tier 4 Colour
 Tier_5_Colour = '2, 0.8, 0' --export: Set Tier 5 Colour
 
-
 system.print("Refresh timer set to: "..Refresh_Timer.." seconds")
 
 options = {}
