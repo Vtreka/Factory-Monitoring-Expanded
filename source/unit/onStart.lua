@@ -6,7 +6,7 @@ system.print(" --- Factory Monitor Expanded v3.1 ---")
 system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
-Use_Databank_Values = true --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
+Use_Databank_Values = false --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
 Show_Indy_Name = false --export: Shows Industry Unit name instead of element being crafted if checked
 Show_Maintain_Batch = true --export: Display maintain and batch values for each machine
 Show_State = true --export: Show machine state if checked
@@ -16,7 +16,7 @@ State_As_Prefix = false --export: Put state before the machine/item name if chec
 State_Sort_Mode = 'V' --export: When sorting by state, 'A' sorts alphabetically and 'V' by value
 Border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_Timer = 5 --export: Screen(s) refresh timer in seconds
-Background = '0, 0, 0' --export: Set background colour "r, g, b" or image URL
+Background = '0, 0, 0' --export: Set background colour "r, g, b" or image URL (make sure to include the http:// or https://)
 Tier_1_Colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
 Tier_2_Colour = '0, 1.5, 0' --export: Set Tier 2 Colour
 Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
