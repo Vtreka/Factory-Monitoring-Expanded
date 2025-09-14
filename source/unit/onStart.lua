@@ -16,14 +16,14 @@ State_As_Prefix = false --export: Put state before the machine/item name if chec
 State_Sort_Mode = 'V' --export: When sorting by state, 'A' sorts alphabetically and 'V' by value
 Border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_Timer = 5 --export: Screen(s) refresh timer in seconds
+Background = '' --export: Set background colour "r, g, b" or image URL
 Tier_1_Colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
 Tier_2_Colour = '0, 1.5, 0' --export: Set Tier 2 Colour
 Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
 Tier_4_Colour = '1, 0, 1.5' --export: Set Tier 4 Colour
 Tier_5_Colour = '2, 0.8, 0' --export: Set Tier 5 Colour
-Background = '' --export: Set background colour "r, g, b" or image URL
 
-system.print("Refresh timer set to: "..Refresh_timer.." seconds")
+system.print("Refresh timer set to: "..Refresh_Timer.." seconds")
 
 options = {}
 options.Show_Indy_Name = Show_Indy_Name
@@ -78,7 +78,7 @@ if databank == nil then
     system.print("No Databank Detected")
 else
     system.print("Databank Connected")
-    if (databank.hasKey("options")) and (useDatabankValues == true) then
+    if (databank.hasKey("options")) and (Use_Databank_Values == true) then
         local db_options = json.decode(databank.getStringValue("options"))
         if db_options then
             for key, value in pairs(options) do
@@ -317,4 +317,4 @@ all_count = honey_all + metalwork_all + electronics_all + glass_all + printer_al
 if all_count > 265 then system.print("Crazy factory detected! You will need more than 1 screen!") 
     else system.print("Factory not so big, you might want to use single screen script.") end
 
-unit.setTimer("refresh",Refresh_timer)
+unit.setTimer("refresh",Refresh_Timer)
