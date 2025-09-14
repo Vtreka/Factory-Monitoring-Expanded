@@ -9,7 +9,7 @@ f_state = function(fid, F)
     local function fmt(name, label)
         if not Show_State then
             return name
-        elseif State_as_Prefix then
+        elseif State_As_Prefix then
             return label .. " - " .. name
         else
             return name .. " - " .. label
@@ -121,7 +121,7 @@ f_stateWithElementName = function(fid)
     end
     if not Show_State then
         return elementName
-    elseif State_as_Prefix then
+    elseif State_As_Prefix then
         return label .. " - " .. elementName
     else
         return elementName .. " - " .. label
@@ -211,17 +211,17 @@ indy_column = function(indy, tier, posx, posy)
         return "" 
     else    
         stxt = ""
-        if tier <= 1 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier1colour ..", 1)\n" end
-        if tier == 2 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier2colour ..", 1)\n" end
-        if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier3colour ..", 1)\n" end
-        if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier4colour ..", .5)\n" end
-        if tier >= 5 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. tier5colour ..", 1)\n" end
+        if tier <= 1 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_1_Colour ..", 1)\n" end
+        if tier == 2 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_2_Colour ..", 1)\n" end
+        if tier == 3 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_3_Colour ..", 1)\n" end
+        if tier == 4 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_4_Colour ..", .5)\n" end
+        if tier >= 5 then t_color = "setDefaultFillColor(layer, Shape_Text, ".. Tier_5_Colour ..", 1)\n" end
         
-        if Show_Indy_name then
+        if Show_Indy_Name then
             --create table of machines
             local machines = {}
             for index,id in ipairs(indy) do
-                if (not SortByItemTier) or (getItemTier(id) == tier) then
+                if (not Sort_By_Item_Tier) or (getItemTier(id) == tier) then
                     local machine = {
                         mid = id,
                         name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", ""),
@@ -234,10 +234,10 @@ indy_column = function(indy, tier, posx, posy)
 
             --Sort table by state or name
             table.sort(machines, function(a,b)
-                if SortByState then
-                    if StateSortMode == 'A' and a.stateLabel ~= b.stateLabel then
+                if Sort_By_State then
+                    if State_Sort_Mode == 'A' and a.stateLabel ~= b.stateLabel then
                         return a.stateLabel < b.stateLabel
-                    elseif StateSortMode == 'V' and a.state ~= b.state then
+                    elseif State_Sort_Mode == 'V' and a.state ~= b.state then
                         return a.state < b.state
                     end
                 end
@@ -256,7 +256,7 @@ indy_column = function(indy, tier, posx, posy)
                 end
                 
                 --Move to next column if position is greater than border
-                if posy >= border then 
+                if posy >= Border then 
                     posy=20 c=c+1 
                 end       
             
@@ -279,7 +279,7 @@ indy_column = function(indy, tier, posx, posy)
                 local industryInfo = core_unit[1].getElementIndustryInfoById(id)["currentProducts"]
                 if industryInfo and #industryInfo >= 1 then
                     local itemInfo = system.getItem(industryInfo[1]["id"])
-                    if itemInfo and ((not SortByItemTier) or itemInfo["tier"] == tier) then
+                    if itemInfo and ((not Sort_By_Item_Tier) or itemInfo["tier"] == tier) then
                         local tempName = itemInfo["displayNameWithSize"]
                         local name = getName(tempName)
                         table.insert(industryUnits, {
@@ -294,10 +294,10 @@ indy_column = function(indy, tier, posx, posy)
 
             --Sort table by state or name
             table.sort(industryUnits, function(a,b)
-                if SortByState then
-                    if StateSortMode == 'A' and a.stateLabel ~= b.stateLabel then
+                if Sort_By_State then
+                    if State_Sort_Mode == 'A' and a.stateLabel ~= b.stateLabel then
                         return a.stateLabel < b.stateLabel
-                    elseif StateSortMode == 'V' and a.state ~= b.state then
+                    elseif State_Sort_Mode == 'V' and a.state ~= b.state then
                         return a.state < b.state
                     end
                 end
@@ -316,7 +316,7 @@ indy_column = function(indy, tier, posx, posy)
                 end
             
             --Move to next column if position is greater than border
-            if posy >= border then
+            if posy >= Border then
                 posy = 20 c=c+1
             end
 
@@ -345,7 +345,7 @@ local function mergeTables(...)
 end
 
 renderIndustry = function(allList, t1, t2, t3, t4)
-    if SortByItemTier then
+    if Sort_By_Item_Tier then
         return indy_column(allList,1,column[c],t_posy+40) ..
                indy_column(allList,2,column[c],t_posy) ..
                indy_column(allList,3,column[c],t_posy) ..
@@ -363,7 +363,7 @@ local electronicsAllList, printerAllList, chemicalAllList, glassAllList
 local refinerAllList, smelterAllList, honeyAllList, recyclerAllList
 local assemblyAllList, metalworkAllList
 
-if SortByItemTier then
+if Sort_By_Item_Tier then
     electronicsAllList = mergeTables(electronics1, electronics2, electronics3, electronics4)
     printerAllList = mergeTables(printer1, printer2, printer3, printer4)
     chemicalAllList = mergeTables(chemical1, chemical2, chemical3, chemical4)

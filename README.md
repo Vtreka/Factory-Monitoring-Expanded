@@ -33,6 +33,9 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 3.1 updates:</b><br>
+    -Added Background parameter, can set as RGB colour or a URL<br>
+<br>
 <b>Version 3.0 updates:</b><br>
     -Added and right Aligned Maintain/Batch values<br>
     -Added toggle to show/hide state value<br>
