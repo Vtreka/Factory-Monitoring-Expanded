@@ -564,13 +564,270 @@ header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
 
 ]]
 
+-- posy = 10
+-- t_posy = 10
+-- c=1
+-- column = {10, 266, 522, 778}
+
+-- screen_five = [[
+-- local layer = createLayer()
+-- local rx, ry = getResolution()
+
+-- local font = loadFont("Oxanium", 12)
+-- local font3 = loadFont("RobotoCondensed", 10)
+
+-- column = {10, 266, 522, 778}
+
+-- setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. Brightness .. [[)
+
+-- ]] .. backgroundScript .. [[
+
+-- local div = rx/4
+-- local posy = 10
+
+-- local header = function(tag, y, p, n)
+--     setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
+--     setNextStrokeWidth(layer, .1)
+--     addBoxRounded(layer, p, y, div - 20, 20, 4)
+--     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
+--     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
+--     addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+-- end
+
+-- for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
+
+-- local c = 1
+
+-- header("Chemical Industry", ]].. t_posy ..[[, column[c], ]]..chemical_all..[[)
+-- ]] .. renderIndustry(chemicalAllList, chemical1, chemical2, chemical3, chemical4) .. [[
+
+-- ]]
+
+-- posy = 10
+-- t_posy = 10
+-- c=1
+-- column = {10, 266, 522, 778}
+
+-- screen_six = [[
+-- local layer = createLayer()
+-- local rx, ry = getResolution()
+
+-- local font = loadFont("Oxanium", 12)
+-- local font3 = loadFont("RobotoCondensed", 10)
+
+-- column = {10, 266, 522, 778}
+
+-- setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. Brightness .. [[)
+
+-- ]] .. backgroundScript .. [[
+
+-- local div = rx/4
+-- local posy = 10
+
+-- local header = function(tag, y, p, n)
+--     setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
+--     setNextStrokeWidth(layer, .1)
+--     addBoxRounded(layer, p, y, div - 20, 20, 4)
+--     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
+--     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
+--     addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+-- end
+
+-- for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
+
+-- local c = 1
+
+-- header("Glass Industry", ]].. t_posy ..[[, column[c], ]]..glass_all..[[)
+-- ]] .. renderIndustry(glassAllList, glass1, glass2, glass3, glass4) .. [[
+
+-- ]]
+
+-- posy = 10
+-- t_posy = 10
+-- c=1
+-- column = {10, 266, 522, 778}
+
+-- screen_seven = [[
+-- local layer = createLayer()
+-- local rx, ry = getResolution()
+
+-- local font = loadFont("Oxanium", 12)
+-- local font3 = loadFont("RobotoCondensed", 10)
+
+-- column = {10, 266, 522, 778}
+
+-- setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. Brightness .. [[)
+
+-- ]] .. backgroundScript .. [[
+
+-- local div = rx/4
+-- local posy = 10
+
+-- local header = function(tag, y, p, n)
+--     setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
+--     setNextStrokeWidth(layer, .1)
+--     addBoxRounded(layer, p, y, div - 20, 20, 4)
+--     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
+--     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
+--     addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+-- end
+
+-- for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
+
+-- local c = 1
+
+-- header("Refiners", ]].. t_posy ..[[, column[c], ]]..refiner_all..[[)
+-- ]] .. renderIndustry(refinerAllList, refiner1, refiner2, refiner3, refiner4) .. [[
+
+-- ]]
+
+-- posy = 10
+-- t_posy = 10
+-- c=1
+-- column = {10, 266, 522, 778}
+
+-- screen_eight = [[
+-- local layer = createLayer()
+-- local rx, ry = getResolution()
+
+-- local font = loadFont("Oxanium", 12)
+-- local font3 = loadFont("RobotoCondensed", 10)
+
+-- column = {10, 266, 522, 778}
+
+-- setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. Brightness .. [[)
+
+-- ]] .. backgroundScript .. [[
+
+-- local div = rx/4
+-- local posy = 10
+
+-- local header = function(tag, y, p, n)
+--     setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
+--     setNextStrokeWidth(layer, .1)
+--     addBoxRounded(layer, p, y, div - 20, 20, 4)
+--     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
+--     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
+--     addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+-- end
+
+-- for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
+
+-- local c = 1
+
+-- header("Smelters", ]].. t_posy ..[[, column[c], ]]..smelter_all..[[)
+-- ]] .. renderIndustry(smelterAllList, smelter1, smelter2, smelter3, smelter4) .. [[
+
+-- ]]
+
+-- posy = 10
+-- t_posy = 10
+-- c=1
+-- column = {10, 266, 522, 778}
+
+-- screen_nine = [[
+-- local layer = createLayer()
+-- local rx, ry = getResolution()
+
+-- local font = loadFont("Oxanium", 12)
+-- local font3 = loadFont("RobotoCondensed", 10)
+
+-- column = {10, 266, 522, 778}
+
+-- setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. Brightness .. [[)
+
+-- ]] .. backgroundScript .. [[
+
+-- local div = rx/4
+-- local posy = 10
+
+-- local header = function(tag, y, p, n)
+--     setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
+--     setNextStrokeWidth(layer, .1)
+--     addBoxRounded(layer, p, y, div - 20, 20, 4)
+--     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
+--     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
+--     addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+-- end
+
+-- for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
+
+-- local c = 1
+
+-- header("Honeycomb", ]].. t_posy ..[[, column[c], ]]..honey_all..[[)
+-- ]] .. renderIndustry(honeyAllList, honey1, honey2, honey3, honey4) .. [[
+
+-- ]]
+
+-- posy = 10
+-- t_posy = 10
+-- c=1
+-- column = {10, 266, 522, 778}
+
+-- screen_ten = [[
+-- local layer = createLayer()
+-- local rx, ry = getResolution()
+
+-- local font = loadFont("Oxanium", 12)
+-- local font3 = loadFont("RobotoCondensed", 10)
+
+-- column = {10, 266, 522, 778}
+
+-- setDefaultFillColor(layer, Shape_Text, 0,0,1,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,]] .. Brightness .. [[)
+-- setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,]] .. Brightness .. [[)
+
+-- ]] .. backgroundScript .. [[
+
+-- local div = rx/4
+-- local posy = 10
+
+-- local header = function(tag, y, p, n)
+--     setNextFillColor(layer, 0,0,1,]] .. (0.2*Brightness) .. [[)
+--     setNextStrokeWidth(layer, .1)
+--     addBoxRounded(layer, p, y, div - 20, 20, 4)
+--     setNextTextAlign(layer, AlignH_Center, AlignV_Middle)
+--     setNextFillColor(layer, 1,1,1,]] .. Brightness .. [[)
+--     addText(layer, font, "(" .. n .. ") " .. tag, div/2+(p)-10, y+11)    
+-- end
+
+-- for x = 1,5 do addLine (layer, div*x, 0, div*x, ry) end
+
+-- local c = 1
+
+-- header("Recyclers", ]].. t_posy ..[[, column[c], ]]..recycler_all..[[)
+-- ]] .. renderIndustry(recyclerAllList, recycler1, recycler2, recycler3, recycler4) .. [[
+
+-- ]]
+
 screens[1].activate()
 screens[2].activate()
 screens[3].activate()
 screens[4].activate()
+-- screens[5].activate()
+-- screens[6].activate()
+-- screens[7].activate()
+-- screens[8].activate()
+-- screens[9].activate()
+-- screens[10].activate()
 
 screens[1].setRenderScript(screen_one)
 screens[2].setRenderScript(screen_two)
 screens[3].setRenderScript(screen_three)
 screens[4].setRenderScript(screen_four)
 --screens[5].setRenderScript(screen_five)
+--screens[6].setRenderScript(screen_six)
+--screens[7].setRenderScript(screen_seven)
+-- screens[8].setRenderScript(screen_eight)
+-- screens[9].setRenderScript(screen_nine)
+-- screens[10].setRenderScript(screen_ten)
