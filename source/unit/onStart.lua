@@ -2,7 +2,7 @@
 -- Updates provided by Vtreka (ingame), Vtreka#1337 (Discord)
 -- Contributions provided by BlimpieBoy (ingame), Blimpieboy#0903 (Discord)
 
-system.print(" --- Factory Monitor Expanded v2.3.1 ---")
+system.print(" --- Factory Monitor Expanded v3.1 ---")
 system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
@@ -95,7 +95,6 @@ end
 
 elementIdList = core_unit[1].getElementIdList()
 
-
 metalwork1 = {}
 metalwork2 = {}
 metalwork3 = {}
@@ -157,7 +156,6 @@ smelter_count = {0,0,0,0}
 assembly_count = {0,0,0,0}
 honey_count = {0,0,0,0}
 recycler_count = {0,0,0,0}
-
 
 ---- substitution list, credits to Squizz Cephinator
 local ntxt = ""
@@ -299,8 +297,6 @@ for index,id in ipairs(elementIdList) do
             end
     end
  end
-
-
 
 metalwork_all = metalwork_count[1] + metalwork_count[2] + metalwork_count[3] + metalwork_count[4]
 electronics_all = electronics_count[1] + electronics_count[2] + electronics_count[3] + electronics_count[4]

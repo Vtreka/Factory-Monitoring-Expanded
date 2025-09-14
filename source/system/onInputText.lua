@@ -4,7 +4,6 @@ indy_type ={"metalwork","printer","chemical","glass","refiner","smelter","assemb
 
 --local check=string.find(T,"/help")
 
-
 if string.find(T,"help") then
  system.print("--- Industry locator ---")   
  system.print("Syntax:")
@@ -15,11 +14,12 @@ if string.find(T,"help") then
  system.print("ex: clear 18")
  system.print("")
  system.print("For assistance contact Vtreka in game or on discord")    
- end
+end
+
 if string.find(T,"clear") then
     str = string.gsub(T, "clear" ,"")
  core_unit[1].deleteSticker(tonumber(str))
- end
+end
 
 if string.find(T, indy_type[1]) then
    str = string.gsub(T, indy_type[1],"")
@@ -77,6 +77,7 @@ elseif string.find(T, indy_type[2]) then
           c_pos = core_unit[1].getElementPositionById(printer4[iid])
           system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
           end
+
 elseif string.find(T, indy_type[3]) then
    str = string.gsub(T, indy_type[3],"")
    
@@ -104,6 +105,7 @@ elseif string.find(T, indy_type[3]) then
           c_pos = core_unit[1].getElementPositionById(chemical4[iid])
           system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+6,"down"))
           end
+
 elseif string.find(T, indy_type[4]) then
    str = string.gsub(T, indy_type[4],"")
    
@@ -131,6 +133,7 @@ elseif string.find(T, indy_type[4]) then
           c_pos = core_unit[1].getElementPositionById(glass4[iid])
           system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+6,"down"))
           end     
+
 elseif string.find(T, indy_type[5]) then
    str = string.gsub(T, indy_type[5],"")
    
@@ -158,6 +161,7 @@ elseif string.find(T, indy_type[5]) then
           c_pos = core_unit[1].getElementPositionById(refiner4[iid])
           system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
           end
+
 elseif string.find(T, indy_type[6]) then
    str = string.gsub(T, indy_type[6],"")
    
@@ -185,6 +189,7 @@ elseif string.find(T, indy_type[6]) then
           c_pos = core_unit[1].getElementPositionById(smelter4[iid])
           system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
           end
+
 elseif string.find(T, indy_type[7]) then
    str = string.gsub(T, indy_type[7],"")
    
@@ -212,6 +217,7 @@ elseif string.find(T, indy_type[7]) then
           c_pos = core_unit[1].getElementPositionById(assembly4[iid])
           system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
           end
+
 elseif string.find(T, indy_type[8]) then
    str = string.gsub(T, indy_type[8],"")
    
@@ -238,8 +244,9 @@ elseif string.find(T, indy_type[8]) then
           iid = tonumber(str)
           c_pos = core_unit[1].getElementPositionById(electronics[4][iid])
           system.print("Arrow added. Index : " .. core_unit[1].spawnArrowSticker(c_pos[1],c_pos[2],c_pos[3]+4,"down"))
-          end    
-    elseif string.find(T, indy_type[9]) then
+          end  
+
+elseif string.find(T, indy_type[9]) then
    str = string.gsub(T, indy_type[9],"")
    
        if string.find(str, "t1") then 
