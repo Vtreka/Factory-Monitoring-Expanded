@@ -23,6 +23,7 @@ Tier 2 Colour - Set Tier 2 Colour<br>
 Tier 3 Colour - Set Tier 3 Colour<br>
 Tier 4 Colour - Set Tier 4 Colour<br>
 Tier 5 Colour - Set Tier 5 Colour<br>
+Background - Set background colour "r, g, b" or image URL<br>
 
 <br>
 Script comes with industry locator. Type <i>help</i> in Lua Tab to see available commands.
