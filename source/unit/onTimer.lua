@@ -394,8 +394,8 @@ screen_one = [[
 local layer = createLayer()
 local rx, ry = getResolution()
 
-local font = loadFont("Oxanium", 12)
-local font3 = loadFont("RobotoCondensed", 10)
+local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 local column = {10, 266, 522, 778}
 
@@ -442,8 +442,8 @@ screen_two = [[
 local layer = createLayer()
 local rx, ry = getResolution()
 
-local font = loadFont("Oxanium", 12)
-local font3 = loadFont("RobotoCondensed", 10)
+local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 local column = {10, 266, 522, 778}
 
@@ -491,8 +491,8 @@ screen_three = [[
 local layer = createLayer()
 local rx, ry = getResolution()
 
-local font = loadFont("Oxanium", 12)
-local font3 = loadFont("RobotoCondensed", 10)
+local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 column = {10, 266, 522, 778}
 
@@ -532,8 +532,8 @@ screen_four = [[
 local layer = createLayer()
 local rx, ry = getResolution()
 
-local font = loadFont("Oxanium", 12)
-local font3 = loadFont("RobotoCondensed", 10)
+local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 column = {10, 266, 522, 778}
 
@@ -573,8 +573,8 @@ header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
 -- local layer = createLayer()
 -- local rx, ry = getResolution()
 
--- local font = loadFont("Oxanium", 12)
--- local font3 = loadFont("RobotoCondensed", 10)
+-- local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+-- local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 -- column = {10, 266, 522, 778}
 
@@ -614,8 +614,8 @@ header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
 -- local layer = createLayer()
 -- local rx, ry = getResolution()
 
--- local font = loadFont("Oxanium", 12)
--- local font3 = loadFont("RobotoCondensed", 10)
+-- local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+-- local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 -- column = {10, 266, 522, 778}
 
@@ -655,8 +655,8 @@ header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
 -- local layer = createLayer()
 -- local rx, ry = getResolution()
 
--- local font = loadFont("Oxanium", 12)
--- local font3 = loadFont("RobotoCondensed", 10)
+-- local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+-- local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 -- column = {10, 266, 522, 778}
 
@@ -696,8 +696,8 @@ header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
 -- local layer = createLayer()
 -- local rx, ry = getResolution()
 
--- local font = loadFont("Oxanium", 12)
--- local font3 = loadFont("RobotoCondensed", 10)
+-- local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+-- local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 -- column = {10, 266, 522, 778}
 
@@ -737,8 +737,8 @@ header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
 -- local layer = createLayer()
 -- local rx, ry = getResolution()
 
--- local font = loadFont("Oxanium", 12)
--- local font3 = loadFont("RobotoCondensed", 10)
+-- local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+-- local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 -- column = {10, 266, 522, 778}
 
@@ -778,8 +778,8 @@ header("Metalwork Industry", ]].. t_posy ..[[, column[c], ]]..metalwork_all..[[)
 -- local layer = createLayer()
 -- local rx, ry = getResolution()
 
--- local font = loadFont("Oxanium", 12)
--- local font3 = loadFont("RobotoCondensed", 10)
+-- local font = loadFont("Oxanium",]] .. Font_Size .. [[)
+-- local font3 = loadFont("RobotoCondensed", ]] .. (Font_Size - 2) .. [[)
 
 -- column = {10, 266, 522, 778}
 

@@ -7,6 +7,7 @@ system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
 Use_Databank_Values = false --export: If checked and if values were saved in databank, parmaters will be loaded from the databank, if not, following ones will be used
+Turn_Screens_Off_on_Exit = false --export: Turn off all connected screens when the board stops
 Show_Indy_Name = false --export: Shows Industry Unit name instead of element being crafted if checked
 Show_Maintain_Batch = true --export: Display maintain and batch values for each machine
 Show_State = true --export: Show machine state if checked
@@ -16,13 +17,15 @@ State_As_Prefix = false --export: Put state before the machine/item name if chec
 State_Sort_Mode = 'V' --export: When sorting by state, 'A' sorts alphabetically and 'V' by value
 Border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_Timer = 5 --export: Screen(s) refresh timer in seconds
+Brightness = 1 --export: Adjust text and background transparency (0 to 1)
+Font_Size = 10 --export: Base font size for text
 Background = '0, 0, 0' --export: Set background colour "r, g, b" or image URL (make sure to include the http:// or https://)
 Tier_1_Colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
 Tier_2_Colour = '0, 1.5, 0' --export: Set Tier 2 Colour
 Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
 Tier_4_Colour = '1, 0, 1.5' --export: Set Tier 4 Colour
 Tier_5_Colour = '2, 0.8, 0' --export: Set Tier 5 Colour
-Brightness = 1 --export: Adjust text and background transparency (0 to 1)
+
 
 system.print("Refresh timer set to: "..Refresh_Timer.." seconds")
 
@@ -36,12 +39,14 @@ options.Tier_4_Colour = Tier_4_Colour
 options.Tier_5_Colour = Tier_5_Colour
 options.Brightness = Brightness
 options.Background = Background
+options.Font_Size = Font_Size
 options.Sort_By_Item_Tier = Sort_By_Item_Tier
 options.Sort_By_State = Sort_By_State
 options.State_As_Prefix = State_As_Prefix
 options.State_Sort_Mode = State_Sort_Mode
 options.Show_Maintain_Batch = Show_Maintain_Batch
 options.Show_State = Show_State
+options.Turn_Screens_Off_on_Exit = Turn_Screens_Off_on_Exit
 
 databank = nil
 screens = {}

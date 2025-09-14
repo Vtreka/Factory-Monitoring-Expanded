@@ -10,6 +10,7 @@ Fork of BartasRS Factory Monitoring Expanded - https://github.com/BartasRS/Facto
 Copy [4 screen version](https://github.com/Vtreka/Factory-Monitoring-Expanded/blob/main/PB.json) into Programming Board in game or version you wish to use <br><br>
 Simply connect core and appropriate number of screens in any order (and optionally a databank) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
 <b>**Lua Parameters**</b><br>
+Turn Screens Off on Exit - Deactivate connected screens when the Programming Board stops<br>
 Show Maintain Batch - Display maintain and batch amounts for each machine <br>
 Show Indy Name - Will display Industry Unit name instead of the item that is being crafted<br>
 Show State - Toggle display of the machine state text<br>
@@ -19,6 +20,7 @@ State Sort Mode - When sorting by state, choose 'A' for alphabetical or 'V' for 
 Border - Bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
 Refresh timer - Value in seconds, set above 3 for really big factories<br>
 Brightness - Adjust brightness of all text and background <br>
+Font Size - Set base font size for displayed text <br>
 Background - Set background colour "r, g, b" or image URL<br>
 Tier 1 Colour - Set Tier 1 Colour<br>
 Tier 2 Colour - Set Tier 2 Colour<br>
@@ -36,6 +38,9 @@ The script is made so it should be fairly easy to shuffle contents between scree
 <hr>
 <b>Version 3.2 updates:</b><br>
     -Added Brightness parameter to control text and background transparency<br>
+    -Added option to turn screens off when the Programming Board stops<br>
+    -Added ability to adjust Font Size in parameters
+    -Created JSON files for 1-4 and 10 screen variants
 <br>
 <b>Version 3.1 updates:</b><br>
     -Added Background parameter, can set as RGB colour or a URL<br>
