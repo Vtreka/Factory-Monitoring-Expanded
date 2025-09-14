@@ -39,8 +39,8 @@ The script is made so it should be fairly easy to shuffle contents between scree
 <b>Version 3.2 updates:</b><br>
     -Added Brightness parameter to control text and background transparency<br>
     -Added option to turn screens off when the Programming Board stops<br>
-    -Added ability to adjust Font Size in parameters
-    -Created JSON files for 1-4 and 10 screen variants
+    -Added ability to adjust Font Size in parameters <br>
+    -Created JSON files for 1-4 and 10 screen variants<br>
 <br>
 <b>Version 3.1 updates:</b><br>
     -Added Background parameter, can set as RGB colour or a URL<br>
