@@ -376,6 +376,19 @@ if SortByItemTier then
     metalworkAllList = mergeTables(metalwork1, metalwork2, metalwork3, metalwork4)
 end
 
+local background = options.Background or ""
+local backgroundScript = "setNextFillColor(layer,0,0,0,0)\nsetNextStrokeWidth(layer, 1)\naddBoxRounded(layer, 0, 0, rx, ry, 10)\n"
+if background ~= "" then
+    if string.match(string.lower(background), "^%a+://") then
+        backgroundScript = "local bg = loadImage(\""..background.."\")\naddImage(layer,bg,0,0,rx,ry)\nsetNextFillColor(layer,0,0,0,0)\nsetNextStrokeWidth(layer,1)\naddBoxRounded(layer,0,0,rx,ry,10)\n"
+    else
+        local r,g,b = background:match("([%d%.]+)%s*,%s*([%d%.]+)%s*,%s*([%d%.]+)")
+        if r and g and b then
+            backgroundScript = "setNextFillColor(layer,"..r..","..g..","..b..",1)\nsetNextStrokeWidth(layer,1)\naddBoxRounded(layer,0,0,rx,ry,10)\n"
+        end
+    end
+end
+
 screen_one = [[
 local layer = createLayer()
 local rx, ry = getResolution()
@@ -389,9 +402,7 @@ setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
 setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
 setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
 
-setNextFillColor(layer, 0,0,0,0)
-setNextStrokeWidth(layer, 1)
-addBoxRounded(layer, 0, 0, rx, ry, 10)
+]] .. backgroundScript .. [[
 
 local div = rx/4
 local posy = 10
@@ -439,9 +450,7 @@ setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
 setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
 setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
 
-setNextFillColor(layer, 0,0,0,0)
-setNextStrokeWidth(layer, 1)
-addBoxRounded(layer, 0, 0, rx, ry, 10)
+]] .. backgroundScript .. [[
 
 local div = rx/4
 local posy = 10
@@ -490,9 +499,7 @@ setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
 setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
 setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
 
-setNextFillColor(layer, 0,0,0,0)
-setNextStrokeWidth(layer, 1)
-addBoxRounded(layer, 0, 0, rx, ry, 10)
+]] .. backgroundScript .. [[
 
 local div = rx/4
 local posy = 10
@@ -533,9 +540,7 @@ setDefaultFillColor(layer, Shape_Text, 0,0,1,1)
 setDefaultStrokeColor(layer, Shape_Line, 0,.3,2,1)
 setDefaultStrokeColor(layer, Shape_BoxRounded, 0,.3,2,1)
 
-setNextFillColor(layer, 0,0,0,0)
-setNextStrokeWidth(layer, 1)
-addBoxRounded(layer, 0, 0, rx, ry, 10)
+]] .. backgroundScript .. [[
 
 local div = rx/4
 local posy = 10
