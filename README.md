@@ -10,19 +10,19 @@ Note: The 9 screen variant of the script is based on the original and has not be
 Copy [4 screen version](https://github.com/Vtreka/Factory-Monitoring-Expanded/blob/main/PB.json) into Programming Board in game <br><br>
 Simply connect core and 4 screens in any order (and optionally a databank) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
 <b>**Lua Parameters**</b><br>
-Refresh timer - value in seconds, set above 3 for really big factories<br>
-Show Maintain/Batch - Display maintain and batch amounts for each machine <br>
-Show name - Will display Industry Unit name instead of the item that is being crafted<br>
+Show Maintain Batch - Display maintain and batch amounts for each machine <br>
+Show Indy Name - Will display Industry Unit name instead of the item that is being crafted<br>
 Show State - Toggle display of the machine state text<br>
-Sort By item tier - Will sort by tier of item being crafted instead of Industry Unit tier <br>
+Sort By Item Tier - Will sort by tier of item being crafted instead of Industry Unit tier <br>
 Sort By State - Sort industry units by their state value <br>
-State Sort Mode - When sorting by state, choose 'A' for alphabetical or 'V' for value-based sorting <br>
-border - bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
-tier1colour - Set Tier 1 Colour<br>
-tier2colour - Set Tier 2 Colour<br>
-tier3colour - Set Tier 3 Colour<br>
-tier4colour - Set Tier 4 Colour<br>
-tier5colour - Set Tier 5 Colour<br>
+State Sort Mode - When sorting by state, choose 'A' for alphabetical or 'V' for State value sorting <br>
+Border - Bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
+Refresh timer - Value in seconds, set above 3 for really big factories<br>
+Tier 1 Colour - Set Tier 1 Colour<br>
+Tier 2 Colour - Set Tier 2 Colour<br>
+Tier 3 Colour - Set Tier 3 Colour<br>
+Tier 4 Colour - Set Tier 4 Colour<br>
+Tier 5 Colour - Set Tier 5 Colour<br>
 
 <br>
 Script comes with industry locator. Type <i>help</i> in Lua Tab to see available commands.
@@ -40,6 +40,7 @@ The script is made so it should be fairly easy to shuffle contents between scree
     - Added parameter to choose alphabetical or value-based state sorting<br>
 <br>
 <b>Version 2.5 updates:</b><br>
+    - Added displaying state of Industrial Unit as a Prefix or Suffix<br>
     - Added option to sort by state<br>
 <br>
 <b>Version 2.4 updates:</b><br>
