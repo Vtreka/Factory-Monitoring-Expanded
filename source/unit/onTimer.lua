@@ -203,7 +203,7 @@ t_stats = function(fid, ax, ay)
         maintain = string.format("%d", info["maintainProductAmount"])
         batch    = string.format("%d", currentProducts[1]["quantity"])
     end
-    return "setNextFillColor(layer, .6,.6,.6,1) setNextTextAlign(layer, AlignH_Right, posy) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
+    return "setNextFillColor(layer, .6,.6,.6,".. Brightness ..") setNextTextAlign(layer, AlignH_Right, posy) addText(layer, font3, \"M:".. maintain .." B:".. batch .."\", " .. ax .. ", " .. ay .. ")\n"
 end
 
 indy_column = function(indy, tier, posx, posy)
