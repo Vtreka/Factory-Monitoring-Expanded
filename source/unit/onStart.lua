@@ -2,7 +2,7 @@
 -- Updates provided by Vtreka (ingame), Vtreka#1337 (Discord)
 -- Contributions provided by BlimpieBoy (ingame), Blimpieboy#0903 (Discord)
 
-system.print(" --- Factory Monitor Expanded v3.1 ---")
+system.print(" --- Factory Monitor Expanded v3.3 ---")
 system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
@@ -316,7 +316,16 @@ honey_all = honey_count[1] + honey_count[2] + honey_count[3] + honey_count[4]
 recycler_all = recycler_count[1] + recycler_count[2] + recycler_count[3] + recycler_count[4]
 all_count = honey_all + metalwork_all + electronics_all + glass_all + printer_all + chemical_all + refiner_all + smelter_all + assembly_all + recycler_all
 
-if all_count > 265 then system.print("Crazy factory detected! You will need more than 1 screen!") 
-    else system.print("Factory not so big, you might want to use single screen script.") end
+local industry_per_screen = 265
+local required_screens = math.max(1, math.ceil(all_count / industry_per_screen))
+local screen_plural = "screen"
+if required_screens ~= 1 then screen_plural = "+ screens" end
+
+system.print(("Factory has %d machines. You will need %d %s (up to %d machines per screen)."):format(
+    all_count,
+    required_screens,
+    screen_plural,
+    industry_per_screen
+))
 
 unit.setTimer("refresh",Refresh_Timer)
