@@ -36,6 +36,10 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 3.3 updates:</b><br>
+    -Fixed script to announce how many machines you have and how many screens it will require<br>
+    -Attempting script fix to auto adjust sections to the next screen if required<br>
+<br>
 <b>Version 3.2 updates:</b><br>
     -Added Brightness parameter to control text and background transparency<br>
     -Added option to turn screens off when the Programming Board stops<br>
