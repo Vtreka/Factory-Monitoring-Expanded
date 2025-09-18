@@ -5,6 +5,47 @@ local function newLayoutContext()
     return { columnIndex = 1, y = 10 }
 end
 
+local headerHeight = 40
+local entrySpacing = 10
+local columnStartY = 20
+
+local function getBorderLimit()
+    if type(Border) == 'number' then
+        return Border
+    end
+
+    return 600
+end
+
+local function computeRemainingCapacityForContext(columnIndex, y)
+    local borderLimit = getBorderLimit()
+    local currentColumn = columnIndex or 1
+    local currentY = y or 0
+    local remaining = 0
+
+    while currentColumn <= maxColumns do
+        if currentY >= borderLimit then
+            currentColumn = currentColumn + 1
+            currentY = columnStartY
+        else
+            remaining = remaining + 1
+            currentY = currentY + entrySpacing
+        end
+    end
+
+    return remaining
+end
+
+local function getRemainingCapacityForNewGroup(context)
+    return computeRemainingCapacityForContext(context.columnIndex, (context.y or 0) + headerHeight)
+end
+
+local screenCapacity
+do
+    local layout = newLayoutContext()
+    screenCapacity = computeRemainingCapacityForContext(layout.columnIndex, layout.y + headerHeight)
+end
+
 f_state = function(fid, F)
     state = core_unit[1].getElementIndustryInfoById(fid)["state"]
     local function fmt(name, label)
@@ -512,17 +553,32 @@ for _, group in ipairs(groups) do
             break
         end
 
-        local content, updatedState, finished = renderGroupSegment(context, group, state)
-        state = updatedState or state
-
-        if content ~= '' then
-            table.insert(currentParts, content)
+        local shouldFinalizeBeforeRender = false
+        if not state.tierStarts and #currentParts > 0 then
+            local groupCount = tonumber(group.count) or 0
+            if groupCount > 0 then
+                local remainingCapacity = getRemainingCapacityForNewGroup(context)
+                if remainingCapacity <= 0 or (groupCount <= screenCapacity and groupCount > remainingCapacity) then
+                    shouldFinalizeBeforeRender = true
+                end
+            end
         end
 
-        if finished then
-            break
-        else
+        if shouldFinalizeBeforeRender then
             finalizeScreen()
+        else
+            local content, updatedState, finished = renderGroupSegment(context, group, state)
+            state = updatedState or state
+
+            if content ~= '' then
+                table.insert(currentParts, content)
+            end
+
+            if finished then
+                break
+            else
+                finalizeScreen()
+            end
         end
     end
 end
