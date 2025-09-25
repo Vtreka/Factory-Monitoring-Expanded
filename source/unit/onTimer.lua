@@ -567,17 +567,39 @@ for _, group in ipairs(groups) do
         if shouldFinalizeBeforeRender then
             finalizeScreen()
         else
-            local content, updatedState, finished = renderGroupSegment(context, group, state)
-            state = updatedState or state
+            local skipRender = false
 
-            if content ~= '' then
-                table.insert(currentParts, content)
+            while true do
+                local headerBottom = (context.y or 0) + headerHeight
+                local borderLimit = getBorderLimit()
+
+                if headerBottom < borderLimit then
+                    break
+                end
+
+                if context.columnIndex < maxColumns then
+                    context.columnIndex = context.columnIndex + 1
+                    context.y = newLayoutContext().y
+                else
+                    finalizeScreen()
+                    skipRender = true
+                    break
+                end
             end
 
-            if finished then
-                break
-            else
-                finalizeScreen()
+            if not skipRender then
+                local content, updatedState, finished = renderGroupSegment(context, group, state)
+                state = updatedState or state
+
+                if content ~= '' then
+                    table.insert(currentParts, content)
+                end
+
+                if finished then
+                    break
+                else
+                    finalizeScreen()
+                end
             end
         end
     end
