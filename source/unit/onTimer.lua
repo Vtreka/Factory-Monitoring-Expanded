@@ -236,6 +236,13 @@ getItemTier = function(fid)
     return 0
 end
 
+getMachineTier = function(fid)
+    if machineTierById then
+        return machineTierById[fid] or 0
+    end
+    return 0
+end
+
 t_stats = function(fid, ax, ay)
     local info = core_unit[1].getElementIndustryInfoById(fid)
     local currentProducts = info["currentProducts"]
@@ -273,11 +280,14 @@ indy_column = function(context, indy, tier, startIndex)
     local entries = {}
     if Show_Indy_Name then
         for _, id in ipairs(indy) do
-            if (not Sort_By_Item_Tier) or (getItemTier(id) == tier) then
+            local itemTier = getItemTier(id)
+            local machineTier = getMachineTier(id)
+            if (not Sort_By_Item_Tier) or itemTier == tier or (itemTier == 0 and machineTier == tier) then
+                local stateInfo = core_unit[1].getElementIndustryInfoById(id)
                 table.insert(entries, {
                     mid = id,
                     name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", ""),
-                    state = core_unit[1].getElementIndustryInfoById(id)["state"],
+                    state = stateInfo["state"],
                     stateLabel = getStateLabel(id)
                 })
             end
@@ -294,19 +304,29 @@ indy_column = function(context, indy, tier, startIndex)
         end)
     else
         for _, id in ipairs(indy) do
-            local industryInfo = core_unit[1].getElementIndustryInfoById(id)["currentProducts"]
-            if industryInfo and #industryInfo >= 1 then
-                local itemInfo = system.getItem(industryInfo[1]["id"])
-                if itemInfo and ((not Sort_By_Item_Tier) or itemInfo["tier"] == tier) then
-                    local tempName = itemInfo["displayNameWithSize"]
-                    local name = getName(tempName)
-                    table.insert(entries, {
-                        mid = id,
-                        name = string.lower(name),
-                        state = core_unit[1].getElementIndustryInfoById(id)["state"],
-                        stateLabel = getStateLabel(id)
-                    })
+            local industryData = core_unit[1].getElementIndustryInfoById(id)
+            local currentProducts = industryData["currentProducts"]
+            local itemTier = 0
+            local displayName
+            if currentProducts and #currentProducts >= 1 then
+                local itemInfo = system.getItem(currentProducts[1]["id"])
+                if itemInfo then
+                    itemTier = itemInfo["tier"] or 0
+                    displayName = getName(itemInfo["displayNameWithSize"])
                 end
+            end
+
+            local machineTier = getMachineTier(id)
+            if (not Sort_By_Item_Tier) or itemTier == tier or (itemTier == 0 and machineTier == tier) then
+                if not displayName then
+                    displayName = getName(core_unit[1].getElementNameById(id))
+                end
+                table.insert(entries, {
+                    mid = id,
+                    name = string.lower(displayName),
+                    state = industryData["state"],
+                    stateLabel = getStateLabel(id)
+                })
             end
         end
         table.sort(entries, function(a, b)

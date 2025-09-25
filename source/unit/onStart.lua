@@ -101,6 +101,14 @@ end
 
 elementIdList = core_unit[1].getElementIdList()
 
+machineTierById = {}
+
+local function registerMachine(list, counts, tierIndex, id)
+    table.insert(list, id)
+    counts[tierIndex] = counts[tierIndex] + 1
+    machineTierById[id] = tierIndex
+end
+
 metalwork1 = {}
 metalwork2 = {}
 metalwork3 = {}
@@ -194,112 +202,112 @@ for index,id in ipairs(elementIdList) do
 
     if (elementType:find("metalwork industry")) then
             if (elementType:find("basic")) then
-            table.insert(metalwork1,id)  metalwork_count[1] = metalwork_count[1] + 1
+            registerMachine(metalwork1, metalwork_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(metalwork2,id)  metalwork_count[2] = metalwork_count[2] + 1
+            registerMachine(metalwork2, metalwork_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(metalwork3,id) metalwork_count[3] = metalwork_count[3] + 1
+            registerMachine(metalwork3, metalwork_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(metalwork4,id)  metalwork_count[4] = metalwork_count[4] + 1
+            registerMachine(metalwork4, metalwork_count, 4, id)
             end
     end
     if (elementType:find("electronics industry")) then
             if (elementType:find("basic")) then
-            table.insert(electronics1,id)  electronics_count[1] = electronics_count[1] + 1
+            registerMachine(electronics1, electronics_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(electronics2,id)  electronics_count[2] = electronics_count[2] + 1
+            registerMachine(electronics2, electronics_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(electronics3,id)  electronics_count[3] = electronics_count[3] + 1
+            registerMachine(electronics3, electronics_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(electronics4,id)  electronics_count[4] = electronics_count[4] + 1
+            registerMachine(electronics4, electronics_count, 4, id)
             end
     end
     if (elementType:find("glass furnace")) then
             if (elementType:find("basic")) then
-            table.insert(glass1,id)  glass_count[1] = glass_count[1] + 1
+            registerMachine(glass1, glass_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(glass2,id)  glass_count[2] = glass_count[2] + 1
+            registerMachine(glass2, glass_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(glass3,id)  glass_count[3] = glass_count[3] + 1
+            registerMachine(glass3, glass_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(glass4,id)  glass_count[4] = glass_count[4] + 1
+            registerMachine(glass4, glass_count, 4, id)
             end
     end
     if (elementType:find("3d printer")) then
             if (elementType:find("basic")) then
-            table.insert(printer1,id)  printer_count[1] = printer_count[1] + 1
+            registerMachine(printer1, printer_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(printer2,id)  printer_count[2] = printer_count[2] + 1
+            registerMachine(printer2, printer_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(printer3,id)  printer_count[3] = printer_count[3] + 1
+            registerMachine(printer3, printer_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(printer4,id)  printer_count[4] = printer_count[4] + 1
+            registerMachine(printer4, printer_count, 4, id)
             end
     end
     if (elementType:find("chemical industry")) then
             if (elementType:find("basic")) then
-            table.insert(chemical1,id)  chemical_count[1] = chemical_count[1] + 1
+            registerMachine(chemical1, chemical_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(chemical2,id)  chemical_count[2] = chemical_count[2] + 1
+            registerMachine(chemical2, chemical_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(chemical3,id)  chemical_count[3] = chemical_count[3] + 1
+            registerMachine(chemical3, chemical_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(chemical4,id)  chemical_count[4] = chemical_count[4] + 1
+            registerMachine(chemical4, chemical_count, 4, id)
             end
     end
     if (elementType:find("refiner")) and not (elementType:find("honeycomb")) then
             if (elementType:find("basic")) then
-            table.insert(refiner1,id)  refiner_count[1] = refiner_count[1] + 1
+            registerMachine(refiner1, refiner_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(refiner2,id)  refiner_count[2] = refiner_count[2] + 1
+            registerMachine(refiner2, refiner_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(refiner3,id)  refiner_count[3] = refiner_count[3] + 1
+            registerMachine(refiner3, refiner_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(refiner4,id)  refiner_count[4] = refiner_count[4] + 1
+            registerMachine(refiner4, refiner_count, 4, id)
             end
     end
     if (elementType:find("smelter")) then
             if (elementType:find("basic")) then
-            table.insert(smelter1,id)  smelter_count[1] = smelter_count[1] + 1
+            registerMachine(smelter1, smelter_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(smelter2,id)  smelter_count[2] = smelter_count[2] + 1
+            registerMachine(smelter2, smelter_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(smelter3,id)  smelter_count[3] = smelter_count[3] + 1
+            registerMachine(smelter3, smelter_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(smelter4,id)  smelter_count[4] = smelter_count[4] + 1
+            registerMachine(smelter4, smelter_count, 4, id)
             end
     end
     if (elementType:find("assembly line")) then
             if (elementType:find("basic")) then
-            table.insert(assembly1,id)  assembly_count[1] = assembly_count[1] + 1
+            registerMachine(assembly1, assembly_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(assembly2,id)  assembly_count[2] = assembly_count[2] + 1
+            registerMachine(assembly2, assembly_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(assembly3,id)  assembly_count[3] = assembly_count[3] + 1
+            registerMachine(assembly3, assembly_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(assembly4,id)  assembly_count[4] = assembly_count[4] + 1
+            registerMachine(assembly4, assembly_count, 4, id)
             end
     end
     if (elementType:find("honeycomb")) then
             if (elementType:find("basic")) then
-            table.insert(honey1,id)  honey_count[1] = honey_count[1] + 1
+            registerMachine(honey1, honey_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(honey2,id)  honey_count[2] = honey_count[2] + 1
+            registerMachine(honey2, honey_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(honey3,id)  assembly_count[3] = honey_count[3] + 1
+            registerMachine(honey3, honey_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(honey4,id)  honey_count[4] = honey_count[4] + 1
+            registerMachine(honey4, honey_count, 4, id)
             end
     end
     if (elementType:find("recycler")) then
             if (elementType:find("basic")) then
-            table.insert(recycler1,id)  recycler_count[1] = recycler_count[1] + 1
+            registerMachine(recycler1, recycler_count, 1, id)
             elseif (elementType:find("uncommon")) then
-            table.insert(recycler2,id)  recycler_count[2] = recycler_count[2] + 1
+            registerMachine(recycler2, recycler_count, 2, id)
             elseif (elementType:find("advanced")) then
-            table.insert(recycler3,id)  recycler_count[3] = recycler_count[3] + 1
+            registerMachine(recycler3, recycler_count, 3, id)
             elseif (elementType:find("rare")) then
-            table.insert(recycler4,id)  recycler_count[4] = recycler_count[4] + 1
+            registerMachine(recycler4, recycler_count, 4, id)
             end
     end
  end
