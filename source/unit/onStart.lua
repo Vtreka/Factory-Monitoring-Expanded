@@ -129,7 +129,7 @@ chemical4 = {}
 refiner1 = {}
 refiner2 = {}
 refiner3 = {}
-refiner4 = {} 
+refiner4 = {}
 
 smelter1 = {}
 smelter2 = {}
@@ -151,7 +151,7 @@ assembly1 = {}
 assembly2 = {}
 assembly3 = {}
 assembly4 = {}
- 
+
 metalwork_count = {0,0,0,0}
 electronics_count = {0,0,0,0}
 glass_count = {0,0,0,0}
@@ -165,8 +165,8 @@ recycler_count = {0,0,0,0}
 
 ---- substitution list, credits to Squizz Cephinator
 local ntxt = ""
-function getName(ntxt)    
-      
+function getName(ntxt)
+
         ntxt = ntxt:gsub(" xs$", " XS")
         ntxt = ntxt:gsub(" s$", " S")
         ntxt = ntxt:gsub(" m$", " M")
@@ -184,19 +184,19 @@ function getName(ntxt)
         ntxt = ntxt:gsub(" plastic ", " ")
         ntxt = ntxt:gsub(" product$", " ")
         ntxt = ntxt:gsub(" Product$", " ")
-        ntxt = ntxt:gsub(" Container ", " Ctnr ")    
-    
+        ntxt = ntxt:gsub(" Container ", " Ctnr ")
+
     return ntxt
 end
 
 for index,id in ipairs(elementIdList) do
     elementType = core_unit[1].getElementDisplayNameById(id):lower()
-    
+
     if (elementType:find("metalwork industry")) then
-            if (elementType:find("basic")) then 
-            table.insert(metalwork1,id)  metalwork_count[1] = metalwork_count[1] + 1        
-            elseif (elementType:find("uncommon")) then 
-            table.insert(metalwork2,id)  metalwork_count[2] = metalwork_count[2] + 1 
+            if (elementType:find("basic")) then
+            table.insert(metalwork1,id)  metalwork_count[1] = metalwork_count[1] + 1
+            elseif (elementType:find("uncommon")) then
+            table.insert(metalwork2,id)  metalwork_count[2] = metalwork_count[2] + 1
             elseif (elementType:find("advanced")) then
             table.insert(metalwork3,id) metalwork_count[3] = metalwork_count[3] + 1
             elseif (elementType:find("rare")) then
@@ -210,95 +210,95 @@ for index,id in ipairs(elementIdList) do
             table.insert(electronics2,id)  electronics_count[2] = electronics_count[2] + 1
             elseif (elementType:find("advanced")) then
             table.insert(electronics3,id)  electronics_count[3] = electronics_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(electronics4,id)  electronics_count[4] = electronics_count[4] + 1
             end
-    end 
+    end
     if (elementType:find("glass furnace")) then
-            if (elementType:find("basic")) then  
+            if (elementType:find("basic")) then
             table.insert(glass1,id)  glass_count[1] = glass_count[1] + 1
-            elseif (elementType:find("uncommon")) then 
+            elseif (elementType:find("uncommon")) then
             table.insert(glass2,id)  glass_count[2] = glass_count[2] + 1
-            elseif (elementType:find("advanced")) then 
+            elseif (elementType:find("advanced")) then
             table.insert(glass3,id)  glass_count[3] = glass_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(glass4,id)  glass_count[4] = glass_count[4] + 1
             end
-    end 
+    end
     if (elementType:find("3d printer")) then
-            if (elementType:find("basic")) then 
+            if (elementType:find("basic")) then
             table.insert(printer1,id)  printer_count[1] = printer_count[1] + 1
-            elseif (elementType:find("uncommon")) then 
+            elseif (elementType:find("uncommon")) then
             table.insert(printer2,id)  printer_count[2] = printer_count[2] + 1
-            elseif (elementType:find("advanced")) then 
+            elseif (elementType:find("advanced")) then
             table.insert(printer3,id)  printer_count[3] = printer_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(printer4,id)  printer_count[4] = printer_count[4] + 1
             end
     end
     if (elementType:find("chemical industry")) then
-            if (elementType:find("basic")) then 
+            if (elementType:find("basic")) then
             table.insert(chemical1,id)  chemical_count[1] = chemical_count[1] + 1
-            elseif (elementType:find("uncommon")) then 
+            elseif (elementType:find("uncommon")) then
             table.insert(chemical2,id)  chemical_count[2] = chemical_count[2] + 1
-            elseif (elementType:find("advanced")) then 
+            elseif (elementType:find("advanced")) then
             table.insert(chemical3,id)  chemical_count[3] = chemical_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(chemical4,id)  chemical_count[4] = chemical_count[4] + 1
             end
     end
     if (elementType:find("refiner")) and not (elementType:find("honeycomb")) then
-            if (elementType:find("basic")) then 
+            if (elementType:find("basic")) then
             table.insert(refiner1,id)  refiner_count[1] = refiner_count[1] + 1
-            elseif (elementType:find("uncommon")) then 
+            elseif (elementType:find("uncommon")) then
             table.insert(refiner2,id)  refiner_count[2] = refiner_count[2] + 1
-            elseif (elementType:find("advanced")) then 
+            elseif (elementType:find("advanced")) then
             table.insert(refiner3,id)  refiner_count[3] = refiner_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(refiner4,id)  refiner_count[4] = refiner_count[4] + 1
             end
     end
     if (elementType:find("smelter")) then
-            if (elementType:find("basic")) then 
+            if (elementType:find("basic")) then
             table.insert(smelter1,id)  smelter_count[1] = smelter_count[1] + 1
-            elseif (elementType:find("uncommon")) then 
+            elseif (elementType:find("uncommon")) then
             table.insert(smelter2,id)  smelter_count[2] = smelter_count[2] + 1
-            elseif (elementType:find("advanced")) then 
+            elseif (elementType:find("advanced")) then
             table.insert(smelter3,id)  smelter_count[3] = smelter_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(smelter4,id)  smelter_count[4] = smelter_count[4] + 1
             end
     end
     if (elementType:find("assembly line")) then
-            if (elementType:find("basic")) then 
+            if (elementType:find("basic")) then
             table.insert(assembly1,id)  assembly_count[1] = assembly_count[1] + 1
-            elseif (elementType:find("uncommon")) then 
+            elseif (elementType:find("uncommon")) then
             table.insert(assembly2,id)  assembly_count[2] = assembly_count[2] + 1
-            elseif (elementType:find("advanced")) then 
+            elseif (elementType:find("advanced")) then
             table.insert(assembly3,id)  assembly_count[3] = assembly_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(assembly4,id)  assembly_count[4] = assembly_count[4] + 1
             end
     end
     if (elementType:find("honeycomb")) then
-            if (elementType:find("basic")) then 
+            if (elementType:find("basic")) then
             table.insert(honey1,id)  honey_count[1] = honey_count[1] + 1
-            elseif (elementType:find("uncommon")) then 
+            elseif (elementType:find("uncommon")) then
             table.insert(honey2,id)  honey_count[2] = honey_count[2] + 1
-            elseif (elementType:find("advanced")) then 
+            elseif (elementType:find("advanced")) then
             table.insert(honey3,id)  assembly_count[3] = honey_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(honey4,id)  honey_count[4] = honey_count[4] + 1
             end
     end
     if (elementType:find("recycler")) then
-            if (elementType:find("basic")) then 
+            if (elementType:find("basic")) then
             table.insert(recycler1,id)  recycler_count[1] = recycler_count[1] + 1
-            elseif (elementType:find("uncommon")) then 
+            elseif (elementType:find("uncommon")) then
             table.insert(recycler2,id)  recycler_count[2] = recycler_count[2] + 1
-            elseif (elementType:find("advanced")) then 
+            elseif (elementType:find("advanced")) then
             table.insert(recycler3,id)  recycler_count[3] = recycler_count[3] + 1
-            elseif (elementType:find("rare")) then 
+            elseif (elementType:find("rare")) then
             table.insert(recycler4,id)  recycler_count[4] = recycler_count[4] + 1
             end
     end

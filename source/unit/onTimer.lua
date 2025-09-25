@@ -1,5 +1,7 @@
 local columnPositions = {10, 266, 522, 778}
 local maxColumns = #columnPositions
+local MACHINE_TIER_COUNT = 4
+local ITEM_TIER_COUNT = 5
 
 local function newLayoutContext()
     return { columnIndex = 1, y = 10 }
@@ -430,20 +432,17 @@ end
 local function getGroupSources(group)
     if Sort_By_Item_Tier then
         local list = group.allList or {}
-        return {
-            { list = list, tier = 1 },
-            { list = list, tier = 2 },
-            { list = list, tier = 3 },
-            { list = list, tier = 4 },
-            { list = list, tier = 5 }
-        }
+        local sources = {}
+        for tier = 1, ITEM_TIER_COUNT do
+            table.insert(sources, { list = list, tier = tier })
+        end
+        return sources
     else
-        return {
-            { list = group.tiers[1] or {}, tier = 1 },
-            { list = group.tiers[2] or {}, tier = 2 },
-            { list = group.tiers[3] or {}, tier = 3 },
-            { list = group.tiers[4] or {}, tier = 4 }
-        }
+        local sources = {}
+        for tier = 1, MACHINE_TIER_COUNT do
+            table.insert(sources, { list = group.tiers[tier] or {}, tier = tier })
+        end
+        return sources
     end
 end
 

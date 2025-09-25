@@ -1,7 +1,12 @@
 if options and options.Turn_Screens_Off_on_Exit and screens then
     for _, screen in ipairs(screens) do
-        if screen and screen.deactivate then
+        if screen then
+            if screen.clearScriptOutput then
+                screen.clearScriptOutput() 
+            end
+            if screen.deactivate then
             screen.deactivate()
+            end
         end
     end
 end
