@@ -48,8 +48,73 @@ do
     screenCapacity = computeRemainingCapacityForContext(layout.columnIndex, layout.y + headerHeight)
 end
 
+local function getIndustryInfo(fid)
+    if not core_unit or not core_unit[1] then
+        return nil
+    end
+
+    local ok, info = pcall(core_unit[1].getElementIndustryInfoById, core_unit[1], fid)
+    if not ok then
+        return nil
+    end
+
+    return info
+end
+
+local function safeGetState(info)
+    if info and info["state"] then
+        return info["state"]
+    end
+
+    return nil
+end
+
+local function getCurrentProduct(info)
+    if not info then
+        return nil
+    end
+
+    local products = info["currentProducts"]
+    if products and products[1] then
+        return products[1]
+    end
+
+    return nil
+end
+
+local function formatDisplayName(displayName)
+    if not displayName then
+        return nil
+    end
+
+    local tt = string.gsub(displayName, "Advanced","Adv.")
+    tt = string.gsub(tt, "hydraulics","Hydraulics")
+    tt = string.gsub(tt, "Uncommon","Unc.")
+    tt = string.gsub(tt, " product","")
+    return tt
+end
+
+local function getFormattedProductName(info)
+    local product = getCurrentProduct(info)
+    if not product then
+        return nil
+    end
+
+    local itemInfo = system.getItem(product["id"])
+    if not itemInfo then
+        return nil
+    end
+
+    return formatDisplayName(itemInfo["displayNameWithSize"] or itemInfo["displayName"])
+end
+
 f_state = function(fid, F)
-    state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+   local info = getIndustryInfo(fid)
+    if not info then
+        return "Not available"
+    end
+
+    state = safeGetState(info)
     local function fmt(name, label)
         if not Show_State then
             return name
@@ -59,15 +124,18 @@ f_state = function(fid, F)
             return name .. " - " .. label
         end
     end
+        if state == nil then
+        return "Not available"
+    end
+
     if state < 1 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Error" .. state)
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Error" .. state)
+        end
+        return fmt(productName, "Error" .. state)
     elseif state == 1 and F == 0 then
-        local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
+        local industryInfo = info
         if industryInfo == nil then
             return "Not configured"
         end
@@ -80,69 +148,69 @@ f_state = function(fid, F)
             return "Not configured"
         end
         local displayNameWithSize = productInfo["displayNameWithSize"]
-        local tt = string.gsub(displayNameWithSize, "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
+                local tt = formatDisplayName(displayNameWithSize)
+        if not tt then
+            return "Not configured"
+        end
         return fmt(tt, "Stopped")
     elseif state == 2 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Running")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Running")
+        end
+        return fmt(productName, "Running")
     elseif state == 3 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Missing ingredient")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Missing ingredient")
+        end
+        return fmt(productName, "Missing ingredient")
     elseif state == 4 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Output full")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Output full")
+        end
+        return fmt(productName, "Output full")
     elseif state == 5 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "No output container")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "No output container")
+        end
+        return fmt(productName, "No output container")
     elseif state == 6 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Pending")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Pending")
+        end
+        return fmt(productName, "Pending")
     elseif state == 7 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Missing schematics")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Missing schematics")
+        end
+        return fmt(productName, "Missing schematics")
     elseif state > 7 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Error" .. state)
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Error" .. state)
+        end
+        return fmt(productName, "Error" .. state)
     end
 end
 
 f_stateWithElementName = function(fid)
-    state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+    local info = getIndustryInfo(fid)
+    if not info then
+        return core_unit[1].getElementNameById(fid)
+    end
+
+    state = safeGetState(info)
     elementName = core_unit[1].getElementNameById(fid)
     elementName = string.gsub(elementName, "Craft ", "")
     local label = ""
-    if state == 1 then
+    if state == nil then
+        label = "Unknown"
+    elseif state == 1 then
         if isElementConfigured(fid) then
             label = "Stopped"
         else
@@ -173,7 +241,7 @@ f_stateWithElementName = function(fid)
 end
 
 isElementConfigured = function(fid)
-        local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
+        local industryInfo = getIndustryInfo(fid)
                 if industryInfo == nil then
                         return false
                 end
@@ -190,7 +258,15 @@ isElementConfigured = function(fid)
 end
 
 getStateLabel = function(fid)
-    local state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+    local info = getIndustryInfo(fid)
+    if not info then
+        return "Unknown"
+    end
+
+    local state = safeGetState(info)
+    if state == nil then
+        return "Unknown"
+    end
     if state == 1 then
         if isElementConfigured(fid) then
             return "Stopped"
@@ -215,7 +291,9 @@ getStateLabel = function(fid)
 end
 
 setNextFillColourByState = function(fid)
-    state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+    local info = getIndustryInfo(fid)
+    local state = safeGetState(info)
+    if state == nil then return "" end
     if state == 1 then return "setNextFillColor(layer,1,1,0,".. Brightness ..")"
         elseif state == 2 then return "setNextFillColor(layer,0,1,0,".. Brightness ..")"
         elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,".. Brightness ..")"
@@ -228,9 +306,14 @@ setNextFillColourByState = function(fid)
 end
 
 getItemTier = function(fid)
-    local info = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-    if info and #info >= 1 then
-        local item = system.getItem(info[1]["id"])
+    local info = getIndustryInfo(fid)
+    if not info then
+        return 0
+    end
+
+    local products = info["currentProducts"]
+    if products and #products >= 1 then
+        local item = system.getItem(products[1]["id"])
         if item then return item["tier"] end
     end
     return 0
@@ -244,7 +327,10 @@ getMachineTier = function(fid)
 end
 
 t_stats = function(fid, ax, ay)
-    local info = core_unit[1].getElementIndustryInfoById(fid)
+    local info = getIndustryInfo(fid)
+    if not info then
+        return ""
+    end
     local currentProducts = info["currentProducts"]
     local maintain, batch
     if currentProducts == nil or currentProducts[1] == nil then
@@ -283,13 +369,15 @@ indy_column = function(context, indy, tier, startIndex)
             local itemTier = getItemTier(id)
             local machineTier = getMachineTier(id)
             if (not Sort_By_Item_Tier) or itemTier == tier or (itemTier == 0 and machineTier == tier) then
-                local stateInfo = core_unit[1].getElementIndustryInfoById(id)
-                table.insert(entries, {
-                    mid = id,
-                    name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", ""),
-                    state = stateInfo["state"],
-                    stateLabel = getStateLabel(id)
-                })
+                local info = getIndustryInfo(id)
+                if info then
+                    table.insert(entries, {
+                        mid = id,
+                        name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", ""),
+                        state = safeGetState(info) or -1,
+                        stateLabel = getStateLabel(id)
+                    })
+                end
             end
         end
         table.sort(entries, function(a, b)
@@ -304,7 +392,10 @@ indy_column = function(context, indy, tier, startIndex)
         end)
     else
         for _, id in ipairs(indy) do
-            local industryData = core_unit[1].getElementIndustryInfoById(id)
+            local industryData = getIndustryInfo(id)
+            if not industryData then
+                goto continue
+            end
             local currentProducts = industryData["currentProducts"]
             local itemTier = 0
             local displayName
@@ -324,10 +415,11 @@ indy_column = function(context, indy, tier, startIndex)
                 table.insert(entries, {
                     mid = id,
                     name = string.lower(displayName),
-                    state = industryData["state"],
+                    state = safeGetState(industryData) or -1,
                     stateLabel = getStateLabel(id)
                 })
             end
+            ::continue::
         end
         table.sort(entries, function(a, b)
             if Sort_By_State then
