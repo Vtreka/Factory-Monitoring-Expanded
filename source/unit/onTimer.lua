@@ -51,10 +51,13 @@ end
 local function getIndustryInfo(fid)
     if not core_unit or not core_unit[1] then
         return nil
-    end
+    end 
 
-    local ok, info = pcall(core_unit[1].getElementIndustryInfoById, core_unit[1], fid)
-    if not ok then
+    local ok, info = pcall(function()
+        return core_unit[1].getElementIndustryInfoById(fid)
+    end)
+
+    if not ok or type(info) ~= 'table' then
         return nil
     end
 
