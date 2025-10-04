@@ -38,6 +38,23 @@ local function computeRemainingCapacityForContext(columnIndex, y)
     return remaining
 end
 
+local function deepCopy(value)
+    if type(value) ~= 'table' then
+        return value
+    end
+
+    local copy = {}
+    for key, item in pairs(value) do
+        if type(item) == 'table' then
+            copy[key] = deepCopy(item)
+        else
+            copy[key] = item
+        end
+    end
+
+    return copy
+end
+
 local function getRemainingCapacityForNewGroup(context)
     return computeRemainingCapacityForContext(context.columnIndex, (context.y or 0) + headerHeight)
 end
@@ -628,6 +645,16 @@ local function buildScreenScript(content)
     return table.concat(scriptParts)
 end
 
+local SCREEN_SCRIPT_LIMIT = 50000
+local DEBUG_SCREEN_SCRIPT_LIMIT = false
+
+local baseScriptLength
+local emptyScreenScript
+do
+    emptyScreenScript = buildScreenScript('')
+    baseScriptLength = #emptyScreenScript
+end
+
 local groups = {
     { name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList },
     { name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList },
@@ -644,16 +671,19 @@ local groups = {
 local screensContent = {}
 local context = newLayoutContext()
 local currentParts = {}
+local currentLength = 0
 
 local function finalizeScreen()
     if #currentParts == 0 then
         context = newLayoutContext()
+        currentLength = 0
         return
     end
 
     table.insert(screensContent, buildScreenScript(table.concat(currentParts)))
     currentParts = {}
     context = newLayoutContext()
+    currentLength = 0
 end
 
 for _, group in ipairs(groups) do
@@ -702,17 +732,35 @@ for _, group in ipairs(groups) do
             end
 
             if not skipRender then
+                local previousState = deepCopy(state)
                 local content, updatedState, finished = renderGroupSegment(context, group, state)
                 state = updatedState or state
 
+                local shouldRetrySegment = false
+
                 if content ~= '' then
-                    table.insert(currentParts, content)
+                    local contentLength = #content
+                    local upcomingLength = currentLength + contentLength + baseScriptLength
+
+                    if upcomingLength > SCREEN_SCRIPT_LIMIT then
+                        if DEBUG_SCREEN_SCRIPT_LIMIT then
+                            system.print(string.format('Debug: screen script length would reach %d (limit %d) while rendering %s; finalizing current screen', upcomingLength, SCREEN_SCRIPT_LIMIT, group.name))
+                        end
+                        finalizeScreen()
+                        state = previousState
+                        shouldRetrySegment = true
+                    else
+                        table.insert(currentParts, content)
+                        currentLength = currentLength + contentLength
+                    end
                 end
 
-                if finished then
-                    break
-                else
-                    finalizeScreen()
+                if not shouldRetrySegment then
+                    if finished then
+                        break
+                    else
+                        finalizeScreen()
+                    end
                 end
             end
         end
@@ -722,8 +770,6 @@ end
 if #currentParts > 0 then
     finalizeScreen()
 end
-
-local emptyScreenScript = buildScreenScript('')
 
 if #screensContent == 0 then
     table.insert(screensContent, emptyScreenScript)

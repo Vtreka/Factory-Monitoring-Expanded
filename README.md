@@ -39,6 +39,7 @@ The script is made so it should be fairly easy to shuffle contents between scree
 <b>Version 3.3 updates:</b><br>
     -Fixed script to announce how many machines you have and how many screens it will require<br>
     -Attempting script fix to auto adjust sections to the next screen if required<br>
+    -Introduced limit to stop filling screen over 50kb threshold (screen will not render if it does)
 <br>
 <b>Version 3.2 updates:</b><br>
     -Added Brightness parameter to control text and background transparency<br>
