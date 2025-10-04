@@ -107,10 +107,17 @@ local function formatDisplayName(displayName)
         return nil
     end
 
-    local tt = string.gsub(displayName, "Advanced","Adv.")
+    local tt = string.gsub(displayName, "^Advanced","Adv.")
     tt = string.gsub(tt, "hydraulics","Hydraulics")
-    tt = string.gsub(tt, "Uncommon","Unc.")
+    tt = string.gsub(tt, "^Uncommon","Unc.")
     tt = string.gsub(tt, " product","")
+    tt = string.gsub(tt, " Product","")
+    tt = string.gsub(tt, "Atmospheric","Atmo")
+    tt = string.gsub(tt, " xs$"," XS")
+    tt = string.gsub(tt, " s$"," S")
+    tt = string.gsub(tt, " m$"," M")
+    tt = string.gsub(tt, " l$"," L")
+    tt = string.gsub(tt, " xl$"," XL")
     return tt
 end
 
