@@ -13,4 +13,5 @@ end
 
 if databank ~= nil then
     databank.setStringValue("options", json.encode(options))
+    system.print("LUA Parameters saved to Databank")
 end

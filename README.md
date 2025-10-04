@@ -3,11 +3,11 @@ Fork of BartasRS Factory Monitoring Expanded - https://github.com/BartasRS/Facto
 <img width="1740" height="1394" alt="image" src="https://github.com/user-attachments/assets/a5823ec7-32ab-4b75-88ba-95f682ec2ac9" />
 
 <br>
-4 Screen default version displays Electronics, 3D Printers, Chemical Industry and Glass industry on screen 1, Refiners, Smelters, Honeycomb and Recyclers on screen 2, Assembly Lines on screen 3 and Metalwork Industry on screen 4. Should be ok for most people but can be expanded up to 10 screens if required (myDU Server must be able to support more than default 9 out links). Separate JSON files for 1-3 and 10 screens are also available<br>
+Factory Monitoring script with various configurable options as set out in the LUA Parameters below. Script will auto adjust industry group sections based on available space left in a screen and tell you how many screens need to be connected for the number of units you have.<br>
 
 <br><br>
 ## Installation
-Copy [4 screen version](https://github.com/Vtreka/Factory-Monitoring-Expanded/blob/main/PB.json) into Programming Board in game or version you wish to use <br><br>
+Copy (https://github.com/Vtreka/Factory-Monitoring-Expanded/blob/main/PB.json) into Programming Board in game <br><br>
 Simply connect core and appropriate number of screens in any order (and optionally a databank) to Programing Board and run the script. Refresh rate (In Lua Parameters) is set to 5, suggest this not be lowered to avoid lag situation.<br><br>
 <b>**Lua Parameters**</b><br>
 Turn Screens Off on Exit - Deactivate connected screens when the Programming Board stops<br>
@@ -20,13 +20,13 @@ State Sort Mode - When sorting by state, choose 'A' for alphabetical or 'V' for 
 Border - Bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
 Refresh timer - Value in seconds, set above 3 for really big factories<br>
 Brightness - Adjust brightness of all text and background <br>
-Font Size - Set base font size for displayed text <br>
 Background - Set background colour "r, g, b" or image URL<br>
 Tier 1 Colour - Set Tier 1 Colour<br>
 Tier 2 Colour - Set Tier 2 Colour<br>
 Tier 3 Colour - Set Tier 3 Colour<br>
 Tier 4 Colour - Set Tier 4 Colour<br>
 Tier 5 Colour - Set Tier 5 Colour<br>
+Group Order - Comma-separated list of industry group keys to control order groups appear on the screens (electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, assembly, metalwork)<br>
 
 <br>
 Script comes with industry locator. Type <i>help</i> in Lua Tab to see available commands.
@@ -39,11 +39,12 @@ The script is made so it should be fairly easy to shuffle contents between scree
 <b>Version 3.3 updates:</b><br>
     -Fixed script to announce how many machines you have and how many screens it will require<br>
     -Attempting script fix to auto adjust sections to the next screen if required<br>
+    -Introduced limit to stop filling screen over 50kb threshold (screen will not render if it does)<br>
+    -Added ability to choose the order that industry unit groups appear in<br>
 <br>
 <b>Version 3.2 updates:</b><br>
     -Added Brightness parameter to control text and background transparency<br>
     -Added option to turn screens off when the Programming Board stops<br>
-    -Added ability to adjust Font Size in parameters <br>
     -Created JSON files for 1-4 and 10 screen variants<br>
 <br>
 <b>Version 3.1 updates:</b><br>

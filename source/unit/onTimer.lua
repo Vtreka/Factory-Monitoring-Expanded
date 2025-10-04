@@ -38,6 +38,23 @@ local function computeRemainingCapacityForContext(columnIndex, y)
     return remaining
 end
 
+local function deepCopy(value)
+    if type(value) ~= 'table' then
+        return value
+    end
+
+    local copy = {}
+    for key, item in pairs(value) do
+        if type(item) == 'table' then
+            copy[key] = deepCopy(item)
+        else
+            copy[key] = item
+        end
+    end
+
+    return copy
+end
+
 local function getRemainingCapacityForNewGroup(context)
     return computeRemainingCapacityForContext(context.columnIndex, (context.y or 0) + headerHeight)
 end
@@ -48,8 +65,91 @@ do
     screenCapacity = computeRemainingCapacityForContext(layout.columnIndex, layout.y + headerHeight)
 end
 
+local function getIndustryInfo(fid)
+    if not core_unit or not core_unit[1] then
+        return nil
+    end 
+
+    local ok, info = pcall(function()
+        return core_unit[1].getElementIndustryInfoById(fid)
+    end)
+
+    if not ok or type(info) ~= 'table' then
+        return nil
+    end
+
+    return info
+end
+
+local function safeGetState(info)
+    if info and info["state"] then
+        return info["state"]
+    end
+
+    return nil
+end
+
+local function getCurrentProduct(info)
+    if not info then
+        return nil
+    end
+
+    local products = info["currentProducts"]
+    if products and products[1] then
+        return products[1]
+    end
+
+    return nil
+end
+
+local function formatDisplayName(displayName)
+    if not displayName then
+        return nil
+    end
+
+    local tt = string.gsub(displayName, "Craft ", "")
+    tt = string.gsub(tt, "Advanced","Adv.")
+    tt = string.gsub(tt, "hydraulics","Hydraulics")
+    tt = string.gsub(tt, "^Uncommon","Unc.")
+    tt = string.gsub(tt, " product","")
+    tt = string.gsub(tt, " Product","")
+    tt = string.gsub(tt, "Atmospheric","Atmo")
+    tt = string.gsub(tt, " industry"," Ind.")
+    tt = string.gsub(tt, " Industry"," Ind.")
+    tt = string.gsub(tt, " xs$"," XS")
+    tt = string.gsub(tt, " s$"," S")
+    tt = string.gsub(tt, " m$"," M")
+    tt = string.gsub(tt, " l$"," L")
+    tt = string.gsub(tt, " xl$"," XL")
+    tt = string.gsub(tt, " xs "," XS ")
+    tt = string.gsub(tt, " s "," S ")
+    tt = string.gsub(tt, " m "," M ")
+    tt = string.gsub(tt, " l "," L ")
+    tt = string.gsub(tt, " xl "," XL ")
+    return tt
+end
+
+local function getFormattedProductName(info)
+    local product = getCurrentProduct(info)
+    if not product then
+        return nil
+    end
+
+    local itemInfo = system.getItem(product["id"])
+    if not itemInfo then
+        return nil
+    end
+
+    return formatDisplayName(itemInfo["displayNameWithSize"] or itemInfo["displayName"])
+end
+
 f_state = function(fid, F)
-    state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+   local info = getIndustryInfo(fid)
+    if not info then
+        return "Not available"
+    end
+
+    state = safeGetState(info)
     local function fmt(name, label)
         if not Show_State then
             return name
@@ -59,15 +159,18 @@ f_state = function(fid, F)
             return name .. " - " .. label
         end
     end
+        if state == nil then
+        return "Not available"
+    end
+
     if state < 1 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Error" .. state)
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Error" .. state)
+        end
+        return fmt(productName, "Error" .. state)
     elseif state == 1 and F == 0 then
-        local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
+        local industryInfo = info
         if industryInfo == nil then
             return "Not configured"
         end
@@ -80,69 +183,69 @@ f_state = function(fid, F)
             return "Not configured"
         end
         local displayNameWithSize = productInfo["displayNameWithSize"]
-        local tt = string.gsub(displayNameWithSize, "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
+                local tt = formatDisplayName(displayNameWithSize)
+        if not tt then
+            return "Not configured"
+        end
         return fmt(tt, "Stopped")
     elseif state == 2 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Running")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Running")
+        end
+        return fmt(productName, "Running")
     elseif state == 3 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Missing ingredient")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Ingredients")
+        end
+        return fmt(productName, "Ingredients")
     elseif state == 4 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Output full")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Output full")
+        end
+        return fmt(productName, "Output full")
     elseif state == 5 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "No output container")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "No output container")
+        end
+        return fmt(productName, "No output container")
     elseif state == 6 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Pending")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Pending")
+        end
+        return fmt(productName, "Pending")
     elseif state == 7 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Missing schematics")
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Schematics")
+        end
+        return fmt(productName, "Schematics")
     elseif state > 7 and F == 0 then
-        t = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-        tt = string.gsub(system.getItem(t[1]["id"])["displayNameWithSize"], "Advanced","Adv.")
-        tt = string.gsub(tt, "hydraulics","Hydraulics")
-        tt = string.gsub(tt, "Uncommon","Unc.")
-        tt = string.gsub(tt, " product","")
-        return fmt(tt, "Error" .. state)
+        local productName = getFormattedProductName(info)
+        if not productName then
+            return fmt("Unknown", "Error" .. state)
+        end
+        return fmt(productName, "Error" .. state)
     end
 end
 
 f_stateWithElementName = function(fid)
-    state = core_unit[1].getElementIndustryInfoById(fid)["state"]
-    elementName = core_unit[1].getElementNameById(fid)
-    elementName = string.gsub(elementName, "Craft ", "")
+    local info = getIndustryInfo(fid)
+    local rawElementName = core_unit[1].getElementNameById(fid)
+    if not info then
+        return formatDisplayName(rawElementName) or rawElementName
+    end
+
+    state = safeGetState(info)
+    elementName = formatDisplayName(rawElementName) or rawElementName
     local label = ""
-    if state == 1 then
+    if state == nil then
+        label = "Unknown"
+    elseif state == 1 then
         if isElementConfigured(fid) then
             label = "Stopped"
         else
@@ -151,7 +254,7 @@ f_stateWithElementName = function(fid)
     elseif state == 2 then
         label = "Running"
     elseif state == 3 then
-        label = "Ingredient"
+        label = "Ingredients"
     elseif state == 4 then
         label = "Output full"
     elseif state == 5 then
@@ -173,7 +276,7 @@ f_stateWithElementName = function(fid)
 end
 
 isElementConfigured = function(fid)
-        local industryInfo = core_unit[1].getElementIndustryInfoById(fid)
+        local industryInfo = getIndustryInfo(fid)
                 if industryInfo == nil then
                         return false
                 end
@@ -190,7 +293,15 @@ isElementConfigured = function(fid)
 end
 
 getStateLabel = function(fid)
-    local state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+    local info = getIndustryInfo(fid)
+    if not info then
+        return "Unknown"
+    end
+
+    local state = safeGetState(info)
+    if state == nil then
+        return "Unknown"
+    end
     if state == 1 then
         if isElementConfigured(fid) then
             return "Stopped"
@@ -200,7 +311,7 @@ getStateLabel = function(fid)
     elseif state == 2 then
         return "Running"
     elseif state == 3 then
-        return "Ingredient"
+        return "Ingredients"
     elseif state == 4 then
         return "Output full"
     elseif state == 5 then
@@ -215,7 +326,9 @@ getStateLabel = function(fid)
 end
 
 setNextFillColourByState = function(fid)
-    state = core_unit[1].getElementIndustryInfoById(fid)["state"]
+    local info = getIndustryInfo(fid)
+    local state = safeGetState(info)
+    if state == nil then return "" end
     if state == 1 then return "setNextFillColor(layer,1,1,0,".. Brightness ..")"
         elseif state == 2 then return "setNextFillColor(layer,0,1,0,".. Brightness ..")"
         elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,".. Brightness ..")"
@@ -228,9 +341,14 @@ setNextFillColourByState = function(fid)
 end
 
 getItemTier = function(fid)
-    local info = core_unit[1].getElementIndustryInfoById(fid)["currentProducts"]
-    if info and #info >= 1 then
-        local item = system.getItem(info[1]["id"])
+    local info = getIndustryInfo(fid)
+    if not info then
+        return 0
+    end
+
+    local products = info["currentProducts"]
+    if products and #products >= 1 then
+        local item = system.getItem(products[1]["id"])
         if item then return item["tier"] end
     end
     return 0
@@ -244,7 +362,10 @@ getMachineTier = function(fid)
 end
 
 t_stats = function(fid, ax, ay)
-    local info = core_unit[1].getElementIndustryInfoById(fid)
+    local info = getIndustryInfo(fid)
+    if not info then
+        return ""
+    end
     local currentProducts = info["currentProducts"]
     local maintain, batch
     if currentProducts == nil or currentProducts[1] == nil then
@@ -283,13 +404,16 @@ indy_column = function(context, indy, tier, startIndex)
             local itemTier = getItemTier(id)
             local machineTier = getMachineTier(id)
             if (not Sort_By_Item_Tier) or itemTier == tier or (itemTier == 0 and machineTier == tier) then
-                local stateInfo = core_unit[1].getElementIndustryInfoById(id)
-                table.insert(entries, {
-                    mid = id,
-                    name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", ""),
-                    state = stateInfo["state"],
-                    stateLabel = getStateLabel(id)
-                })
+                local info = getIndustryInfo(id)
+                if info then
+                    local rawName = core_unit[1].getElementNameById(id)
+                    table.insert(entries, {
+                        mid = id,
+                        name = formatDisplayName(rawName) or rawName,
+                        state = safeGetState(info) or -1,
+                        stateLabel = getStateLabel(id)
+                    })
+                end
             end
         end
         table.sort(entries, function(a, b)
@@ -304,7 +428,10 @@ indy_column = function(context, indy, tier, startIndex)
         end)
     else
         for _, id in ipairs(indy) do
-            local industryData = core_unit[1].getElementIndustryInfoById(id)
+            local industryData = getIndustryInfo(id)
+            if not industryData then
+                goto continue
+            end
             local currentProducts = industryData["currentProducts"]
             local itemTier = 0
             local displayName
@@ -324,10 +451,11 @@ indy_column = function(context, indy, tier, startIndex)
                 table.insert(entries, {
                     mid = id,
                     name = string.lower(displayName),
-                    state = industryData["state"],
+                    state = safeGetState(industryData) or -1,
                     stateLabel = getStateLabel(id)
                 })
             end
+            ::continue::
         end
         table.sort(entries, function(a, b)
             if Sort_By_State then
@@ -449,6 +577,145 @@ if background ~= '' then
     end
 end
 
+local groupDefinitions
+
+local groupKeyAliases = {
+    electronics = 'electronics',
+    electronic = 'electronics',
+    chemical = 'chemical',
+    chemicals = 'chemical',
+    glass = 'glass',
+    glasses = 'glass',
+    printers = 'printers',
+    printer = 'printers',
+    ['3dprinters'] = 'printers',
+    ['3dprinter'] = 'printers',
+    refiners = 'refiners',
+    refiner = 'refiners',
+    refineries = 'refiners',
+    refinery = 'refiners',
+    smelters = 'smelters',
+    smelter = 'smelters',
+    honeycomb = 'honeycomb',
+    honeycombs = 'honeycomb',
+    honey = 'honeycomb',
+    recyclers = 'recyclers',
+    recycler = 'recyclers',
+    recycling = 'recyclers',
+    assembly = 'assembly',
+    assemblies = 'assembly',
+    assembler = 'assembly',
+    assemblers = 'assembly',
+    ['assemblyline'] = 'assembly',
+    ['assemblylines'] = 'assembly',
+    metalwork = 'metalwork',
+    metalworks = 'metalwork'
+}
+
+local defaultGroupOrder = {
+    'electronics',
+    'chemical',
+    'glass',
+    'printers',
+    'refiners',
+    'smelters',
+    'honeycomb',
+    'recyclers',
+    'assembly',
+    'metalwork'
+}
+
+local cachedGroupOrderString
+local cachedGroupOrderResult
+local cachedGroupOrderInvalidTokens
+
+local function normalizeGroupOrderKey(key)
+    if type(key) ~= 'string' then
+        return nil
+    end
+
+    local normalized = key:lower()
+    normalized = normalized:gsub('%s+', '')
+    normalized = normalized:gsub('[^%w]', '')
+    if normalized == '' then
+        return nil
+    end
+
+    return normalized
+end
+
+local function resolveGroupKey(key)
+    local normalized = normalizeGroupOrderKey(key)
+    if not normalized then
+        return nil
+    end
+
+    local resolved = groupKeyAliases[normalized] or normalized
+    if groupDefinitions and groupDefinitions[resolved] then
+        return resolved
+    end
+
+    return nil
+end
+
+local function computeGroupOrder(orderString)
+    if type(orderString) ~= 'string' then
+        orderString = ''
+    end
+
+    if cachedGroupOrderString == orderString and cachedGroupOrderResult then
+        return cachedGroupOrderResult
+    end
+
+    local seen = {}
+    local parsed = {}
+    local invalidTokens = {}
+
+    for entry in orderString:gmatch('[^,]+') do
+        local trimmed = entry:match('^%s*(.-)%s*$')
+        if trimmed ~= '' then
+            local resolved = resolveGroupKey(trimmed)
+            if resolved then
+                if not seen[resolved] then
+                    table.insert(parsed, resolved)
+                    seen[resolved] = true
+                end
+            else
+                table.insert(invalidTokens, trimmed)
+            end
+        end
+    end
+
+    for _, key in ipairs(defaultGroupOrder) do
+        if not seen[key] then
+            table.insert(parsed, key)
+            seen[key] = true
+        end
+    end
+
+    cachedGroupOrderString = orderString
+    cachedGroupOrderResult = parsed
+    cachedGroupOrderInvalidTokens = table.concat(invalidTokens, ', ')
+
+    if #invalidTokens > 0 then
+        system.print("Unknown group(s) in Group_Order: " .. cachedGroupOrderInvalidTokens)
+    end
+
+    return parsed
+end
+
+local function getGroupsInConfiguredOrder()
+    local keys = computeGroupOrder(options.Group_Order or '')
+    local ordered = {}
+    for _, key in ipairs(keys) do
+        local group = groupDefinitions and groupDefinitions[key]
+        if group then
+            table.insert(ordered, group)
+        end
+    end
+    return ordered
+end
+
 local function getGroupSources(group)
     if Sort_By_Item_Tier then
         local list = group.allList or {}
@@ -533,32 +800,47 @@ local function buildScreenScript(content)
     return table.concat(scriptParts)
 end
 
-local groups = {
-    { name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList },
-    { name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList },
-    { name = 'Glass Industry', count = glass_all, tiers = { glass1, glass2, glass3, glass4 }, allList = glassAllList },
-    { name = '3D Printers', count = printer_all, tiers = { printer1, printer2, printer3, printer4 }, allList = printerAllList },
-    { name = 'Refiners', count = refiner_all, tiers = { refiner1, refiner2, refiner3, refiner4 }, allList = refinerAllList },
-    { name = 'Smelters', count = smelter_all, tiers = { smelter1, smelter2, smelter3, smelter4 }, allList = smelterAllList },
-    { name = 'Honeycomb', count = honey_all, tiers = { honey1, honey2, honey3, honey4 }, allList = honeyAllList },
-    { name = 'Recyclers', count = recycler_all, tiers = { recycler1, recycler2, recycler3, recycler4 }, allList = recyclerAllList },
-    { name = 'Assembly Lines', count = assembly_all, tiers = { assembly1, assembly2, assembly3, assembly4 }, allList = assemblyAllList },
-    { name = 'Metalwork Industry', count = metalwork_all, tiers = { metalwork1, metalwork2, metalwork3, metalwork4 }, allList = metalworkAllList }
+local SCREEN_SCRIPT_LIMIT = 50000
+local DEBUG_SCREEN_SCRIPT_LIMIT = false
+
+local baseScriptLength
+local emptyScreenScript
+do
+    emptyScreenScript = buildScreenScript('')
+    baseScriptLength = #emptyScreenScript
+end
+
+groupDefinitions = {
+    electronics = { key = 'electronics', name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList },
+    chemical = { key = 'chemical', name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList },
+    glass = { key = 'glass', name = 'Glass Industry', count = glass_all, tiers = { glass1, glass2, glass3, glass4 }, allList = glassAllList },
+    printers = { key = 'printers', name = '3D Printers', count = printer_all, tiers = { printer1, printer2, printer3, printer4 }, allList = printerAllList },
+    refiners = { key = 'refiners', name = 'Refiners', count = refiner_all, tiers = { refiner1, refiner2, refiner3, refiner4 }, allList = refinerAllList },
+    smelters = { key = 'smelters', name = 'Smelters', count = smelter_all, tiers = { smelter1, smelter2, smelter3, smelter4 }, allList = smelterAllList },
+    honeycomb = { key = 'honeycomb', name = 'Honeycomb', count = honey_all, tiers = { honey1, honey2, honey3, honey4 }, allList = honeyAllList },
+    recyclers = { key = 'recyclers', name = 'Recyclers', count = recycler_all, tiers = { recycler1, recycler2, recycler3, recycler4 }, allList = recyclerAllList },
+    assembly = { key = 'assembly', name = 'Assembly Lines', count = assembly_all, tiers = { assembly1, assembly2, assembly3, assembly4 }, allList = assemblyAllList },
+    metalwork = { key = 'metalwork', name = 'Metalwork Industry', count = metalwork_all, tiers = { metalwork1, metalwork2, metalwork3, metalwork4 }, allList = metalworkAllList }
 }
+
+local groups = getGroupsInConfiguredOrder()
 
 local screensContent = {}
 local context = newLayoutContext()
 local currentParts = {}
+local currentLength = 0
 
 local function finalizeScreen()
     if #currentParts == 0 then
         context = newLayoutContext()
+        currentLength = 0
         return
     end
 
     table.insert(screensContent, buildScreenScript(table.concat(currentParts)))
     currentParts = {}
     context = newLayoutContext()
+    currentLength = 0
 end
 
 for _, group in ipairs(groups) do
@@ -607,17 +889,35 @@ for _, group in ipairs(groups) do
             end
 
             if not skipRender then
+                local previousState = deepCopy(state)
                 local content, updatedState, finished = renderGroupSegment(context, group, state)
                 state = updatedState or state
 
+                local shouldRetrySegment = false
+
                 if content ~= '' then
-                    table.insert(currentParts, content)
+                    local contentLength = #content
+                    local upcomingLength = currentLength + contentLength + baseScriptLength
+
+                    if upcomingLength > SCREEN_SCRIPT_LIMIT then
+                        if DEBUG_SCREEN_SCRIPT_LIMIT then
+                            system.print(string.format('Debug: screen script length would reach %d (limit %d) while rendering %s; finalizing current screen', upcomingLength, SCREEN_SCRIPT_LIMIT, group.name))
+                        end
+                        finalizeScreen()
+                        state = previousState
+                        shouldRetrySegment = true
+                    else
+                        table.insert(currentParts, content)
+                        currentLength = currentLength + contentLength
+                    end
                 end
 
-                if finished then
-                    break
-                else
-                    finalizeScreen()
+                if not shouldRetrySegment then
+                    if finished then
+                        break
+                    else
+                        finalizeScreen()
+                    end
                 end
             end
         end
@@ -627,8 +927,6 @@ end
 if #currentParts > 0 then
     finalizeScreen()
 end
-
-local emptyScreenScript = buildScreenScript('')
 
 if #screensContent == 0 then
     table.insert(screensContent, emptyScreenScript)

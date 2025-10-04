@@ -14,17 +14,18 @@ Show_State = true --export: Show machine state if checked
 Sort_By_Item_Tier = true --export: Sort by item tier instead of Industry Unit tier
 Sort_By_State = false --export: Sort machines by state
 State_As_Prefix = false --export: Put state before the machine/item name if checked
-State_Sort_Mode = 'V' --export: When sorting by state, 'A' sorts alphabetically and 'V' by value
+State_Sort_Mode = 'V' --export: When sorting by state, 'A' sorts alphabetically and 'V' by default value
 Border = 600 --export: Bottom display line<br>Maximum 600<br>Use to adjust
 Refresh_Timer = 5 --export: Screen(s) refresh timer in seconds
 Brightness = 1 --export: Adjust text and background transparency (0 to 1)
-Font_Size = 12 --export: Base font size for text
+Font_Size = 12 -- Base font size for text
 Background = '0, 0, 0' --export: Set background colour "r, g, b" or image URL (make sure to include the http:// or https://)
 Tier_1_Colour = '0.8, 0.8, 0.8' --export: Set Tier 1 Colour
 Tier_2_Colour = '0, 1.5, 0' --export: Set Tier 2 Colour
 Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
 Tier_4_Colour = '1, 0, 1.5' --export: Set Tier 4 Colour
 Tier_5_Colour = '2, 0.8, 0' --export: Set Tier 5 Colour
+Group_Order = 'assembly, electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, metalwork' --export: Comma separated industry group keys (electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, assembly, metalwork)
 
 system.print("Refresh timer set to: "..Refresh_Timer.." seconds")
 
@@ -38,7 +39,7 @@ options.Tier_4_Colour = Tier_4_Colour
 options.Tier_5_Colour = Tier_5_Colour
 options.Brightness = Brightness
 options.Background = Background
-options.Font_Size = Font_Size
+-- options.Font_Size = Font_Size
 options.Sort_By_Item_Tier = Sort_By_Item_Tier
 options.Sort_By_State = Sort_By_State
 options.State_As_Prefix = State_As_Prefix
@@ -46,6 +47,7 @@ options.State_Sort_Mode = State_Sort_Mode
 options.Show_Maintain_Batch = Show_Maintain_Batch
 options.Show_State = Show_State
 options.Turn_Screens_Off_on_Exit = Turn_Screens_Off_on_Exit
+options.Group_Order = Group_Order
 
 databank = nil
 screens = {}
@@ -324,16 +326,158 @@ honey_all = honey_count[1] + honey_count[2] + honey_count[3] + honey_count[4]
 recycler_all = recycler_count[1] + recycler_count[2] + recycler_count[3] + recycler_count[4]
 all_count = honey_all + metalwork_all + electronics_all + glass_all + printer_all + chemical_all + refiner_all + smelter_all + assembly_all + recycler_all
 
-local industry_per_screen = 265
-local required_screens = math.max(1, math.ceil(all_count / industry_per_screen))
-local screen_plural = "screen"
-if required_screens ~= 1 then screen_plural = "+ screens" end
+local layoutColumnPositions = {10, 266, 522, 778}
+local layoutMaxColumns = #layoutColumnPositions
+local layoutHeaderHeight = 40
+local layoutEntrySpacing = 10
+local layoutColumnStartY = 20
 
-system.print(("Factory has %d machines. You will need %d %s (up to %d machines per screen)."):format(
+local function getBorderLimitValue()
+    if type(Border) == 'number' then
+        return Border
+    end
+
+    return 600
+end
+
+local function computeRemainingCapacityForContext(columnIndex, y)
+    local borderLimit = getBorderLimitValue()
+    local currentColumn = columnIndex or 1
+    local currentY = y or 0
+    local remaining = 0
+
+    while currentColumn <= layoutMaxColumns do
+        if currentY >= borderLimit then
+            currentColumn = currentColumn + 1
+            currentY = layoutColumnStartY
+        else
+            remaining = remaining + 1
+            currentY = currentY + layoutEntrySpacing
+        end
+    end
+
+    return remaining
+end
+
+local function getRemainingCapacityForNewGroup(context)
+    return computeRemainingCapacityForContext(context.columnIndex, (context.y or 0) + layoutHeaderHeight)
+end
+
+local screenCapacity = computeRemainingCapacityForContext(1, 10 + layoutHeaderHeight)
+
+local function estimateScreensNeeded(groupCounts)
+    local context = { columnIndex = 1, y = 10 }
+    local screensNeeded = 0
+    local hasContent = false
+
+    local function resetContext()
+        context.columnIndex = 1
+        context.y = 10
+    end
+
+    local function finalizeScreen()
+        if hasContent then
+            screensNeeded = screensNeeded + 1
+            hasContent = false
+        end
+        resetContext()
+    end
+
+    for _, totalCount in ipairs(groupCounts) do
+        local groupTotal = tonumber(totalCount) or 0
+        local remaining = groupTotal
+        local continuing = false
+
+        repeat
+            if context.columnIndex > layoutMaxColumns then
+                finalizeScreen()
+            end
+
+            if not continuing and hasContent and groupTotal > 0 then
+                local remainingCapacity = getRemainingCapacityForNewGroup(context)
+                if remainingCapacity <= 0 or (groupTotal <= screenCapacity and groupTotal > remainingCapacity) then
+                    finalizeScreen()
+                end
+            end
+
+            while (context.y or 0) + layoutHeaderHeight >= getBorderLimitValue() do
+                if context.columnIndex < layoutMaxColumns then
+                    context.columnIndex = context.columnIndex + 1
+                    context.y = 10
+                else
+                    finalizeScreen()
+                end
+            end
+
+            hasContent = true
+            context.y = context.y + layoutHeaderHeight
+
+            while remaining > 0 do
+                if context.columnIndex > layoutMaxColumns then
+                    break
+                end
+
+                if context.y >= getBorderLimitValue() then
+                    if context.columnIndex < layoutMaxColumns then
+                        context.columnIndex = context.columnIndex + 1
+                        context.y = layoutColumnStartY
+                    else
+                        break
+                    end
+                else
+                    context.y = context.y + layoutEntrySpacing
+                    remaining = remaining - 1
+                end
+            end
+
+            if remaining > 0 then
+                continuing = true
+                finalizeScreen()
+            else
+                continuing = false
+            end
+        until remaining == 0 and not continuing
+    end
+
+    if hasContent then
+        screensNeeded = screensNeeded + 1
+    end
+
+    if screensNeeded == 0 then
+        screensNeeded = 1
+    end
+
+    return screensNeeded
+end
+
+local required_screens = estimateScreensNeeded({
+    electronics_all,
+    chemical_all,
+    glass_all,
+    printer_all,
+    refiner_all,
+    smelter_all,
+    honey_all,
+    recycler_all,
+    assembly_all,
+    metalwork_all
+})
+
+local screen_plural = "screen"
+if required_screens ~= 1 then screen_plural = "screens" end
+
+system.print(("Factory has %d machines. You will need %d %s with current settings."):format(
     all_count,
     required_screens,
     screen_plural,
-    industry_per_screen
+    screenCapacity
 ))
+
+if required_screens > #screens then
+    local missing = required_screens - #screens
+    local missingPlural = "screen"
+    if missing ~= 1 then missingPlural = "screens" end
+    system.print(string.format("Connect %d more %s to display everything.", missing, missingPlural))
+end
 
 unit.setTimer("refresh",Refresh_Timer)
