@@ -324,16 +324,158 @@ honey_all = honey_count[1] + honey_count[2] + honey_count[3] + honey_count[4]
 recycler_all = recycler_count[1] + recycler_count[2] + recycler_count[3] + recycler_count[4]
 all_count = honey_all + metalwork_all + electronics_all + glass_all + printer_all + chemical_all + refiner_all + smelter_all + assembly_all + recycler_all
 
-local industry_per_screen = 265
-local required_screens = math.max(1, math.ceil(all_count / industry_per_screen))
-local screen_plural = "screen"
-if required_screens ~= 1 then screen_plural = "+ screens" end
+local layoutColumnPositions = {10, 266, 522, 778}
+local layoutMaxColumns = #layoutColumnPositions
+local layoutHeaderHeight = 40
+local layoutEntrySpacing = 10
+local layoutColumnStartY = 20
 
-system.print(("Factory has %d machines. You will need %d %s (up to %d machines per screen)."):format(
+local function getBorderLimitValue()
+    if type(Border) == 'number' then
+        return Border
+    end
+
+    return 600
+end
+
+local function computeRemainingCapacityForContext(columnIndex, y)
+    local borderLimit = getBorderLimitValue()
+    local currentColumn = columnIndex or 1
+    local currentY = y or 0
+    local remaining = 0
+
+    while currentColumn <= layoutMaxColumns do
+        if currentY >= borderLimit then
+            currentColumn = currentColumn + 1
+            currentY = layoutColumnStartY
+        else
+            remaining = remaining + 1
+            currentY = currentY + layoutEntrySpacing
+        end
+    end
+
+    return remaining
+end
+
+local function getRemainingCapacityForNewGroup(context)
+    return computeRemainingCapacityForContext(context.columnIndex, (context.y or 0) + layoutHeaderHeight)
+end
+
+local screenCapacity = computeRemainingCapacityForContext(1, 10 + layoutHeaderHeight)
+
+local function estimateScreensNeeded(groupCounts)
+    local context = { columnIndex = 1, y = 10 }
+    local screensNeeded = 0
+    local hasContent = false
+
+    local function resetContext()
+        context.columnIndex = 1
+        context.y = 10
+    end
+
+    local function finalizeScreen()
+        if hasContent then
+            screensNeeded = screensNeeded + 1
+            hasContent = false
+        end
+        resetContext()
+    end
+
+    for _, totalCount in ipairs(groupCounts) do
+        local groupTotal = tonumber(totalCount) or 0
+        local remaining = groupTotal
+        local continuing = false
+
+        repeat
+            if context.columnIndex > layoutMaxColumns then
+                finalizeScreen()
+            end
+
+            if not continuing and hasContent and groupTotal > 0 then
+                local remainingCapacity = getRemainingCapacityForNewGroup(context)
+                if remainingCapacity <= 0 or (groupTotal <= screenCapacity and groupTotal > remainingCapacity) then
+                    finalizeScreen()
+                end
+            end
+
+            while (context.y or 0) + layoutHeaderHeight >= getBorderLimitValue() do
+                if context.columnIndex < layoutMaxColumns then
+                    context.columnIndex = context.columnIndex + 1
+                    context.y = 10
+                else
+                    finalizeScreen()
+                end
+            end
+
+            hasContent = true
+            context.y = context.y + layoutHeaderHeight
+
+            while remaining > 0 do
+                if context.columnIndex > layoutMaxColumns then
+                    break
+                end
+
+                if context.y >= getBorderLimitValue() then
+                    if context.columnIndex < layoutMaxColumns then
+                        context.columnIndex = context.columnIndex + 1
+                        context.y = layoutColumnStartY
+                    else
+                        break
+                    end
+                else
+                    context.y = context.y + layoutEntrySpacing
+                    remaining = remaining - 1
+                end
+            end
+
+            if remaining > 0 then
+                continuing = true
+                finalizeScreen()
+            else
+                continuing = false
+            end
+        until remaining == 0 and not continuing
+    end
+
+    if hasContent then
+        screensNeeded = screensNeeded + 1
+    end
+
+    if screensNeeded == 0 then
+        screensNeeded = 1
+    end
+
+    return screensNeeded
+end
+
+local required_screens = estimateScreensNeeded({
+    electronics_all,
+    chemical_all,
+    glass_all,
+    printer_all,
+    refiner_all,
+    smelter_all,
+    honey_all,
+    recycler_all,
+    assembly_all,
+    metalwork_all
+})
+
+local screen_plural = "screen"
+if required_screens ~= 1 then screen_plural = "screens" end
+
+system.print(("Factory has %d machines. You will need %d %s with current settings."):format(
     all_count,
     required_screens,
     screen_plural,
-    industry_per_screen
+    screenCapacity
 ))
+
+if required_screens > #screens then
+    local missing = required_screens - #screens
+    local missingPlural = "screen"
+    if missing ~= 1 then missingPlural = "screens" end
+    system.print(string.format("Connect %d more %s to display everything.", missing, missingPlural))
+end
 
 unit.setTimer("refresh",Refresh_Timer)
