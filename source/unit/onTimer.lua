@@ -107,7 +107,8 @@ local function formatDisplayName(displayName)
         return nil
     end
 
-    local tt = string.gsub(displayName, "^Advanced","Adv.")
+    local tt = string.gsub(displayName, "Craft ", "")
+    tt = string.gsub(tt, "Advanced","Adv.")
     tt = string.gsub(tt, "hydraulics","Hydraulics")
     tt = string.gsub(tt, "^Uncommon","Unc.")
     tt = string.gsub(tt, " product","")
@@ -227,13 +228,13 @@ end
 
 f_stateWithElementName = function(fid)
     local info = getIndustryInfo(fid)
+    local rawElementName = core_unit[1].getElementNameById(fid)
     if not info then
-        return core_unit[1].getElementNameById(fid)
+        return formatDisplayName(rawElementName) or rawElementName
     end
 
     state = safeGetState(info)
-    elementName = core_unit[1].getElementNameById(fid)
-    elementName = string.gsub(elementName, "Craft ", "")
+    elementName = formatDisplayName(rawElementName) or rawElementName
     local label = ""
     if state == nil then
         label = "Unknown"
@@ -398,9 +399,10 @@ indy_column = function(context, indy, tier, startIndex)
             if (not Sort_By_Item_Tier) or itemTier == tier or (itemTier == 0 and machineTier == tier) then
                 local info = getIndustryInfo(id)
                 if info then
+                    local rawName = core_unit[1].getElementNameById(id)
                     table.insert(entries, {
                         mid = id,
-                        name = string.gsub(core_unit[1].getElementNameById(id), "Craft ", ""),
+                        name = formatDisplayName(rawName) or rawName,
                         state = safeGetState(info) or -1,
                         stateLabel = getStateLabel(id)
                     })
