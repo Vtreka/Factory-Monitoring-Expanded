@@ -20,7 +20,6 @@ State Sort Mode - When sorting by state, choose 'A' for alphabetical or 'V' for 
 Border - Bottom display line position, use to fine tune (increments of 10) if some headers are at the bottom. Maximum is 600.<br>
 Refresh timer - Value in seconds, set above 3 for really big factories<br>
 Brightness - Adjust brightness of all text and background <br>
-Font Size - Set base font size for displayed text <br>
 Background - Set background colour "r, g, b" or image URL<br>
 Tier 1 Colour - Set Tier 1 Colour<br>
 Tier 2 Colour - Set Tier 2 Colour<br>
@@ -47,7 +46,6 @@ The script is made so it should be fairly easy to shuffle contents between scree
 <b>Version 3.2 updates:</b><br>
     -Added Brightness parameter to control text and background transparency<br>
     -Added option to turn screens off when the Programming Board stops<br>
-    -Added ability to adjust Font Size in parameters <br>
     -Created JSON files for 1-4 and 10 screen variants<br>
 <br>
 <b>Version 3.1 updates:</b><br>

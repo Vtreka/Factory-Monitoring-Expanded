@@ -114,11 +114,18 @@ local function formatDisplayName(displayName)
     tt = string.gsub(tt, " product","")
     tt = string.gsub(tt, " Product","")
     tt = string.gsub(tt, "Atmospheric","Atmo")
+    tt = string.gsub(tt, " industry"," Ind.")
+    tt = string.gsub(tt, " Industry"," Ind.")
     tt = string.gsub(tt, " xs$"," XS")
     tt = string.gsub(tt, " s$"," S")
     tt = string.gsub(tt, " m$"," M")
     tt = string.gsub(tt, " l$"," L")
     tt = string.gsub(tt, " xl$"," XL")
+    tt = string.gsub(tt, " xs "," XS ")
+    tt = string.gsub(tt, " s "," S ")
+    tt = string.gsub(tt, " m "," M ")
+    tt = string.gsub(tt, " l "," L ")
+    tt = string.gsub(tt, " xl "," XL ")
     return tt
 end
 
@@ -190,9 +197,9 @@ f_state = function(fid, F)
     elseif state == 3 and F == 0 then
         local productName = getFormattedProductName(info)
         if not productName then
-            return fmt("Unknown", "Missing ingredient")
+            return fmt("Unknown", "Ingredients")
         end
-        return fmt(productName, "Missing ingredient")
+        return fmt(productName, "Ingredients")
     elseif state == 4 and F == 0 then
         local productName = getFormattedProductName(info)
         if not productName then
@@ -214,9 +221,9 @@ f_state = function(fid, F)
     elseif state == 7 and F == 0 then
         local productName = getFormattedProductName(info)
         if not productName then
-            return fmt("Unknown", "Missing schematics")
+            return fmt("Unknown", "Schematics")
         end
-        return fmt(productName, "Missing schematics")
+        return fmt(productName, "Schematics")
     elseif state > 7 and F == 0 then
         local productName = getFormattedProductName(info)
         if not productName then
@@ -247,7 +254,7 @@ f_stateWithElementName = function(fid)
     elseif state == 2 then
         label = "Running"
     elseif state == 3 then
-        label = "Ingredient"
+        label = "Ingredients"
     elseif state == 4 then
         label = "Output full"
     elseif state == 5 then
@@ -304,7 +311,7 @@ getStateLabel = function(fid)
     elseif state == 2 then
         return "Running"
     elseif state == 3 then
-        return "Ingredient"
+        return "Ingredients"
     elseif state == 4 then
         return "Output full"
     elseif state == 5 then
