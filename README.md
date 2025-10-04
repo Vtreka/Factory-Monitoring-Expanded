@@ -27,6 +27,7 @@ Tier 2 Colour - Set Tier 2 Colour<br>
 Tier 3 Colour - Set Tier 3 Colour<br>
 Tier 4 Colour - Set Tier 4 Colour<br>
 Tier 5 Colour - Set Tier 5 Colour<br>
+Group Order - Comma-separated list of industry group keys to control screen order (electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, assembly, metalwork)<br>
 
 <br>
 Script comes with industry locator. Type <i>help</i> in Lua Tab to see available commands.
@@ -40,6 +41,8 @@ The script is made so it should be fairly easy to shuffle contents between scree
     -Fixed script to announce how many machines you have and how many screens it will require<br>
     -Attempting script fix to auto adjust sections to the next screen if required<br>
     -Introduced limit to stop filling screen over 50kb threshold (screen will not render if it does)
+    -Added ability to choose the order that industry unit groups appear in
+    
 <br>
 <b>Version 3.2 updates:</b><br>
     -Added Brightness parameter to control text and background transparency<br>

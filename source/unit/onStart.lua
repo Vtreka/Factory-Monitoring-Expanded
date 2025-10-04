@@ -25,6 +25,7 @@ Tier_2_Colour = '0, 1.5, 0' --export: Set Tier 2 Colour
 Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
 Tier_4_Colour = '1, 0, 1.5' --export: Set Tier 4 Colour
 Tier_5_Colour = '2, 0.8, 0' --export: Set Tier 5 Colour
+Group_Order = 'assembly, electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, metalwork' --export: Comma separated industry group keys (electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, assembly, metalwork)
 
 system.print("Refresh timer set to: "..Refresh_Timer.." seconds")
 
@@ -46,6 +47,7 @@ options.State_Sort_Mode = State_Sort_Mode
 options.Show_Maintain_Batch = Show_Maintain_Batch
 options.Show_State = Show_State
 options.Turn_Screens_Off_on_Exit = Turn_Screens_Off_on_Exit
+options.Group_Order = Group_Order
 
 databank = nil
 screens = {}

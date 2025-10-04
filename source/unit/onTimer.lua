@@ -561,6 +561,145 @@ if background ~= '' then
     end
 end
 
+local groupDefinitions
+
+local groupKeyAliases = {
+    electronics = 'electronics',
+    electronic = 'electronics',
+    chemical = 'chemical',
+    chemicals = 'chemical',
+    glass = 'glass',
+    glasses = 'glass',
+    printers = 'printers',
+    printer = 'printers',
+    ['3dprinters'] = 'printers',
+    ['3dprinter'] = 'printers',
+    refiners = 'refiners',
+    refiner = 'refiners',
+    refineries = 'refiners',
+    refinery = 'refiners',
+    smelters = 'smelters',
+    smelter = 'smelters',
+    honeycomb = 'honeycomb',
+    honeycombs = 'honeycomb',
+    honey = 'honeycomb',
+    recyclers = 'recyclers',
+    recycler = 'recyclers',
+    recycling = 'recyclers',
+    assembly = 'assembly',
+    assemblies = 'assembly',
+    assembler = 'assembly',
+    assemblers = 'assembly',
+    ['assemblyline'] = 'assembly',
+    ['assemblylines'] = 'assembly',
+    metalwork = 'metalwork',
+    metalworks = 'metalwork'
+}
+
+local defaultGroupOrder = {
+    'electronics',
+    'chemical',
+    'glass',
+    'printers',
+    'refiners',
+    'smelters',
+    'honeycomb',
+    'recyclers',
+    'assembly',
+    'metalwork'
+}
+
+local cachedGroupOrderString
+local cachedGroupOrderResult
+local cachedGroupOrderInvalidTokens
+
+local function normalizeGroupOrderKey(key)
+    if type(key) ~= 'string' then
+        return nil
+    end
+
+    local normalized = key:lower()
+    normalized = normalized:gsub('%s+', '')
+    normalized = normalized:gsub('[^%w]', '')
+    if normalized == '' then
+        return nil
+    end
+
+    return normalized
+end
+
+local function resolveGroupKey(key)
+    local normalized = normalizeGroupOrderKey(key)
+    if not normalized then
+        return nil
+    end
+
+    local resolved = groupKeyAliases[normalized] or normalized
+    if groupDefinitions and groupDefinitions[resolved] then
+        return resolved
+    end
+
+    return nil
+end
+
+local function computeGroupOrder(orderString)
+    if type(orderString) ~= 'string' then
+        orderString = ''
+    end
+
+    if cachedGroupOrderString == orderString and cachedGroupOrderResult then
+        return cachedGroupOrderResult
+    end
+
+    local seen = {}
+    local parsed = {}
+    local invalidTokens = {}
+
+    for entry in orderString:gmatch('[^,]+') do
+        local trimmed = entry:match('^%s*(.-)%s*$')
+        if trimmed ~= '' then
+            local resolved = resolveGroupKey(trimmed)
+            if resolved then
+                if not seen[resolved] then
+                    table.insert(parsed, resolved)
+                    seen[resolved] = true
+                end
+            else
+                table.insert(invalidTokens, trimmed)
+            end
+        end
+    end
+
+    for _, key in ipairs(defaultGroupOrder) do
+        if not seen[key] then
+            table.insert(parsed, key)
+            seen[key] = true
+        end
+    end
+
+    cachedGroupOrderString = orderString
+    cachedGroupOrderResult = parsed
+    cachedGroupOrderInvalidTokens = table.concat(invalidTokens, ', ')
+
+    if #invalidTokens > 0 then
+        system.print("Unknown group(s) in Group_Order: " .. cachedGroupOrderInvalidTokens)
+    end
+
+    return parsed
+end
+
+local function getGroupsInConfiguredOrder()
+    local keys = computeGroupOrder(options.Group_Order or '')
+    local ordered = {}
+    for _, key in ipairs(keys) do
+        local group = groupDefinitions and groupDefinitions[key]
+        if group then
+            table.insert(ordered, group)
+        end
+    end
+    return ordered
+end
+
 local function getGroupSources(group)
     if Sort_By_Item_Tier then
         local list = group.allList or {}
@@ -655,18 +794,20 @@ do
     baseScriptLength = #emptyScreenScript
 end
 
-local groups = {
-    { name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList },
-    { name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList },
-    { name = 'Glass Industry', count = glass_all, tiers = { glass1, glass2, glass3, glass4 }, allList = glassAllList },
-    { name = '3D Printers', count = printer_all, tiers = { printer1, printer2, printer3, printer4 }, allList = printerAllList },
-    { name = 'Refiners', count = refiner_all, tiers = { refiner1, refiner2, refiner3, refiner4 }, allList = refinerAllList },
-    { name = 'Smelters', count = smelter_all, tiers = { smelter1, smelter2, smelter3, smelter4 }, allList = smelterAllList },
-    { name = 'Honeycomb', count = honey_all, tiers = { honey1, honey2, honey3, honey4 }, allList = honeyAllList },
-    { name = 'Recyclers', count = recycler_all, tiers = { recycler1, recycler2, recycler3, recycler4 }, allList = recyclerAllList },
-    { name = 'Assembly Lines', count = assembly_all, tiers = { assembly1, assembly2, assembly3, assembly4 }, allList = assemblyAllList },
-    { name = 'Metalwork Industry', count = metalwork_all, tiers = { metalwork1, metalwork2, metalwork3, metalwork4 }, allList = metalworkAllList }
+groupDefinitions = {
+    electronics = { key = 'electronics', name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList },
+    chemical = { key = 'chemical', name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList },
+    glass = { key = 'glass', name = 'Glass Industry', count = glass_all, tiers = { glass1, glass2, glass3, glass4 }, allList = glassAllList },
+    printers = { key = 'printers', name = '3D Printers', count = printer_all, tiers = { printer1, printer2, printer3, printer4 }, allList = printerAllList },
+    refiners = { key = 'refiners', name = 'Refiners', count = refiner_all, tiers = { refiner1, refiner2, refiner3, refiner4 }, allList = refinerAllList },
+    smelters = { key = 'smelters', name = 'Smelters', count = smelter_all, tiers = { smelter1, smelter2, smelter3, smelter4 }, allList = smelterAllList },
+    honeycomb = { key = 'honeycomb', name = 'Honeycomb', count = honey_all, tiers = { honey1, honey2, honey3, honey4 }, allList = honeyAllList },
+    recyclers = { key = 'recyclers', name = 'Recyclers', count = recycler_all, tiers = { recycler1, recycler2, recycler3, recycler4 }, allList = recyclerAllList },
+    assembly = { key = 'assembly', name = 'Assembly Lines', count = assembly_all, tiers = { assembly1, assembly2, assembly3, assembly4 }, allList = assemblyAllList },
+    metalwork = { key = 'metalwork', name = 'Metalwork Industry', count = metalwork_all, tiers = { metalwork1, metalwork2, metalwork3, metalwork4 }, allList = metalworkAllList }
 }
+
+local groups = getGroupsInConfiguredOrder()
 
 local screensContent = {}
 local context = newLayoutContext()
