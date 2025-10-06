@@ -2,7 +2,7 @@
 -- Updates provided by Vtreka (ingame), Vtreka#1337 (Discord)
 -- Contributions provided by BlimpieBoy (ingame), Blimpieboy#0903 (Discord)
 
-system.print(" --- Factory Monitor Expanded v3.3 ---")
+system.print(" --- Factory Monitor Expanded v3.4 ---")
 system.print ("type 'help' for available commands")
 
 --[[ LUA PARAMETERS ]]
@@ -26,6 +26,7 @@ Tier_3_Colour = '0, 0.15, 1' --export: Set Tier 3 Colour
 Tier_4_Colour = '1, 0, 1.5' --export: Set Tier 4 Colour
 Tier_5_Colour = '2, 0.8, 0' --export: Set Tier 5 Colour
 Group_Order = 'assembly, electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, metalwork' --export: Comma separated industry group keys (electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, assembly, metalwork)
+Hidden_Groups = '' --export: Comma separated industry group keys to hide from processing and display (electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, assembly, metalwork)
 
 system.print("Refresh timer set to: "..Refresh_Timer.." seconds")
 
@@ -48,6 +49,66 @@ options.Show_Maintain_Batch = Show_Maintain_Batch
 options.Show_State = Show_State
 options.Turn_Screens_Off_on_Exit = Turn_Screens_Off_on_Exit
 options.Group_Order = Group_Order
+options.Hidden_Groups = Hidden_Groups
+
+groupKeyAliases = groupKeyAliases or {
+    electronics = 'electronics',
+    electronic = 'electronics',
+    chemical = 'chemical',
+    chemicals = 'chemical',
+    glass = 'glass',
+    glasses = 'glass',
+    printers = 'printers',
+    printer = 'printers',
+    ['3dprinters'] = 'printers',
+    ['3dprinter'] = 'printers',
+    refiners = 'refiners',
+    refiner = 'refiners',
+    refineries = 'refiners',
+    refinery = 'refiners',
+    smelters = 'smelters',
+    smelter = 'smelters',
+    honeycomb = 'honeycomb',
+    honeycombs = 'honeycomb',
+    honey = 'honeycomb',
+    recyclers = 'recyclers',
+    recycler = 'recyclers',
+    recycling = 'recyclers',
+    assembly = 'assembly',
+    assemblies = 'assembly',
+    assembler = 'assembly',
+    assemblers = 'assembly',
+    ['assemblyline'] = 'assembly',
+    ['assemblylines'] = 'assembly',
+    metalwork = 'metalwork',
+    metalworks = 'metalwork'
+}
+
+groupDisplayNames = groupDisplayNames or {
+    electronics = 'Electronics Industry',
+    chemical = 'Chemical Industry',
+    glass = 'Glass Industry',
+    printers = '3D Printers',
+    refiners = 'Refiners',
+    smelters = 'Smelters',
+    honeycomb = 'Honeycomb',
+    recyclers = 'Recyclers',
+    assembly = 'Assembly Lines',
+    metalwork = 'Metalwork Industry'
+}
+
+validGroupKeys = validGroupKeys or {
+    electronics = true,
+    chemical = true,
+    glass = true,
+    printers = true,
+    refiners = true,
+    smelters = true,
+    honeycomb = true,
+    recyclers = true,
+    assembly = true,
+    metalwork = true
+}
 
 databank = nil
 screens = {}
@@ -99,6 +160,84 @@ else
     else
         system.print("Options Loaded From LUA Parameters")
     end
+end
+
+local function normalizeGroupKey(key)
+    if type(key) ~= 'string' then
+        return nil
+    end
+
+    local normalized = key:lower()
+    normalized = normalized:gsub('%s+', '')
+    normalized = normalized:gsub('[^%w]', '')
+    if normalized == '' then
+        return nil
+    end
+
+    return normalized
+end
+
+local function resolveGroupKey(key)
+    local normalized = normalizeGroupKey(key)
+    if not normalized then
+        return nil
+    end
+
+    local resolved = groupKeyAliases[normalized] or normalized
+    if validGroupKeys[resolved] then
+        return resolved
+    end
+
+    return nil
+end
+
+local function parseHiddenGroups(value)
+    local hiddenSet = {}
+    local hiddenList = {}
+    local invalidList = {}
+
+    if type(value) ~= 'string' then
+        return hiddenSet, hiddenList, invalidList
+    end
+
+    for entry in value:gmatch('[^,]+') do
+        local trimmed = entry:match('^%s*(.-)%s*$')
+        if trimmed ~= '' then
+            local resolved = resolveGroupKey(trimmed)
+            if resolved then
+                if not hiddenSet[resolved] then
+                    hiddenSet[resolved] = true
+                    table.insert(hiddenList, resolved)
+                end
+            else
+                table.insert(invalidList, trimmed)
+            end
+        end
+    end
+
+    return hiddenSet, hiddenList, invalidList
+end
+
+hiddenGroups = {}
+do
+    local parsedHidden, hiddenOrder, invalidTokens = parseHiddenGroups(options.Hidden_Groups or '')
+    hiddenGroups = parsedHidden
+
+    if #hiddenOrder > 0 then
+        local readable = {}
+        for _, key in ipairs(hiddenOrder) do
+            table.insert(readable, groupDisplayNames[key] or key)
+        end
+        system.print('Hiding industry groups: ' .. table.concat(readable, ', '))
+    end
+
+    if #invalidTokens > 0 then
+        system.print('Unknown group(s) in Hidden_Groups: ' .. table.concat(invalidTokens, ', '))
+    end
+end
+
+local function isGroupHidden(key)
+    return hiddenGroups and hiddenGroups[key] == true
 end
 
 elementIdList = core_unit[1].getElementIdList()
@@ -156,7 +295,6 @@ recycler2 = {}
 recycler3 = {}
 recycler4 = {}
 
--- Assembly Lines --
 assembly1 = {}
 assembly2 = {}
 assembly3 = {}
@@ -202,7 +340,7 @@ end
 for index,id in ipairs(elementIdList) do
     elementType = core_unit[1].getElementDisplayNameById(id):lower()
 
-    if (elementType:find("metalwork industry")) then
+    if (not isGroupHidden('metalwork')) and (elementType:find("metalwork industry")) then
             if (elementType:find("basic")) then
             registerMachine(metalwork1, metalwork_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -213,7 +351,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(metalwork4, metalwork_count, 4, id)
             end
     end
-    if (elementType:find("electronics industry")) then
+    if (not isGroupHidden('electronics')) and (elementType:find("electronics industry")) then
             if (elementType:find("basic")) then
             registerMachine(electronics1, electronics_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -224,7 +362,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(electronics4, electronics_count, 4, id)
             end
     end
-    if (elementType:find("glass furnace")) then
+    if (not isGroupHidden('glass')) and (elementType:find("glass furnace")) then
             if (elementType:find("basic")) then
             registerMachine(glass1, glass_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -235,7 +373,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(glass4, glass_count, 4, id)
             end
     end
-    if (elementType:find("3d printer")) then
+    if (not isGroupHidden('printers')) and (elementType:find("3d printer")) then
             if (elementType:find("basic")) then
             registerMachine(printer1, printer_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -246,7 +384,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(printer4, printer_count, 4, id)
             end
     end
-    if (elementType:find("chemical industry")) then
+    if (not isGroupHidden('chemical')) and (elementType:find("chemical industry")) then
             if (elementType:find("basic")) then
             registerMachine(chemical1, chemical_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -257,7 +395,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(chemical4, chemical_count, 4, id)
             end
     end
-    if (elementType:find("refiner")) and not (elementType:find("honeycomb")) then
+    if (not isGroupHidden('refiners')) and (elementType:find("refiner")) then
             if (elementType:find("basic")) then
             registerMachine(refiner1, refiner_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -268,7 +406,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(refiner4, refiner_count, 4, id)
             end
     end
-    if (elementType:find("smelter")) then
+    if (not isGroupHidden('smelters')) and (elementType:find("smelter")) then
             if (elementType:find("basic")) then
             registerMachine(smelter1, smelter_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -279,7 +417,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(smelter4, smelter_count, 4, id)
             end
     end
-    if (elementType:find("assembly line")) then
+    if (not isGroupHidden('assembly')) and (elementType:find("assembly line")) then
             if (elementType:find("basic")) then
             registerMachine(assembly1, assembly_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -290,7 +428,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(assembly4, assembly_count, 4, id)
             end
     end
-    if (elementType:find("honeycomb")) then
+    if (not isGroupHidden('honeycomb')) and (elementType:find("honeycomb")) then
             if (elementType:find("basic")) then
             registerMachine(honey1, honey_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -301,7 +439,7 @@ for index,id in ipairs(elementIdList) do
             registerMachine(honey4, honey_count, 4, id)
             end
     end
-    if (elementType:find("recycler")) then
+    if (not isGroupHidden('recyclers')) and (elementType:find("recycler")) then
             if (elementType:find("basic")) then
             registerMachine(recycler1, recycler_count, 1, id)
             elseif (elementType:find("uncommon")) then
@@ -324,7 +462,111 @@ smelter_all = smelter_count[1] + smelter_count[2] + smelter_count[3] + smelter_c
 assembly_all = assembly_count[1] + assembly_count[2] + assembly_count[3] + assembly_count[4]
 honey_all = honey_count[1] + honey_count[2] + honey_count[3] + honey_count[4]
 recycler_all = recycler_count[1] + recycler_count[2] + recycler_count[3] + recycler_count[4]
-all_count = honey_all + metalwork_all + electronics_all + glass_all + printer_all + chemical_all + refiner_all + smelter_all + assembly_all + recycler_all
+
+local groupTotals = {
+    electronics = electronics_all,
+    chemical = chemical_all,
+    glass = glass_all,
+    printers = printer_all,
+    refiners = refiner_all,
+    smelters = smelter_all,
+    honeycomb = honey_all,
+    recyclers = recycler_all,
+    assembly = assembly_all,
+    metalwork = metalwork_all
+}
+
+local defaultGroupOrder = {
+    'electronics',
+    'chemical',
+    'glass',
+    'printers',
+    'refiners',
+    'smelters',
+    'honeycomb',
+    'recyclers',
+    'assembly',
+    'metalwork'
+}
+
+local function normalizeGroupOrderKey(key)
+    if type(key) ~= 'string' then
+        return nil
+    end
+
+    local normalized = key:lower()
+    normalized = normalized:gsub('%s+', '')
+    normalized = normalized:gsub('[^%w]', '')
+    if normalized == '' then
+        return nil
+    end
+
+    return normalized
+end
+
+local function resolveGroupOrderKey(key)
+    local normalized = normalizeGroupOrderKey(key)
+    if not normalized then
+        return nil
+    end
+
+    local resolved = groupKeyAliases[normalized] or normalized
+    if validGroupKeys[resolved] then
+        return resolved
+    end
+
+    return nil
+end
+
+local function computeOrderedGroupKeys(orderString)
+    if type(orderString) ~= 'string' then
+        orderString = ''
+    end
+
+    local ordered = {}
+    local encountered = {}
+    local invalidTokens = {}
+
+    for entry in orderString:gmatch('[^,]+') do
+        local trimmed = entry:match('^%s*(.-)%s*$')
+        if trimmed ~= '' then
+            local resolved = resolveGroupOrderKey(trimmed)
+            if resolved then
+                if not isGroupHidden(resolved) and not encountered[resolved] then
+                    table.insert(ordered, resolved)
+                    encountered[resolved] = true
+                end
+            else
+                table.insert(invalidTokens, trimmed)
+            end
+        end
+    end
+
+    for _, key in ipairs(defaultGroupOrder) do
+        if not encountered[key] and not isGroupHidden(key) then
+            table.insert(ordered, key)
+            encountered[key] = true
+        end
+    end
+
+    if #invalidTokens > 0 then
+        system.print('Unknown group(s) in Group_Order: ' .. table.concat(invalidTokens, ', '))
+    end
+
+    return ordered
+end
+
+local orderedGroupKeys = computeOrderedGroupKeys(options.Group_Order)
+local visibleCountsForScreens = {}
+all_count = 0
+
+for _, key in ipairs(orderedGroupKeys) do
+    local total = groupTotals[key] or 0
+    if not isGroupHidden(key) then
+        table.insert(visibleCountsForScreens, total)
+        all_count = all_count + total
+    end
+end
 
 local layoutColumnPositions = {10, 266, 522, 778}
 local layoutMaxColumns = #layoutColumnPositions
@@ -450,18 +692,7 @@ local function estimateScreensNeeded(groupCounts)
     return screensNeeded
 end
 
-local required_screens = estimateScreensNeeded({
-    electronics_all,
-    chemical_all,
-    glass_all,
-    printer_all,
-    refiner_all,
-    smelter_all,
-    honey_all,
-    recycler_all,
-    assembly_all,
-    metalwork_all
-})
+local required_screens = estimateScreensNeeded(visibleCountsForScreens)
 
 local screen_plural = "screen"
 if required_screens ~= 1 then screen_plural = "screens" end

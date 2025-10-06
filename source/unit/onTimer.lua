@@ -3,6 +3,10 @@ local maxColumns = #columnPositions
 local MACHINE_TIER_COUNT = 4
 local ITEM_TIER_COUNT = 5
 
+hiddenGroups = hiddenGroups or {}
+
+local industryInfoCache = {}
+
 local function newLayoutContext()
     return { columnIndex = 1, y = 10 }
 end
@@ -70,14 +74,24 @@ local function getIndustryInfo(fid)
         return nil
     end 
 
+    local cached = industryInfoCache[fid]
+    if cached ~= nil then
+        if cached == false then
+            return nil
+        end
+        return cached
+    end
+
     local ok, info = pcall(function()
         return core_unit[1].getElementIndustryInfoById(fid)
     end)
 
     if not ok or type(info) ~= 'table' then
+        industryInfoCache[fid] = false
         return nil
     end
 
+    industryInfoCache[fid] = info
     return info
 end
 
@@ -143,13 +157,13 @@ local function getFormattedProductName(info)
     return formatDisplayName(itemInfo["displayNameWithSize"] or itemInfo["displayName"])
 end
 
-f_state = function(fid, F)
-   local info = getIndustryInfo(fid)
+f_state = function(fid, F, info)
+   info = info or getIndustryInfo(fid)
     if not info then
         return "Not available"
     end
 
-    state = safeGetState(info)
+    local state = safeGetState(info)
     local function fmt(name, label)
         if not Show_State then
             return name
@@ -233,20 +247,20 @@ f_state = function(fid, F)
     end
 end
 
-f_stateWithElementName = function(fid)
-    local info = getIndustryInfo(fid)
-    local rawElementName = core_unit[1].getElementNameById(fid)
+f_stateWithElementName = function(fid, info, rawElementName)
+    info = info or getIndustryInfo(fid)
+    rawElementName = rawElementName or core_unit[1].getElementNameById(fid)
     if not info then
         return formatDisplayName(rawElementName) or rawElementName
     end
 
-    state = safeGetState(info)
-    elementName = formatDisplayName(rawElementName) or rawElementName
+    local state = safeGetState(info)
+    local elementName = formatDisplayName(rawElementName) or rawElementName
     local label = ""
     if state == nil then
         label = "Unknown"
     elseif state == 1 then
-        if isElementConfigured(fid) then
+        if isElementConfigured(fid, info) then
             label = "Stopped"
         else
             label = "Unconfig"
@@ -275,8 +289,8 @@ f_stateWithElementName = function(fid)
     end
 end
 
-isElementConfigured = function(fid)
-        local industryInfo = getIndustryInfo(fid)
+isElementConfigured = function(fid, info)
+        local industryInfo = info or getIndustryInfo(fid)
                 if industryInfo == nil then
                         return false
                 end
@@ -292,43 +306,65 @@ isElementConfigured = function(fid)
         return true
 end
 
-getStateLabel = function(fid)
-    local info = getIndustryInfo(fid)
+getStateLabel = function(fid, info, state)
+    info = info or getIndustryInfo(fid)
     if not info then
         return "Unknown"
     end
 
-    local state = safeGetState(info)
-    if state == nil then
+    local resolvedState = state
+    if resolvedState == nil then
+        resolvedState = safeGetState(info)
+    end
+    if resolvedState == nil then
         return "Unknown"
     end
-    if state == 1 then
-        if isElementConfigured(fid) then
+    if resolvedState == 1 then
+        if isElementConfigured(fid, info) then
             return "Stopped"
         else
             return "Unconfig"
         end
-    elseif state == 2 then
+    elseif resolvedState == 2 then
         return "Running"
-    elseif state == 3 then
+    elseif resolvedState == 3 then
         return "Ingredients"
-    elseif state == 4 then
+    elseif resolvedState == 4 then
         return "Output full"
-    elseif state == 5 then
+    elseif resolvedState == 5 then
         return "No output"
-    elseif state == 6 then
+    elseif resolvedState == 6 then
         return "Pending"
-    elseif state == 7 then
+    elseif resolvedState == 7 then
         return "Schematic"
     else
-        return "Error" .. state
+        return "Error" .. resolvedState
     end
 end
 
-setNextFillColourByState = function(fid)
-    local info = getIndustryInfo(fid)
-    local state = safeGetState(info)
-    if state == nil then return "" end
+local function resolveStateValue(stateOrId, info)
+    if type(stateOrId) == 'number' then
+        if stateOrId >= 0 and stateOrId <= 15 then
+            return stateOrId
+        end
+        local industryInfo = info or getIndustryInfo(stateOrId)
+        if industryInfo then
+            return safeGetState(industryInfo)
+        end
+    elseif type(stateOrId) == 'table' then
+        return safeGetState(stateOrId)
+    end
+
+    if info then
+        return safeGetState(info)
+    end
+
+    return nil
+end
+
+setNextFillColourByState = function(stateOrId, info)
+    local state = resolveStateValue(stateOrId, info)
+    if type(state) ~= 'number' then return "" end
     if state == 1 then return "setNextFillColor(layer,1,1,0,".. Brightness ..")"
         elseif state == 2 then return "setNextFillColor(layer,0,1,0,".. Brightness ..")"
         elseif state == 3 then return "setNextFillColor(layer,1,0,0.8,".. Brightness ..")"
@@ -361,8 +397,8 @@ getMachineTier = function(fid)
     return 0
 end
 
-t_stats = function(fid, ax, ay)
-    local info = getIndustryInfo(fid)
+t_stats = function(fid, ax, ay, info)
+    info = info or getIndustryInfo(fid)
     if not info then
         return ""
     end
@@ -405,15 +441,24 @@ indy_column = function(context, indy, tier, startIndex)
             local machineTier = getMachineTier(id)
             if (not Sort_By_Item_Tier) or itemTier == tier or (itemTier == 0 and machineTier == tier) then
                 local info = getIndustryInfo(id)
-                if info then
-                    local rawName = core_unit[1].getElementNameById(id)
-                    table.insert(entries, {
-                        mid = id,
-                        name = formatDisplayName(rawName) or rawName,
-                        state = safeGetState(info) or -1,
-                        stateLabel = getStateLabel(id)
-                    })
+                local rawName = core_unit[1].getElementNameById(id)
+                local formattedName = formatDisplayName(rawName) or rawName
+                local stateValue = info and safeGetState(info) or nil
+                local sortState = stateValue ~= nil and stateValue or -1
+                local displayText = f_stateWithElementName(id, info, rawName)
+                if not displayText then
+                    displayText = formattedName or rawName or ''
                 end
+                    table.insert(entries, {
+                    mid = id,
+                    info = info,
+                    name = formattedName or '',
+                    state = sortState,
+                    resolvedState = stateValue,
+                    stateLabel = getStateLabel(id, info, stateValue),
+                    rawName = rawName,
+                    displayText = displayText
+                })
             end
         end
         table.sort(entries, function(a, b)
@@ -448,11 +493,21 @@ indy_column = function(context, indy, tier, startIndex)
                 if not displayName then
                     displayName = getName(core_unit[1].getElementNameById(id))
                 end
+                local sortKey = string.lower(displayName or '')
+                local stateValue = safeGetState(industryData)
+                local sortState = stateValue ~= nil and stateValue or -1
+                local displayText = f_state(id, 0, industryData)
+                if not displayText then
+                    displayText = displayName or ''
+                end
                 table.insert(entries, {
                     mid = id,
-                    name = string.lower(displayName),
-                    state = safeGetState(industryData) or -1,
-                    stateLabel = getStateLabel(id)
+                    info = industryData,
+                    name = sortKey,
+                    state = sortState,
+                    resolvedState = stateValue,
+                    stateLabel = getStateLabel(id, industryData, stateValue),
+                    displayText = displayText
                 })
             end
             ::continue::
@@ -518,14 +573,18 @@ indy_column = function(context, indy, tier, startIndex)
         local num = formatIndex(i)
 
         table.insert(parts, string.format("addText(layer, font3, \"%s\", %d, %d)\n", num, x, y))
-        table.insert(parts, setNextFillColourByState(entry.mid))
-        if Show_Indy_Name then
-            table.insert(parts, string.format("addText(layer, font3, \"%s\", %d, %d)\n", f_stateWithElementName(entry.mid), x + 20, y))
-        else
-            table.insert(parts, string.format("addText(layer, font3, \"%s\", %d, %d)\n", f_state(entry.mid, 0), x + 20, y))
+        table.insert(parts, setNextFillColourByState(entry.resolvedState, entry.info))
+        local displayText = entry.displayText
+        if not displayText then
+            if Show_Indy_Name then
+                displayText = f_stateWithElementName(entry.mid, entry.info, entry.rawName)
+            else
+                displayText = f_state(entry.mid, 0, entry.info)
+            end
         end
+        table.insert(parts, string.format("addText(layer, font3, \"%s\", %d, %d)\n", displayText or '', x + 20, y))
         if Show_Maintain_Batch then
-            table.insert(parts, t_stats(entry.mid, x + 240, y))
+            table.insert(parts, t_stats(entry.mid, x + 240, y, entry.info))
         end
 
         y = y + 10
@@ -551,16 +610,56 @@ local refinerAllList, smelterAllList, honeyAllList, recyclerAllList
 local assemblyAllList, metalworkAllList
 
 if Sort_By_Item_Tier then
-    electronicsAllList = mergeTables(electronics1, electronics2, electronics3, electronics4)
-    printerAllList = mergeTables(printer1, printer2, printer3, printer4)
-    chemicalAllList = mergeTables(chemical1, chemical2, chemical3, chemical4)
-    glassAllList = mergeTables(glass1, glass2, glass3, glass4)
-    refinerAllList = mergeTables(refiner1, refiner2, refiner3, refiner4)
-    smelterAllList = mergeTables(smelter1, smelter2, smelter3, smelter4)
-    honeyAllList = mergeTables(honey1, honey2, honey3, honey4)
-    recyclerAllList = mergeTables(recycler1, recycler2, recycler3, recycler4)
-    assemblyAllList = mergeTables(assembly1, assembly2, assembly3, assembly4)
-    metalworkAllList = mergeTables(metalwork1, metalwork2, metalwork3, metalwork4)
+    if not (hiddenGroups and hiddenGroups.electronics) then
+        electronicsAllList = mergeTables(electronics1, electronics2, electronics3, electronics4)
+    else
+        electronicsAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.printers) then
+        printerAllList = mergeTables(printer1, printer2, printer3, printer4)
+    else
+        printerAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.chemical) then
+        chemicalAllList = mergeTables(chemical1, chemical2, chemical3, chemical4)
+    else
+        chemicalAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.glass) then
+        glassAllList = mergeTables(glass1, glass2, glass3, glass4)
+    else
+        glassAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.refiners) then
+        refinerAllList = mergeTables(refiner1, refiner2, refiner3, refiner4)
+    else
+        refinerAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.smelters) then
+        smelterAllList = mergeTables(smelter1, smelter2, smelter3, smelter4)
+    else
+        smelterAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.honeycomb) then
+        honeyAllList = mergeTables(honey1, honey2, honey3, honey4)
+    else
+        honeyAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.recyclers) then
+        recyclerAllList = mergeTables(recycler1, recycler2, recycler3, recycler4)
+    else
+        recyclerAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.assembly) then
+        assemblyAllList = mergeTables(assembly1, assembly2, assembly3, assembly4)
+    else
+        assemblyAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.metalwork) then
+        metalworkAllList = mergeTables(metalwork1, metalwork2, metalwork3, metalwork4)
+    else
+        metalworkAllList = {}
+    end
 end
 
 local brightness = options.Brightness or 1
@@ -579,7 +678,7 @@ end
 
 local groupDefinitions
 
-local groupKeyAliases = {
+groupKeyAliases = groupKeyAliases or {
     electronics = 'electronics',
     electronic = 'electronics',
     chemical = 'chemical',
@@ -610,6 +709,19 @@ local groupKeyAliases = {
     ['assemblylines'] = 'assembly',
     metalwork = 'metalwork',
     metalworks = 'metalwork'
+}
+
+validGroupKeys = validGroupKeys or {
+    electronics = true,
+    chemical = true,
+    glass = true,
+    printers = true,
+    refiners = true,
+    smelters = true,
+    honeycomb = true,
+    recyclers = true,
+    assembly = true,
+    metalwork = true
 }
 
 local defaultGroupOrder = {
@@ -650,8 +762,8 @@ local function resolveGroupKey(key)
         return nil
     end
 
-    local resolved = groupKeyAliases[normalized] or normalized
-    if groupDefinitions and groupDefinitions[resolved] then
+    local resolved = (groupKeyAliases and groupKeyAliases[normalized]) or normalized
+    if validGroupKeys and validGroupKeys[resolved] then
         return resolved
     end
 
@@ -667,7 +779,7 @@ local function computeGroupOrder(orderString)
         return cachedGroupOrderResult
     end
 
-    local seen = {}
+    local encounteredKeys = {}
     local parsed = {}
     local invalidTokens = {}
 
@@ -676,9 +788,11 @@ local function computeGroupOrder(orderString)
         if trimmed ~= '' then
             local resolved = resolveGroupKey(trimmed)
             if resolved then
-                if not seen[resolved] then
-                    table.insert(parsed, resolved)
-                    seen[resolved] = true
+                if not (hiddenGroups and hiddenGroups[resolved]) then
+                    if not encounteredKeys[resolved] then
+                        table.insert(parsed, resolved)
+                        encounteredKeys[resolved] = true
+                    end
                 end
             else
                 table.insert(invalidTokens, trimmed)
@@ -687,9 +801,9 @@ local function computeGroupOrder(orderString)
     end
 
     for _, key in ipairs(defaultGroupOrder) do
-        if not seen[key] then
+        if not encounteredKeys[key] and not (hiddenGroups and hiddenGroups[key]) then
             table.insert(parsed, key)
-            seen[key] = true
+            encounteredKeys[key] = true
         end
     end
 
@@ -709,7 +823,7 @@ local function getGroupsInConfiguredOrder()
     local ordered = {}
     for _, key in ipairs(keys) do
         local group = groupDefinitions and groupDefinitions[key]
-        if group then
+        if group and not (hiddenGroups and hiddenGroups[key]) then
             table.insert(ordered, group)
         end
     end
@@ -810,18 +924,25 @@ do
     baseScriptLength = #emptyScreenScript
 end
 
-groupDefinitions = {
-    electronics = { key = 'electronics', name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList },
-    chemical = { key = 'chemical', name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList },
-    glass = { key = 'glass', name = 'Glass Industry', count = glass_all, tiers = { glass1, glass2, glass3, glass4 }, allList = glassAllList },
-    printers = { key = 'printers', name = '3D Printers', count = printer_all, tiers = { printer1, printer2, printer3, printer4 }, allList = printerAllList },
-    refiners = { key = 'refiners', name = 'Refiners', count = refiner_all, tiers = { refiner1, refiner2, refiner3, refiner4 }, allList = refinerAllList },
-    smelters = { key = 'smelters', name = 'Smelters', count = smelter_all, tiers = { smelter1, smelter2, smelter3, smelter4 }, allList = smelterAllList },
-    honeycomb = { key = 'honeycomb', name = 'Honeycomb', count = honey_all, tiers = { honey1, honey2, honey3, honey4 }, allList = honeyAllList },
-    recyclers = { key = 'recyclers', name = 'Recyclers', count = recycler_all, tiers = { recycler1, recycler2, recycler3, recycler4 }, allList = recyclerAllList },
-    assembly = { key = 'assembly', name = 'Assembly Lines', count = assembly_all, tiers = { assembly1, assembly2, assembly3, assembly4 }, allList = assemblyAllList },
-    metalwork = { key = 'metalwork', name = 'Metalwork Industry', count = metalwork_all, tiers = { metalwork1, metalwork2, metalwork3, metalwork4 }, allList = metalworkAllList }
-}
+groupDefinitions = {}
+
+local function registerGroupDefinition(key, definition)
+    if hiddenGroups and hiddenGroups[key] then
+        return
+    end
+    groupDefinitions[key] = definition
+end
+
+registerGroupDefinition('electronics', { key = 'electronics', name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList })
+registerGroupDefinition('chemical', { key = 'chemical', name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList })
+registerGroupDefinition('glass', { key = 'glass', name = 'Glass Industry', count = glass_all, tiers = { glass1, glass2, glass3, glass4 }, allList = glassAllList })
+registerGroupDefinition('printers', { key = 'printers', name = '3D Printers', count = printer_all, tiers = { printer1, printer2, printer3, printer4 }, allList = printerAllList })
+registerGroupDefinition('refiners', { key = 'refiners', name = 'Refiners', count = refiner_all, tiers = { refiner1, refiner2, refiner3, refiner4 }, allList = refinerAllList })
+registerGroupDefinition('smelters', { key = 'smelters', name = 'Smelters', count = smelter_all, tiers = { smelter1, smelter2, smelter3, smelter4 }, allList = smelterAllList })
+registerGroupDefinition('honeycomb', { key = 'honeycomb', name = 'Honeycomb', count = honey_all, tiers = { honey1, honey2, honey3, honey4 }, allList = honeyAllList })
+registerGroupDefinition('recyclers', { key = 'recyclers', name = 'Recyclers', count = recycler_all, tiers = { recycler1, recycler2, recycler3, recycler4 }, allList = recyclerAllList })
+registerGroupDefinition('assembly', { key = 'assembly', name = 'Assembly Lines', count = assembly_all, tiers = { assembly1, assembly2, assembly3, assembly4 }, allList = assemblyAllList })
+registerGroupDefinition('metalwork', { key = 'metalwork', name = 'Metalwork Industry', count = metalwork_all, tiers = { metalwork1, metalwork2, metalwork3, metalwork4 }, allList = metalworkAllList })
 
 local groups = getGroupsInConfiguredOrder()
 
