@@ -39,6 +39,7 @@ The script is made so it should be fairly easy to shuffle contents between scree
 <hr>
 <b>Version 3.4 updates:</b><br>
     -Added ability to hide industry unit groups<br>
+    -Code optimisations to avoid Script CPU overload for large factories
 <br>
 <b>Version 3.3 updates:</b><br>
     -Fixed script to announce how many machines you have and how many screens it will require<br>
