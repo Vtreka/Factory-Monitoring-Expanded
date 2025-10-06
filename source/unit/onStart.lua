@@ -476,7 +476,7 @@ local groupTotals = {
     metalwork = metalwork_all
 }
 
-local orderedGroupKeys = {
+local defaultGroupOrder = {
     'electronics',
     'chemical',
     'glass',
@@ -489,6 +489,74 @@ local orderedGroupKeys = {
     'metalwork'
 }
 
+local function normalizeGroupOrderKey(key)
+    if type(key) ~= 'string' then
+        return nil
+    end
+
+    local normalized = key:lower()
+    normalized = normalized:gsub('%s+', '')
+    normalized = normalized:gsub('[^%w]', '')
+    if normalized == '' then
+        return nil
+    end
+
+    return normalized
+end
+
+local function resolveGroupOrderKey(key)
+    local normalized = normalizeGroupOrderKey(key)
+    if not normalized then
+        return nil
+    end
+
+    local resolved = groupKeyAliases[normalized] or normalized
+    if validGroupKeys[resolved] then
+        return resolved
+    end
+
+    return nil
+end
+
+local function computeOrderedGroupKeys(orderString)
+    if type(orderString) ~= 'string' then
+        orderString = ''
+    end
+
+    local ordered = {}
+    local encountered = {}
+    local invalidTokens = {}
+
+    for entry in orderString:gmatch('[^,]+') do
+        local trimmed = entry:match('^%s*(.-)%s*$')
+        if trimmed ~= '' then
+            local resolved = resolveGroupOrderKey(trimmed)
+            if resolved then
+                if not isGroupHidden(resolved) and not encountered[resolved] then
+                    table.insert(ordered, resolved)
+                    encountered[resolved] = true
+                end
+            else
+                table.insert(invalidTokens, trimmed)
+            end
+        end
+    end
+
+    for _, key in ipairs(defaultGroupOrder) do
+        if not encountered[key] and not isGroupHidden(key) then
+            table.insert(ordered, key)
+            encountered[key] = true
+        end
+    end
+
+    if #invalidTokens > 0 then
+        system.print('Unknown group(s) in Group_Order: ' .. table.concat(invalidTokens, ', '))
+    end
+
+    return ordered
+end
+
+local orderedGroupKeys = computeOrderedGroupKeys(options.Group_Order)
 local visibleCountsForScreens = {}
 all_count = 0
 
