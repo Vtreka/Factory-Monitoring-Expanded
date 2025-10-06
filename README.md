@@ -27,6 +27,7 @@ Tier 3 Colour - Set Tier 3 Colour<br>
 Tier 4 Colour - Set Tier 4 Colour<br>
 Tier 5 Colour - Set Tier 5 Colour<br>
 Group Order - Comma-separated list of industry group keys to control order groups appear on the screens (electronics, chemical, glass, printers, refiners, smelters, honeycomb, recyclers, assembly, metalwork)<br>
+Hidden_Groups - Comma-separated industry group keys to hide from processing and display<br>
 
 <br>
 Script comes with industry locator. Type <i>help</i> in Lua Tab to see available commands.
@@ -36,6 +37,9 @@ The script is made so it should be fairly easy to shuffle contents between scree
 
 <br>
 <hr>
+<b>Version 3.4 updates:</b><br>
+    -Added ability to hide industry unit groups<br>
+<br>
 <b>Version 3.3 updates:</b><br>
     -Fixed script to announce how many machines you have and how many screens it will require<br>
     -Fix to auto adjust sections to the next screen if required<br>

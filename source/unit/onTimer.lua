@@ -3,6 +3,8 @@ local maxColumns = #columnPositions
 local MACHINE_TIER_COUNT = 4
 local ITEM_TIER_COUNT = 5
 
+hiddenGroups = hiddenGroups or {}
+
 local function newLayoutContext()
     return { columnIndex = 1, y = 10 }
 end
@@ -551,16 +553,56 @@ local refinerAllList, smelterAllList, honeyAllList, recyclerAllList
 local assemblyAllList, metalworkAllList
 
 if Sort_By_Item_Tier then
-    electronicsAllList = mergeTables(electronics1, electronics2, electronics3, electronics4)
-    printerAllList = mergeTables(printer1, printer2, printer3, printer4)
-    chemicalAllList = mergeTables(chemical1, chemical2, chemical3, chemical4)
-    glassAllList = mergeTables(glass1, glass2, glass3, glass4)
-    refinerAllList = mergeTables(refiner1, refiner2, refiner3, refiner4)
-    smelterAllList = mergeTables(smelter1, smelter2, smelter3, smelter4)
-    honeyAllList = mergeTables(honey1, honey2, honey3, honey4)
-    recyclerAllList = mergeTables(recycler1, recycler2, recycler3, recycler4)
-    assemblyAllList = mergeTables(assembly1, assembly2, assembly3, assembly4)
-    metalworkAllList = mergeTables(metalwork1, metalwork2, metalwork3, metalwork4)
+    if not (hiddenGroups and hiddenGroups.electronics) then
+        electronicsAllList = mergeTables(electronics1, electronics2, electronics3, electronics4)
+    else
+        electronicsAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.printers) then
+        printerAllList = mergeTables(printer1, printer2, printer3, printer4)
+    else
+        printerAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.chemical) then
+        chemicalAllList = mergeTables(chemical1, chemical2, chemical3, chemical4)
+    else
+        chemicalAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.glass) then
+        glassAllList = mergeTables(glass1, glass2, glass3, glass4)
+    else
+        glassAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.refiners) then
+        refinerAllList = mergeTables(refiner1, refiner2, refiner3, refiner4)
+    else
+        refinerAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.smelters) then
+        smelterAllList = mergeTables(smelter1, smelter2, smelter3, smelter4)
+    else
+        smelterAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.honeycomb) then
+        honeyAllList = mergeTables(honey1, honey2, honey3, honey4)
+    else
+        honeyAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.recyclers) then
+        recyclerAllList = mergeTables(recycler1, recycler2, recycler3, recycler4)
+    else
+        recyclerAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.assembly) then
+        assemblyAllList = mergeTables(assembly1, assembly2, assembly3, assembly4)
+    else
+        assemblyAllList = {}
+    end
+    if not (hiddenGroups and hiddenGroups.metalwork) then
+        metalworkAllList = mergeTables(metalwork1, metalwork2, metalwork3, metalwork4)
+    else
+        metalworkAllList = {}
+    end
 end
 
 local brightness = options.Brightness or 1
@@ -579,7 +621,7 @@ end
 
 local groupDefinitions
 
-local groupKeyAliases = {
+groupKeyAliases = groupKeyAliases or {
     electronics = 'electronics',
     electronic = 'electronics',
     chemical = 'chemical',
@@ -610,6 +652,19 @@ local groupKeyAliases = {
     ['assemblylines'] = 'assembly',
     metalwork = 'metalwork',
     metalworks = 'metalwork'
+}
+
+validGroupKeys = validGroupKeys or {
+    electronics = true,
+    chemical = true,
+    glass = true,
+    printers = true,
+    refiners = true,
+    smelters = true,
+    honeycomb = true,
+    recyclers = true,
+    assembly = true,
+    metalwork = true
 }
 
 local defaultGroupOrder = {
@@ -650,8 +705,8 @@ local function resolveGroupKey(key)
         return nil
     end
 
-    local resolved = groupKeyAliases[normalized] or normalized
-    if groupDefinitions and groupDefinitions[resolved] then
+    local resolved = (groupKeyAliases and groupKeyAliases[normalized]) or normalized
+    if validGroupKeys and validGroupKeys[resolved] then
         return resolved
     end
 
@@ -667,7 +722,7 @@ local function computeGroupOrder(orderString)
         return cachedGroupOrderResult
     end
 
-    local seen = {}
+    local encounteredKeys = {}
     local parsed = {}
     local invalidTokens = {}
 
@@ -676,9 +731,11 @@ local function computeGroupOrder(orderString)
         if trimmed ~= '' then
             local resolved = resolveGroupKey(trimmed)
             if resolved then
-                if not seen[resolved] then
-                    table.insert(parsed, resolved)
-                    seen[resolved] = true
+                if not (hiddenGroups and hiddenGroups[resolved]) then
+                    if not encounteredKeys[resolved] then
+                        table.insert(parsed, resolved)
+                        encounteredKeys[resolved] = true
+                    end
                 end
             else
                 table.insert(invalidTokens, trimmed)
@@ -687,9 +744,9 @@ local function computeGroupOrder(orderString)
     end
 
     for _, key in ipairs(defaultGroupOrder) do
-        if not seen[key] then
+        if not encounteredKeys[key] and not (hiddenGroups and hiddenGroups[key]) then
             table.insert(parsed, key)
-            seen[key] = true
+            encounteredKeys[key] = true
         end
     end
 
@@ -709,7 +766,7 @@ local function getGroupsInConfiguredOrder()
     local ordered = {}
     for _, key in ipairs(keys) do
         local group = groupDefinitions and groupDefinitions[key]
-        if group then
+        if group and not (hiddenGroups and hiddenGroups[key]) then
             table.insert(ordered, group)
         end
     end
@@ -810,18 +867,25 @@ do
     baseScriptLength = #emptyScreenScript
 end
 
-groupDefinitions = {
-    electronics = { key = 'electronics', name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList },
-    chemical = { key = 'chemical', name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList },
-    glass = { key = 'glass', name = 'Glass Industry', count = glass_all, tiers = { glass1, glass2, glass3, glass4 }, allList = glassAllList },
-    printers = { key = 'printers', name = '3D Printers', count = printer_all, tiers = { printer1, printer2, printer3, printer4 }, allList = printerAllList },
-    refiners = { key = 'refiners', name = 'Refiners', count = refiner_all, tiers = { refiner1, refiner2, refiner3, refiner4 }, allList = refinerAllList },
-    smelters = { key = 'smelters', name = 'Smelters', count = smelter_all, tiers = { smelter1, smelter2, smelter3, smelter4 }, allList = smelterAllList },
-    honeycomb = { key = 'honeycomb', name = 'Honeycomb', count = honey_all, tiers = { honey1, honey2, honey3, honey4 }, allList = honeyAllList },
-    recyclers = { key = 'recyclers', name = 'Recyclers', count = recycler_all, tiers = { recycler1, recycler2, recycler3, recycler4 }, allList = recyclerAllList },
-    assembly = { key = 'assembly', name = 'Assembly Lines', count = assembly_all, tiers = { assembly1, assembly2, assembly3, assembly4 }, allList = assemblyAllList },
-    metalwork = { key = 'metalwork', name = 'Metalwork Industry', count = metalwork_all, tiers = { metalwork1, metalwork2, metalwork3, metalwork4 }, allList = metalworkAllList }
-}
+groupDefinitions = {}
+
+local function registerGroupDefinition(key, definition)
+    if hiddenGroups and hiddenGroups[key] then
+        return
+    end
+    groupDefinitions[key] = definition
+end
+
+registerGroupDefinition('electronics', { key = 'electronics', name = 'Electronics Industry', count = electronics_all, tiers = { electronics1, electronics2, electronics3, electronics4 }, allList = electronicsAllList })
+registerGroupDefinition('chemical', { key = 'chemical', name = 'Chemical Industry', count = chemical_all, tiers = { chemical1, chemical2, chemical3, chemical4 }, allList = chemicalAllList })
+registerGroupDefinition('glass', { key = 'glass', name = 'Glass Industry', count = glass_all, tiers = { glass1, glass2, glass3, glass4 }, allList = glassAllList })
+registerGroupDefinition('printers', { key = 'printers', name = '3D Printers', count = printer_all, tiers = { printer1, printer2, printer3, printer4 }, allList = printerAllList })
+registerGroupDefinition('refiners', { key = 'refiners', name = 'Refiners', count = refiner_all, tiers = { refiner1, refiner2, refiner3, refiner4 }, allList = refinerAllList })
+registerGroupDefinition('smelters', { key = 'smelters', name = 'Smelters', count = smelter_all, tiers = { smelter1, smelter2, smelter3, smelter4 }, allList = smelterAllList })
+registerGroupDefinition('honeycomb', { key = 'honeycomb', name = 'Honeycomb', count = honey_all, tiers = { honey1, honey2, honey3, honey4 }, allList = honeyAllList })
+registerGroupDefinition('recyclers', { key = 'recyclers', name = 'Recyclers', count = recycler_all, tiers = { recycler1, recycler2, recycler3, recycler4 }, allList = recyclerAllList })
+registerGroupDefinition('assembly', { key = 'assembly', name = 'Assembly Lines', count = assembly_all, tiers = { assembly1, assembly2, assembly3, assembly4 }, allList = assemblyAllList })
+registerGroupDefinition('metalwork', { key = 'metalwork', name = 'Metalwork Industry', count = metalwork_all, tiers = { metalwork1, metalwork2, metalwork3, metalwork4 }, allList = metalworkAllList })
 
 local groups = getGroupsInConfiguredOrder()
 
